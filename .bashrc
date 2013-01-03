@@ -112,3 +112,6 @@ EDITOR=/usr/bin/vim
 # For Perl Module Development
 export RELEASE_TESTING=1
 
+# For Git
+GIT_EDITOR=/usr/bin/vim
+
