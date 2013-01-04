@@ -106,12 +106,12 @@ if [ -f /etc/bash_completion ] && ! shopt -oq posix; then
 fi
 
 PATH=$PATH:/sbin:$HOME/bin:$HOME/.vim/bin
-VISUAL=/usr/bin/vim
-EDITOR=/usr/bin/vim
+export VISUAL=/usr/bin/vim
+export EDITOR=/usr/bin/vim
 
 # For Perl Module Development
 export RELEASE_TESTING=1
 
 # For Git
-GIT_EDITOR=/usr/bin/vim
+export GIT_EDITOR=/usr/bin/vim
 
