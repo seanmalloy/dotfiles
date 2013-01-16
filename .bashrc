@@ -115,3 +115,5 @@ export RELEASE_TESTING=1
 # For Git
 export GIT_EDITOR=/usr/bin/vim
 
+# For Perlbrew
+source ~/perl5/perlbrew/etc/bashrc
