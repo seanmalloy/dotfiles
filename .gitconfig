@@ -1,0 +1,10 @@
+[user]
+	name = Sean Malloy
+	email = spinelli85@gmail.com
+[color]
+    status = auto
+    branch = auto
+[core]
+	editor = vim
+[merge]
+	tool = vimdiff
