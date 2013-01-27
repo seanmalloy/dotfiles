@@ -16,6 +16,6 @@ if [ -n "$BASH_VERSION" ]; then
     fi
 fi
 
-if [ -z $SSH_AGENT_PID ]; then
+if [ -z "$SSH_AGENT_PID" ]; then
     eval $(ssh-agent -s)
 fi
