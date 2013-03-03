@@ -1,0 +1,4 @@
+default_parallel   = /dev/local/avr_programmer;
+default_serial     = /dev/local/avr_programmer;
+default_programmer = stk500v2;
+
