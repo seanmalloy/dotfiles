@@ -38,6 +38,9 @@ filetype on
 filetype plugin on
 filetype indent on
 
+" Color Scheme
+colorscheme darkblue
+
 "-------------------------------------------------------------------------------
 " comma always followed by a space
 "-------------------------------------------------------------------------------
