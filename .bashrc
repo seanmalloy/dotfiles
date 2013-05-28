@@ -61,7 +61,7 @@ alias bin='cd ~/bin'
 alias proj='cd ~/projects'
 
 # Set PATH
-PATH=/usr/bin:/bin:/sbin:/usr/sbin:/usr/games:/usr/local/games:/usr/local/bin
+PATH=/usr/bin:/bin:/sbin:/usr/sbin:/usr/games:/usr/local/games:/opt/perl5/bin:/usr/local/bin
 if [ -d $HOME/bin ]; then
     PATH=$PATH:$HOME/bin
 fi
@@ -69,13 +69,15 @@ if [ -d $HOME/.vim/bin ]; then
     PATH=$PATH:$HOME/.vim/bin
 fi
 
-export PATH              #
-export VISUAL=vim        # vim is my editor
-export EDITOR=vim        # vim is my editor
-export RELEASE_TESTING=1 # For Perl Module Development
+export PATH                     #
+export VISUAL=vim               # vim is my editor
+export EDITOR=vim               # vim is my editor
+export RELEASE_TESTING=1        # For Perl Module Development
+export PERLBREW_ROOT=/opt/perl5 # Top level perlbrew directory
 
 # Source Perlbrew Environment
-if [ -f ~/perl5/perlbrew/etc/bashrc ]; then
-    source ~/perl5/perlbrew/etc/bashrc
+PERLBREW_ENV_FILE=/opt/perl5/etc/bashrc
+if [ -f "$PERLBREW_ENV_FILE" ]; then
+    source $PERLBREW_ENV_FILE
 fi
 
