@@ -1,0 +1,3 @@
+[submodule "delimitMate.vim"]
+	path = delimitMate.vim
+	url = git@github.com:vim-scripts/delimitMate.vim.git
