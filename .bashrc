@@ -62,8 +62,8 @@ alias proj='cd ~/projects'
 
 # Set PATH
 PATH=/usr/bin:/bin:/sbin:/usr/sbin:/usr/games:/usr/local/games:/opt/perl5/bin:/usr/local/bin
-if [ -d $HOME/bin ]; then
-    PATH=$PATH:$HOME/bin
+if [ -d $HOME/tech/bin ]; then
+    PATH=$HOME/tech/bin:$PATH
 fi
 if [ -d $HOME/.vim/bin ]; then
     PATH=$PATH:$HOME/.vim/bin
