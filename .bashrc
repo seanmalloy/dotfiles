@@ -51,29 +51,32 @@ fi
 set -o vi
 set -o noclobber
 
+export TECH_DIR=$HOME/tech      # top level dir for locally installed software
+export BIN_DIR=$TECH_DIR/bin    # directory for scripts, binaries, etc.
+export PROJ_DIR=$HOME/projects  # directory for code projects
+export VISUAL=vim               # vim is my editor
+export EDITOR=vim               # vim is my editor
+export RELEASE_TESTING=1        # For Perl Module Development
+export PERLBREW_ROOT=/opt/perl5 # Top level perlbrew directory
+
 # Alias Definitions
 alias ll='ls -l'
 alias la='ls -A'
 alias ltr='ls -ltr'
 alias vi='vim'
 alias tmux='tmux attach'
-alias bin='cd ~/bin'
-alias proj='cd ~/projects'
+alias bin='cd $BIN_DIR'
+alias proj='cd $PROJ_DIR'
+alias tech='cd $TECH_DIR'
 
 # Set PATH
-PATH=/usr/bin:/bin:/sbin:/usr/sbin:/usr/games:/usr/local/games:/opt/perl5/bin:/usr/local/bin
-if [ -d $HOME/tech/bin ]; then
-    PATH=$HOME/tech/bin:$PATH
+export PATH=/usr/bin:/bin:/sbin:/usr/sbin:/usr/games:/usr/local/games:/usr/local/bin
+if [ -d $BIN_DIR ]; then
+    PATH=$BIN_DIR:$PATH
 fi
 if [ -d $HOME/.vim/bin ]; then
     PATH=$PATH:$HOME/.vim/bin
 fi
-
-export PATH                     #
-export VISUAL=vim               # vim is my editor
-export EDITOR=vim               # vim is my editor
-export RELEASE_TESTING=1        # For Perl Module Development
-export PERLBREW_ROOT=/opt/perl5 # Top level perlbrew directory
 
 # Source Perlbrew Environment
 PERLBREW_ENV_FILE=/opt/perl5/etc/bashrc
