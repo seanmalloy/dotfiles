@@ -70,17 +70,16 @@ alias proj='cd $PROJ_DIR'
 alias tech='cd $TECH_DIR'
 
 # Set PATH
-export PATH=/usr/bin:/bin:/sbin:/usr/sbin:/usr/games:/usr/local/games:/usr/local/bin
-if [ -d $BIN_DIR ]; then
-    PATH=$BIN_DIR:$PATH
-fi
-if [ -d $HOME/.vim/bin ]; then
-    PATH=$PATH:$HOME/.vim/bin
-fi
+export PATH=$HOME/.vim/bin:/usr/bin:/bin:/sbin:/usr/sbin:/usr/games:/usr/local/games:/usr/local/bin
 
 # Source Perlbrew Environment
 PERLBREW_ENV_FILE=/opt/perl5/etc/bashrc
 if [ -f "$PERLBREW_ENV_FILE" ]; then
     source $PERLBREW_ENV_FILE
+fi
+
+# Update PATH
+if [ -d $BIN_DIR ]; then
+    PATH=$BIN_DIR:$PATH
 fi
 
