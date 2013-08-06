@@ -83,3 +83,12 @@ if [ -d $BIN_DIR ]; then
     PATH=$BIN_DIR:$PATH
 fi
 
+# SSH Setup
+SSH_DIR=$HOME/.ssh
+SSH_SOCKET_DIR=$SSH_DIR/sockets
+if [ ! -d "$SSH_SOCKET_DIR" ]; then
+    mkdir -p $SSH_SOCKET_DIR
+    chmod 700 $SSH_DIR
+    chmod 700 $SSH_SOCKET_DIR
+fi
+
