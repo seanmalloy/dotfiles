@@ -71,6 +71,7 @@ unset bindex
 ########################################################################
 # Nothing below here to configure
 
+# START
 # Store the commandline
 declare -r cmdline=${1:-""}
 

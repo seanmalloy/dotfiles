@@ -11,8 +11,7 @@
      * new windows for SSH sessions will have two panes by default
        and be split horizantally 75% on top, 25% on bottom
 
-2. Add staticly compiled tmux binary to
-   ~/tech/bin/ directory.
+2. Add man page for staticly compiled tmux in ~/tech/bin/ directory.
 
 3. Create deploy script.
    * self extracting shell script?

@@ -58,6 +58,7 @@ export VISUAL=vim               # vim is my editor
 export EDITOR=vim               # vim is my editor
 export RELEASE_TESTING=1        # For Perl Module Development
 export PERLBREW_ROOT=/opt/perl5 # Top level perlbrew directory
+export HOSTNAME=$(hostname -s)  # Short hostname of this computer
 
 # Alias Definitions
 alias ll='ls -l'
@@ -79,7 +80,7 @@ if [ -f "$PERLBREW_ENV_FILE" ]; then
 fi
 
 # Update PATH
-if [ -d $BIN_DIR ]; then
+if [ -d "$BIN_DIR" ]; then
     PATH=$BIN_DIR:$PATH
 fi
 
@@ -90,5 +91,27 @@ if [ ! -d "$SSH_SOCKET_DIR" ]; then
     mkdir -p $SSH_SOCKET_DIR
     chmod 700 $SSH_DIR
     chmod 700 $SSH_SOCKET_DIR
+fi
+
+# TMUX Setup
+if [ -n "$(which tmux)" ]; then
+    #alias attach='tmux attach -t $HOSTNAME'
+    TMUX_DIR=$HOME/.tmux.d
+    TMUX_SOCKET_DIR=$HOME/.tmux.d/sockets
+    if [ ! -d "$TMUX_SOCKET_DIR" ]; then
+        mkdir -p $TMUX_SOCKET_DIR
+        chmod 700 $TMUX_DIR
+        chmod 700 $TMUX_SOCKET_DIR
+    fi
+
+    
+    if ! tmux has-session -t ${HOSTNAME} 2>/dev/null; then
+        # session does not exist, create one
+        #tmux -L $TMUX_SOCKET_DIR new-session -d -s $HOSTNAME
+        tmux new-session -d -s $HOSTNAME
+    #else
+    #    # attach to existing session
+    #    attach
+    fi
 fi
 
