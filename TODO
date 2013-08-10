@@ -2,8 +2,6 @@
    * See tm script
    * See tmux.conf
    * Requirements
-     * Auto start tmux in terminal if it's not already running
-     * Windows for SSH session have the remove hostname
      * Connecting via SSH to a host with an existing connection
        will "switch" to the existing window instead of opening a new one
      * SSH "Proxy" option for connecting to hosts that need a "jump box"
@@ -11,9 +9,7 @@
      * new windows for SSH sessions will have two panes by default
        and be split horizantally 75% on top, 25% on bottom
 
-2. Add man page for staticly compiled tmux in ~/tech/bin/ directory.
-
-3. Create deploy script.
+2. Create deploy script.
    * self extracting shell script?
    * Pull current ack?
    * Pull VIM modules?

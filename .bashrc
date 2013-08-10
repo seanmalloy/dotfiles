@@ -51,14 +51,15 @@ fi
 set -o vi
 set -o noclobber
 
-export TECH_DIR=$HOME/tech      # top level dir for locally installed software
-export BIN_DIR=$TECH_DIR/bin    # directory for scripts, binaries, etc.
-export PROJ_DIR=$HOME/projects  # directory for code projects
-export VISUAL=vim               # vim is my editor
-export EDITOR=vim               # vim is my editor
-export RELEASE_TESTING=1        # For Perl Module Development
-export PERLBREW_ROOT=/opt/perl5 # Top level perlbrew directory
-export HOSTNAME=$(hostname -s)  # Short hostname of this computer
+export TECH_DIR=$HOME/tech         # top level dir for locally installed software
+export BIN_DIR=$TECH_DIR/bin       # directory for scripts, binaries, etc.
+export MAN_DIR=$TECH_DIR/share/man # directory for man pages
+export PROJ_DIR=$HOME/projects     # directory for code projects
+export VISUAL=vim                  # vim is my editor
+export EDITOR=vim                  # vim is my editor
+export RELEASE_TESTING=1           # For Perl Module Development
+export PERLBREW_ROOT=/opt/perl5    # Top level perlbrew directory
+export HOSTNAME=$(hostname -s)     # Short hostname of this computer
 
 # Alias Definitions
 alias ll='ls -l'
@@ -84,6 +85,8 @@ if [ -d "$BIN_DIR" ]; then
     PATH=$BIN_DIR:$PATH
 fi
 
+export MANPATH=$MAN_DIR:$MAN_PATH
+
 # SSH Setup
 SSH_DIR=$HOME/.ssh
 SSH_SOCKET_DIR=$SSH_DIR/sockets
@@ -94,24 +97,44 @@ if [ ! -d "$SSH_SOCKET_DIR" ]; then
 fi
 
 # TMUX Setup
-if [ -n "$(which tmux)" ]; then
-    #alias attach='tmux attach -t $HOSTNAME'
-    TMUX_DIR=$HOME/.tmux.d
-    TMUX_SOCKET_DIR=$HOME/.tmux.d/sockets
+function attach() {
+    local MY_SESSION=$1
+    shift
+
+    if [ -z "$TMUX_BIN" ]; then
+        return
+    fi
+
+    if [ -z "$MY_SESSION" ]; then
+        $TMUX_BIN -S $TMUX_SOCKET list-sessions
+        return
+    fi
+
+    if ! $TMUX_BIN -q -S $TMUX_SOCKET has-session -t $MY_SESSION; then
+        # session does not exist, create one
+        $TMUX_BIN -S $TMUX_SOCKET new-session -d -n $MY_SESSION -s $MY_SESSION
+        $TMUX_BIN -S $TMUX_SOCKET attach -t $MY_SESSION
+    else
+        if [ -z "$TMUX" ]; then
+            local TMUX_CLIENTS=$($TMUX_BIN -S $TMUX_SOCKET list-clients -t $MY_SESSION)
+            if [ -z "$TMUX_CLIENTS" ]; then
+                $TMUX_BIN -S $TMUX_SOCKET attach -t $MY_SESSION
+            fi
+        fi
+    fi
+}
+
+TMUX_BIN=$(which tmux)
+if [ -n "$TMUX_BIN" ]; then
+    export TMUX_DIR=$HOME/.tmux.d
+    export TMUX_SOCKET_DIR=$HOME/.tmux.d/sockets
     if [ ! -d "$TMUX_SOCKET_DIR" ]; then
         mkdir -p $TMUX_SOCKET_DIR
         chmod 700 $TMUX_DIR
         chmod 700 $TMUX_SOCKET_DIR
     fi
-
-    
-    if ! tmux has-session -t ${HOSTNAME} 2>/dev/null; then
-        # session does not exist, create one
-        #tmux -L $TMUX_SOCKET_DIR new-session -d -s $HOSTNAME
-        tmux new-session -d -s $HOSTNAME
-    #else
-    #    # attach to existing session
-    #    attach
-    fi
+    export TMUX_SESSION=$HOSTNAME
+    export TMUX_SOCKET=$TMUX_SOCKET_DIR/$TMUX_SESSION
+    attach $TMUX_SESSION
 fi
 
