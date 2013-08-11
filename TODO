@@ -8,3 +8,5 @@
    * Pull current ack?
    * Pull VIM modules?
 
+3. Perl Dist::Zilla configuration.
+
