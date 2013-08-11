@@ -1,13 +1,7 @@
 1. Finish initial tmux config and setup.
    * See tm script
-   * See tmux.conf
    * Requirements
-     * Connecting via SSH to a host with an existing connection
-       will "switch" to the existing window instead of opening a new one
-     * SSH "Proxy" option for connecting to hosts that need a "jump box"
      * Multi session ... think "cluster ssh"
-     * new windows for SSH sessions will have two panes by default
-       and be split horizantally 75% on top, 25% on bottom
 
 2. Create deploy script.
    * self extracting shell script?
