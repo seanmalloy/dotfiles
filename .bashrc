@@ -68,7 +68,6 @@ alias ltr='ls -ltr'
 alias vi='vim'
 alias tmux='tmux attach'
 alias bin='cd $BIN_DIR'
-alias proj='cd $PROJ_DIR'
 alias tech='cd $TECH_DIR'
 
 # Set PATH
@@ -137,4 +136,27 @@ if [ -n "$TMUX_BIN" ]; then
     export TMUX_SOCKET=$TMUX_SOCKET_DIR/$TMUX_SESSION
     attach $TMUX_SESSION
 fi
+
+### Shell Functions ###
+function proj() {
+    if [ -z "$PROJ_DIR" ]; then
+        echo "Environment Varialbe PROJ_DIR not set"
+        return
+    fi
+
+    if [ ! -d "$PROJ_DIR" ]; then
+        mkdir -p $PROJ_DIR
+    fi
+
+    if [ -z "$1" ]; then
+        cd $PROJ_DIR
+    else
+        if [ -d "$PROJ_DIR/$1" ]; then
+            cd $PROJ_DIR/$1
+        else
+            echo "Project Directory for $1 does not exist"
+            return
+        fi
+    fi
+}
 
