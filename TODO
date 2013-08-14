@@ -1,5 +1,6 @@
 1. Finish initial tmux config and setup.
    * See tm script
+   * left and right status bar config
    * Requirements
      * Multi session ... think "cluster ssh"
 
