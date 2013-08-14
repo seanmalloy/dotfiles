@@ -9,5 +9,8 @@
    * Pull current ack?
    * Pull VIM modules?
 
-3. Perl Dist::Zilla configuration.
+3. Detect if OpenSSH "ControlPersist" option
+   is supported or not.
+
+4. Perl Dist::Zilla configuration.
 
