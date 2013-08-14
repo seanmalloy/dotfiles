@@ -66,7 +66,6 @@ alias ll='ls -l'
 alias la='ls -A'
 alias ltr='ls -ltr'
 alias vi='vim'
-alias tmux='tmux attach'
 alias bin='cd $BIN_DIR'
 alias tech='cd $TECH_DIR'
 
