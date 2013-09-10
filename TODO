@@ -2,16 +2,18 @@
    * See tm script
    * left and right status bar config
    * C-a P ssh -W vs nc
-   * Requirements
-     * Multi session ... think "cluster ssh"
+   * Multi session ... think "cluster ssh"
 
-2. Create deploy script.
-   * self extracting shell script?
-   * Pull current ack?
-   * Pull VIM modules?
+2. Update Install Script
+   * Setup vim modules
+   * Dynamically setup .gitconfig name
+   * Dynamically setup .gitconfig email
+   * Dynamically setup .ssh/config jump host
 
 3. Detect if OpenSSH "ControlPersist" option
    is supported or not.
 
 4. Perl Dist::Zilla configuration.
+
+5. Vim modules.
 
