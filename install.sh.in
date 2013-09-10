@@ -1,0 +1,17 @@
+#!/bin/bash
+
+function f_install()
+{
+    match=$(grep --text --line-number '^PAYLOAD:$' $0 | cut -d ':' -f 1)
+    payload_start=$((match + 1))
+    tail -n +$payload_start $0 | tar -zvf - -C $HOME
+}
+
+read -p "Install files? " ans
+if [[ "${ans:0:1}"  ||  "${ans:0:1}" ]]; then
+    f_install
+    # Do remainder of install steps.
+fi
+
+exit 0
+
