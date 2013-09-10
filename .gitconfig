@@ -8,3 +8,9 @@
 	editor = vim
 [merge]
 	tool = vimdiff
+[alias]
+	br = branch
+	ci = commit --verbose
+	co = checkout
+	st = status
+
