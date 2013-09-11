@@ -1,5 +1,7 @@
 #!/bin/bash
 
+#TODO: function variables local
+
 function f_install()
 {
     match=$(grep --text --line-number '^PAYLOAD:$' $0 | cut -d ':' -f 1)
@@ -7,10 +9,26 @@ function f_install()
     tail -n +$payload_start $0 | tar xzf - -C $HOME
 }
 
+function f_setup_git()
+{
+    git_cmd=$(which git)
+    if [ -z "$git_cmd" ]; then
+        return 0
+    fi
+
+    read -p "Name: "  MYNAME
+    read -p "Email: " MYEMAIL
+
+    $git_cmd config --global user.name  "$MYNAME"
+    $git_cmd config --global user.email "$MYEMAIL"
+}
+
 read -p "Install files? " ans
 if [[ "${ans:0:1}"  ||  "${ans:0:1}" ]]; then
     f_install
+    
     # Do remainder of install steps.
+    f_setup_git
 fi
 
 exit 0

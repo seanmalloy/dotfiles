@@ -4,6 +4,5 @@ Install Instructions
 ====================
 $ cd /tmp
 $ wget https://raw.github.com/seanmalloy/dotfiles/master/install.sh
-$ chmod +x install.sh
-$ ./install.sh
+$ bash ./install.sh
 

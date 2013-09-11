@@ -5,7 +5,6 @@ rm -f installer.tar install.tar.gz
 tar cf install.tar $(ls -1A)
 tar --delete -f install.tar .git
 tar --delete -f install.tar .gitignore
-tar --delete -f install.tar .gitmodules
 tar --delete -f install.tar .gitattributes
 tar --delete -f install.tar README
 tar --delete -f install.tar TODO

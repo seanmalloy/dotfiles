@@ -5,15 +5,13 @@
    * Multi session ... think "cluster ssh"
 
 2. Update Install Script
-   * Setup vim modules
-   * Dynamically setup .gitconfig name
-   * Dynamically setup .gitconfig email
    * Dynamically setup .ssh/config jump host
-
-3. Detect if OpenSSH "ControlPersist" option
-   is supported or not.
+   * Detect if OpenSSH "ControlPersist option is supported"
 
 4. Perl Dist::Zilla configuration.
 
-5. Vim modules.
+5. More Vim modules.
+
+6. Script to auto update all VIM
+   modules using git.
 
