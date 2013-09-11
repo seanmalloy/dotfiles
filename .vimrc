@@ -1,5 +1,10 @@
 " Sean Malloy's .vimrc file.
 
+" Load plugins using pathogen
+filetype on
+execute pathogen#infect()
+execute pathogen#helptags()
+
 " Use Vim setting instead of Vi settings. Must be first.
 set nocompatible
 
