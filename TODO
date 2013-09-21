@@ -11,6 +11,8 @@
 4. Perl Dist::Zilla configuration.
 
 5. More Vim modules.
+   * https://github.com/godlygeek/tabular
+   * https://github.com/scrooloose/syntastic
 
 6. Script to auto update all VIM
    modules using git.
