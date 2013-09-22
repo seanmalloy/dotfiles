@@ -4,7 +4,6 @@
    * Multi session ... think "cluster ssh"
 
 2. Update Install Script
-   * tmux C-a P ssh -W vs nc, create f_setup_tmux in install.sh.in.
    * General code clean up in install.sh.in.
    * Maybe combine build and addpayload.sh scripts.
 
