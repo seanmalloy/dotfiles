@@ -11,7 +11,9 @@
 4. Perl Dist::Zilla configuration.
 
 5. More Vim modules.
-   * https://github.com/godlygeek/tabular
+   * Configure tabular plugin for C, C++, and Perl files.
+   * Fix "conflict" between delimate and vim-puppet. Hash rocket
+     alignment does not work when } is at the end of the line.
    * https://github.com/scrooloose/syntastic
 
 6. Script to auto update all VIM

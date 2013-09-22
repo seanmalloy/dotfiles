@@ -40,12 +40,11 @@ filetype plugin indent on
 colorscheme darkblue
 
 " delimitMate Plugin Config
-au FileType c    let b:delimitMate_expand_cr = 1
-au FileType cpp  let b:delimitMate_expand_cr = 1
-au FileType perl let b:delimitMate_expand_cr = 1
-au FileType sh   let b:delimitMate_expand_cr = 1
+au FileType c      let b:delimitMate_expand_cr = 1
+au FileType cpp    let b:delimitMate_expand_cr = 1
+au FileType perl   let b:delimitMate_expand_cr = 1
+au FileType puppet let b:delimitMate_expand_cr = 1
+au FileType sh     let b:delimitMate_expand_cr = 1
 
 let delimitMate_matchpairs = '(:),{:},[:]'
 
-" Comma always followed by a space
-inoremap  ,  ,<Space>
