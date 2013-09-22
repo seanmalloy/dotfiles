@@ -5,8 +5,8 @@
    * Multi session ... think "cluster ssh"
 
 2. Update Install Script
-   * Dynamically setup .ssh/config jump host
-   * Detect if OpenSSH "ControlPersist option is supported"
+   * General code clean up in install.sh.in.
+   * Maybe combine build and addpayload.sh scripts.
 
 4. Perl Dist::Zilla configuration.
 
