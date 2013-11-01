@@ -13,7 +13,6 @@
    * Configure tabular plugin to align = for C, C++, and Perl files.
    * Fix "conflict" between delimate and vim-puppet. Hash rocket
      alignment does not work when } is at the end of the line.
-   * https://github.com/scrooloose/syntastic
 
 6. Script to auto update all VIM
    modules using git.
