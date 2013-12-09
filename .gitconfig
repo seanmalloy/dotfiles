@@ -10,4 +10,5 @@
 	ci = commit --verbose
 	co = checkout
 	st = status
-
+[push]
+	default = upstream

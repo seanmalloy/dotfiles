@@ -8,6 +8,11 @@
    * Maybe combine build and addpayload.sh scripts.
 
 4. Perl Dist::Zilla configuration.
+   * Copyright year should be a variable in Module.pm
+   * Pod Weaver setup for minting profile
+   * Create app minting profile
+   * Create Moose minting profile
+   * Create work minting profiles
 
 5. More Vim modules.
    * Configure tabular plugin to align = for C, C++, and Perl files.
