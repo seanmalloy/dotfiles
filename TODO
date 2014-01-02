@@ -9,6 +9,7 @@
 
 4. Perl Dist::Zilla configuration.
    * START: Pod Weaver setup for minting profile
+   * Add a README.md file to the skel directory
    * Create app minting profile
    * Create Moose minting profile
    * Create work minting profiles
