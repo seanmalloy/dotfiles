@@ -8,8 +8,7 @@
    * Maybe combine build and addpayload.sh scripts.
 
 4. Perl Dist::Zilla configuration.
-   * START: automatic management of modules version and git tags.
-   * Pod Weaver setup for minting profile
+   * START: Pod Weaver setup for minting profile
    * Create app minting profile
    * Create Moose minting profile
    * Create work minting profiles
