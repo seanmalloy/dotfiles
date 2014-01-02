@@ -1,6 +1,6 @@
 package {{ $name }};
 
-# Copyright (c) 2013 {{ $dist->stash_named('%Rights')->copyright_holder }}. All rights reserved.
+# Copyright (c) 2014 {{ $dist->stash_named('%Rights')->copyright_holder }}. All rights reserved.
 # 
 # Redistribution and use in source and binary forms, with or without
 # modification, are permitted provided that the following conditions
@@ -36,27 +36,20 @@ our @EXPORT_OK = qw( );
 our $VERSION   = '0.01';
 
 #############################################
-# Usage      : is_defined(scalar)
+# Usage      : example(scalar)
 # Purpose    : Test if a scalar is defined
 # Returns    : True if scalar is defined
-# Parameters : Scalar variable
-# Throws     : SPM::X::BadValue if scalar input is undef
+# Parameters : scalar variable
+# Throws     : none
 # Comments   : none
 # See Also   : perldoc -f defined, perldoc -f undef
-sub is_defined {
-    my $parameter = shift;
-    if (!defined $parameter) {
-        SPM::X::BadValue->throw({
-            ident   => 'bad parameter', 
-            tags    => [ qw(undef) ], 
-            public  => 1, 
-            message => "invalid parameter %{given_value}s for %{given_for}s", 
-            given_value => 'undef', 
-            given_for   => 'undef test', 
-        });
-    }
-    return 1;
-}
+#sub example {
+#    my $parameter = shift;
+#    if (!defined $parameter) {
+#        return;
+#    }
+#    return 1;
+#}
 
 1;
 __END__
@@ -97,7 +90,7 @@ No known bugs at this time.
 
 =head1 COPYRIGHT AND LICENSE
 
-Copyright (c) 2013 {{ $dist->stash_named('%Rights')->copyright_holder }}. All rights reserved.
+Copyright (c) 2014 {{ $dist->stash_named('%Rights')->copyright_holder }}. All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
 modification, are permitted provided that the following conditions
