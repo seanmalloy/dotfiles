@@ -1,0 +1,4 @@
+*.gz
+*.swp
+.gitnxtver_cache
+{{$dist->name}}*/
