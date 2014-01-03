@@ -1,18 +1,28 @@
-#/bin/bash
+#!/bin/bash
 
-rm -f installer.tar install.tar.gz
+PAYLOAD_FILE="install.tar.gz"
+BUILD_FILE="install.tar"
+rm -f $BUILD_FILE $PAYLOAD_FILE
 
-tar cf install.tar $(ls -1A)
-tar --delete -f install.tar .git
-tar --delete -f install.tar .gitignore
-tar --delete -f install.tar .gitattributes
-tar --delete -f install.tar README
-tar --delete -f install.tar TODO
-tar --delete -f install.tar build
-tar --delete -f install.tar addpayload.sh
-tar --delete -f install.tar install.sh
-tar --delete -f install.tar install.sh.in
-tar --delete --wildcards -f install.tar .*.swp
+tar cf $BUILD_FILE $(ls -1A)
+tar --delete -f $BUILD_FILE .git
+tar --delete -f $BUILD_FILE .gitignore
+tar --delete -f $BUILD_FILE .gitattributes
+tar --delete -f $BUILD_FILE README
+tar --delete -f $BUILD_FILE TODO
+tar --delete -f $BUILD_FILE build
+tar --delete -f $BUILD_FILE install.sh
+tar --delete -f $BUILD_FILE install.sh.in
+tar --delete --wildcards -f $BUILD_FILE .*.swp
 
-gzip install.tar
+gzip $BUILD_FILE
+if [[ "$?" -ne 0 ]]; then
+    echo "ERROR: failed to create $PAYLOAD_FILE"
+    exit 1    
+fi
+
+# Append binary data.
+cp install.sh.in install.sh
+echo "PAYLOAD:"   >> install.sh
+cat $PAYLOAD_FILE >> install.sh
 

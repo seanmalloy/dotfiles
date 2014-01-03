@@ -1,51 +1,50 @@
 #!/bin/bash
 
-set -u
+# DESCRIPTION
+#
+# Self extracting shell script to install Sean Malloy's dotfiles.
 
-#TODO: function variables should be local
+set -u
 
 f_install()
 {
-    declare -r match=$(grep --text --line-number '^PAYLOAD:$' $0 | cut -d ':' -f 1)
-    declare -r payload_start=$((match + 1))
-    tail -n +$payload_start $0 | tar xzf - -C $HOME
+    declare -r MATCH=$(grep --text --line-number '^PAYLOAD:$' $0 | cut -d ':' -f 1)
+    declare -r PAYLOAD_START=$((MATCH + 1))
+    tail -n +$PAYLOAD_START $0 | tar xzf - -C $HOME
 }
 
-f_git_is_installed()
+f_set_env()
 {
-    declare -r GIT_CMD=$(which git 2> /dev/null)
-    if [[ -z $GIT_CMD ]]; then
-        return 0
-    fi
-    return 1
+    SSH_MAJOR_VERSION=$(ssh -v 2>&1 | head -1 | awk '{print $1}' | awk -F_ '{print $NF}' | cut -b 1-3 | awk -F. '{print $1}')
+    SSH_MINOR_VERSION=$(ssh -v 2>&1 | head -1 | awk '{print $1}' | awk -F_ '{print $NF}' | cut -b 1-3 | awk -F. '{print $2}')
+    SSH_CMD=$(which ssh 2> /dev/null)
+
+    GIT_CMD=$(which git 2> /dev/null)
 }
 
 f_setup_git()
 {
-    declare -r GIT_INSTALLED=$(f_git_is_installed)
-    if (( $GIT_INSTALLED )); then
+    if [[ -n $GIT_CMD ]]; then
         read -p "Name: "  MYNAME
         read -p "Email: " MYEMAIL
-        $git_cmd config --global user.name  "$MYNAME"
-        $git_cmd config --global user.email "$MYEMAIL"
+        $(which git) config --global user.name  "$MYNAME"
+        $(which git) config --global user.email "$MYEMAIL"
     fi
 }
 
 f_setup_github()
 {
-    declare -r GIT_INSTALLED=$(f_git_is_installed)
-    if (( $GIT_INSTALLED )); then
+    if [[ -n $GIT_CMD ]]; then
         read -p "Setup Github? " ans
         if [[ "${ans:0:1}"  ||  "${ans:0:1}" ]]; then
             read -p "Name: "  GITHUB_USER
-            git config --global github.user $GITHUB_USER
+            $(which git) config --global github.user $GITHUB_USER
         fi
     fi
 }
 
 f_setup_ssh()
 {
-    declare -r SSH_CMD=$(which ssh 2> /dev/null)
     if [[ -z $SSH_CMD ]]; then
         return 0
     fi
@@ -55,8 +54,6 @@ f_setup_ssh()
     sed -i "s/JUMPHOST/$MYSSHJUMPHOST/g" $HOME/.ssh/config
 
     # Enable ControlPersist option
-    declare -r SSH_MAJOR_VERSION=$(ssh -v 2>&1 | head -1 | awk '{print $1}' | awk -F_ '{print $NF}' | cut -b 1-3 | awk -F. '{print $1}')
-    declare -r SSH_MINOR_VERSION=$(ssh -v 2>&1 | head -1 | awk '{print $1}' | awk -F_ '{print $NF}' | cut -b 1-3 | awk -F. '{print $2}')
     if [[ $SSH_MAJOR_VERSION -gt 5 ]]; then
         echo "Enabling SSH ControlPersist"
         sed -i 's/\#ControlPersist/ControlPersist/g' $HOME/.ssh/config
@@ -68,8 +65,6 @@ f_setup_ssh()
 
 f_setup_tmux()
 {
-    declare -r SSH_MAJOR_VERSION=$(ssh -v 2>&1 | head -1 | awk '{print $1}' | awk -F_ '{print $NF}' | cut -b 1-3 | awk -F. '{print $1}')
-    declare -r SSH_MINOR_VERSION=$(ssh -v 2>&1 | head -1 | awk '{print $1}' | awk -F_ '{print $NF}' | cut -b 1-3 | awk -F. '{print $2}')
     if [[ $SSH_MAJOR_VERSION -gt 5 ]]; then
         echo "Enabling TMUX Proxy Command ssh -W"
         echo ""                                    >> $HOME/.tmux.conf
@@ -90,6 +85,7 @@ f_setup_tmux()
 
 read -p "Install files? " ans
 if [[ "${ans:0:1}"  ||  "${ans:0:1}" ]]; then
+    f_set_env
     f_install
     
     # Do remainder of install steps.
