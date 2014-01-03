@@ -8,7 +8,6 @@
    * Maybe combine build and addpayload.sh scripts.
 
 4. Perl Dist::Zilla configuration.
-   * START: Add a README.md file to the skel directory
    * Fix Changelog file.
    * Create app minting profile
    * Create Moose minting profile
