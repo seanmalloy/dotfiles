@@ -1,5 +1,5 @@
-Sean Malloy's Dotfiles.
-=======================
+Sean Malloy's Dotfiles
+======================
 
 Install Instructions
 --------------------
