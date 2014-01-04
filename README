@@ -1,8 +1,0 @@
-Sean Malloy's dot files.
-
-Install Instructions
-====================
-$ cd /tmp
-$ wget https://raw.github.com/seanmalloy/dotfiles/master/install.sh
-$ bash ./install.sh
-

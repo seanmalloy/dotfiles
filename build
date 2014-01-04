@@ -8,7 +8,7 @@ tar cf $BUILD_FILE $(ls -1A)
 tar --delete -f $BUILD_FILE .git
 tar --delete -f $BUILD_FILE .gitignore
 tar --delete -f $BUILD_FILE .gitattributes
-tar --delete -f $BUILD_FILE README
+tar --delete -f $BUILD_FILE README.md
 tar --delete -f $BUILD_FILE build
 tar --delete -f $BUILD_FILE install.sh
 tar --delete -f $BUILD_FILE install.sh.in
