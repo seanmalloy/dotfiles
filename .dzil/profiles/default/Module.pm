@@ -26,8 +26,6 @@ package {{ $name }};
 # ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
 
-# ABSTRACT: please fill in this section
-
 use strict;
 use warnings;
 use English qw( -no_match_vars );
@@ -37,13 +35,6 @@ our @ISA       = qw(Exporter);
 our @EXPORT_OK = qw( );
 our $VERSION   = '0.01';
 
-=pod 
-
-=func example
-
-Example function.
-
-=cut
 #############################################
 # Usage      : example(scalar)
 # Purpose    : Test if a scalar is defined
@@ -61,6 +52,10 @@ sub example {
 }
 
 1;
+
+########## Pod Weaver Documentation ##########
+
+# ABSTRACT: please fill in this section
 
 =pod
 
@@ -84,6 +79,16 @@ be explicitly requested.
 =head1 BUGS
 
 No known bugs at this time.
+
+=cut
+
+########## Pod Weaver Function Documentation ##########
+
+=pod 
+
+=func example
+
+Example function.
 
 =cut
 

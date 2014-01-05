@@ -26,25 +26,20 @@ package {{ $name }};
 # ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
 
-# ABSTRACT: please fill in this section
-
 use Moose;
 use English qw( -no_match_vars );
 
 our $VERSION = '0.01';
 
-=pod 
-
-=method example
-
-Example method.
-
-=cut
 has 'example' => (isa => 'Int', is => 'rw', required => 0, default => 0);
 
 __PACKAGE__->meta->make_immutable;
 
 1;
+
+########## Pod Weaver Documentation ##########
+
+# ABSTRACT: please fill in this section
 
 =pod
 
@@ -63,6 +58,16 @@ Put description here.
 =head1 BUGS
 
 No known bugs at this time.
+
+=cut
+
+########## Pod Weaver Method Documentation ##########
+
+=pod 
+
+=method example
+
+Example method.
 
 =cut
 
