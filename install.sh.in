@@ -36,9 +36,11 @@ f_setup_github()
 {
     if [[ -n $GIT_CMD ]]; then
         read -p "Setup Github? " ans
-        if [[ "${ans:0:1}"  ||  "${ans:0:1}" ]]; then
+        if [[ "$ans" =  "y" ]]; then
             read -p "Name: "  GITHUB_USER
             $(which git) config --global github.user $GITHUB_USER
+        else
+            echo "Skipping Github Configuration!"
         fi
     fi
 }
