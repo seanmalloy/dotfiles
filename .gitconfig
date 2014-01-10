@@ -11,4 +11,4 @@
 	co = checkout
 	st = status
 [push]
-	default = upstream
+	default = nothing
