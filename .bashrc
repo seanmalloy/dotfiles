@@ -61,7 +61,7 @@ export RELEASE_TESTING=1           # For Perl Module Development
 export PERLBREW_ROOT=/opt/perl5    # Top level perlbrew directory
 export HOSTNAME=$(hostname -s)     # Short hostname of this computer
 
-# Alias Definitions
+# Generic Aliases
 alias ll='ls -l'
 alias la='ls -A'
 alias ltr='ls -ltr'
@@ -79,6 +79,9 @@ alias .2='cd ../..'
 alias .3='cd ../../..'
 alias .4='cd ../../../..'
 alias .5='cd ../../../../../..'
+
+# Git Aliases
+alias g='git'
 
 # Set PATH
 export PATH=$HOME/.vim/bin:/usr/bin:/bin:/sbin:/usr/sbin:/usr/games:/usr/local/games:/usr/local/bin
