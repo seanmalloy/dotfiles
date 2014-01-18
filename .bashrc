@@ -39,7 +39,6 @@ export PROJ_DIR=$HOME/projects     # directory for code projects
 export VISUAL=vim                  # vim is my editor
 export EDITOR=vim                  # vim is my editor
 export RELEASE_TESTING=1           # For Perl Module Development
-export PERLBREW_ROOT=/opt/perl5    # Top level perlbrew directory
 export HOSTNAME=$(hostname -s)     # Short hostname of this computer
 
 # Generic Aliases
@@ -62,19 +61,14 @@ alias .4='cd ../../../..'
 alias .5='cd ../../../../../..'
 
 # Set PATH
-export PATH=$HOME/.vim/bin:/usr/bin:/bin:/sbin:/usr/sbin:/usr/games:/usr/local/games:/usr/local/bin
-
-# Source Perlbrew Environment
-PERLBREW_ENV_FILE=/opt/perl5/etc/bashrc
-if [ -f "$PERLBREW_ENV_FILE" ]; then
-    source $PERLBREW_ENV_FILE
-fi
-
-# Update PATH
+export PATH=$HOME/.plenv/bin:$HOME/.vim/bin:/usr/bin:/bin:/sbin:/usr/sbin:/usr/games:/usr/local/games:/usr/local/bin
 if [ -d "$BIN_DIR" ]; then
     PATH=$BIN_DIR:$PATH
 fi
 export MANPATH=$MAN_DIR:$MAN_PATH
+
+### Setup plenv ###
+eval "$(plenv init -)"
 
 #### Git Setup ###
 if [ -f "$BASH_INCLUDE_DIR/git-completion.bash" ]; then

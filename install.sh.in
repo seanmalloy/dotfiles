@@ -24,7 +24,11 @@ f_set_env()
 
 f_pre_clean()
 {
+    # Clean Ununsed Files
     rm -f $HOME/.bash_profile
+    rm -rf $HOME/.perlbrew/
+
+    # Clean Up Used Directories Before Install
     rm -rf $HOME/.bash_files/
     rm -rf $HOME/.dzil/
     rm -rf $HOME/.terminfo/

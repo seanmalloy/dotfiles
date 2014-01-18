@@ -1,0 +1,105 @@
+#!/usr/bin/env perl
+#
+# Summary: Install a Perl version using the perl-build plugin
+#
+# Usage: plenv install [-v|--verbose] <version>
+#        plenv install [-v|--verbose] /path/to/definition
+#        plenv install -l|--list
+#
+#   -l/--list        List all available versions
+#   -v/--verbose     Verbose mode: print compilation status to stdout
+#   --as=<NAME>      Install the definition as <NAME>
+#   --test           Run test cases
+#
+# For detailed information on installing Perl versions with
+# perl-build, including a list of environment variables for adjusting
+# compilation, see: https://github.com/tokuhirom/perl-build#usage
+use strict;
+use warnings;
+use 5.008001;
+use FindBin;
+use lib "$FindBin::Bin/../lib/";
+
+use Getopt::Long ();
+use File::Path qw(mkpath);
+
+my $PERL_BUILD = "$FindBin::Bin/perl-build";
+
+&main;exit 0;
+
+# Provide plenv completions
+sub main {
+    if (!defined $ENV{PLENV_ROOT}) {
+        $ENV{PLENV_ROOT} = "$ENV{HOME}/.plenv";
+    }
+
+
+    if (@ARGV > 0 && $ARGV[0] eq '--complete') {
+        print `/usr/bin/perl $PERL_BUILD --definitions`;
+        exit 0;
+    }
+
+    my $p = Getopt::Long::Parser->new(
+        config => [qw(posix_default no_ignore_case pass_through permute)]
+    );
+    $p->getoptions(
+        'version!'       => \my $version,
+        'h|help'         => \my $help,
+        'l|list'         => \my $list,
+        'as=s'           => \my $as,
+    );
+    if ($version) {
+        print "$Perl::Build::VERSION\n";
+        exit 0;
+    } elsif ($help) {
+        usage();
+    } elsif ($list) {
+        print "Available versions:\n";
+        print `/usr/bin/perl $PERL_BUILD --definitions | sed 's/^/ /g'`;
+        exit 0;
+    }
+
+    my $definition = shift @ARGV or usage();
+    if (not defined $as) {
+        $as = $definition;
+    }
+    my $prefix = "$ENV{PLENV_ROOT}/versions/$as";
+    if (-d $prefix) {
+        die "$prefix is already installed\n";
+    }
+
+    my $cache_dir = "$ENV{PLENV_ROOT}/cache/";
+    mkpath($cache_dir);
+    my $build_dir = "$ENV{PLENV_ROOT}/build/";
+    mkpath($build_dir);
+
+    system(
+        '/usr/bin/perl',
+        '--',
+        $PERL_BUILD,
+        '--symlink-devel-executables',
+        '--build-dir'   => $build_dir,
+        '--tarball-dir' => $cache_dir,
+        '-Dusedevel',
+        @ARGV,
+        $definition,
+        $prefix,
+    ) == 0 or die "ABORT\n";
+
+    system("plenv rehash");
+}
+
+sub usage {
+    open my $fh, '<', $0 or die "$0: $!\n";
+    my $buf = '';
+    <$fh>; # shebang
+    while (<$fh>) {
+        s/^#// or last;
+        s/^ //;
+        $buf .= $_;
+    }
+    print $buf;
+    exit 0;
+}
+
+

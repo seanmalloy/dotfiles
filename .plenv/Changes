@@ -1,0 +1,154 @@
+2.1.0 2013-09-04T10:43:51
+
+    - Some minor tweaks.
+
+2.0.1 2013-06-02T10:44:30
+
+    - bump
+
+2.0.0 2013-06-02T10:33:38
+
+    - Show installation information if there is no perl-build.
+      (suggested by miyagawa++)
+
+1.9.4 2013-06-01T14:07:24
+
+    - Documentation fix
+
+1.9.1 2013-05-30T15:24:14
+
+    - Switch to rbenv based code.
+      (tokuhirom)
+
+v1.6.0 2013-05-26T10:32:21Z
+
+    - uninstall command
+      (Shoichi Kaji)
+
+1.5.0 2013-05-17T02:14:45Z
+
+    - ~/.plenv/build/ as a default building directory. And do not remove building directory by default
+      (tokuhirom)
+    - Support parallel building. Please try `-j` option!
+      (tokuhirom)
+
+1.4.15 2013-05-14T08:08:27Z
+
+    - Added `plenv install --force` option
+      (WATANABE Hiroaki)
+    - Make `plenv -h` as an alias of `plenv help`
+      (Suggested by Tatsuhiko Miyagawa)
+    - Document about --test option for `plenv install`
+      (tokuhirom)
+
+1.4.14 2013-04-25T21:55:59Z
+
+    - Fixed packaging issue.
+
+1.4.13 2013-04-24T05:33:09Z
+
+    - Do not handle `plenv exec perl --version` in core.
+      (tokuhirom)
+    - Search only plenv PATH if current environment is not "system"(#21)
+      (syohex)
+
+1.4.12 2013-04-15T05:43:50Z
+
+    - Added `plenv --version`
+      (Suggested by miyagawa++)
+
+1.4.11 2013-03-31T03:43:53Z
+
+    - pass test option to Perl::Build
+      (ks <ks-for-git@live.jp>)
+    - Depend to Perl::Build 0.13
+      (tokuhirom)
+
+1.4.10 2013-03-30T13:41:09Z
+
+    - Removed deps for Module::Build::Pluggable
+
+1.4.9 2013-03-28T02:46:35Z
+
+    - depend to Perl-Build 0.10
+
+1.4.8 2013-03-28T02:39:34Z
+
+    - re-packaging
+      (tokuhirom)
+
+1.4.7 2013-03-27T12:22:53Z
+
+    - 1.4.5 & 1.4.6 was broken if you are using plenv by `git clone`.
+      I forgot to users using plenv by `git clone`.
+      I renamed `bin/` directory to `script/` at 1.4.5.
+      But it's so bad.
+      (tokuhirom)
+
+1.4.6 2013-03-27T12:11:54Z
+
+    - Latest Perl::Build deprecates `patchperl` parameter.
+
+1.4.5 2013-03-27T06:14:00Z
+
+    - Depend to Perl-Build 0.09
+
+1.4.4 2013-03-10T10:53:22
+
+    - Updated deps for Devel::PatchPerl and Perl::Build.
+      Latest version of Devel::PatchPerl removes deps for IPC::Cmd!
+      (tokuhirom)
+
+1.4.1 2013-02-07T11:50:56
+
+    - bundle IPC::Cmd
+    (This version is not uploaded to CPAN)
+
+1.4.0 2013-02-07T09:48:26
+
+    - bundle cpanm and just use it in `install-cpanm` command
+      (Reported by @turugina, and thanks to @miyagawa)
+    - Fix for parsing command line argument
+      - Loop for @D, @A, @U makes no sense
+      - Remove '--' if @ARGV contains it(See also Getopt::Long document).
+     (Syohei YOSHIDA)
+   - speciallize the shim file for cpanm. Speciallized version of 'cpanm'
+     shim runs rehashing after installing.
+     (tokuhirom)
+
+1.3.1 2013-01-24T11:56:38
+
+    [BUG FIX]
+    - expand ~ in --build-dir.
+      (tokuhirom)
+
+1.3.0 2013-01-24T11:28:10
+
+    - added '--build-dir' argumetns for plenv-install.
+      It helps to save object files for debugging with gdb.
+      (tokuhirom)
+
+1.2.1 2013-01-23T08:15:49
+
+    - fixed installation issue
+      (tokuhirom)
+
+1.2.0 2013-01-23T07:52:54
+
+    - added lots of documents
+      (tokuhirom)
+    - `global` command removes "perl-" prefix
+      `install` command removes "perl-" prefix but `global` doesn't.
+      (Masato Ikeda)
+
+
+1.1.0
+
+    - fixed broken path
+
+1.0.9
+
+    - first release to CPAN!
+
+0.0.1    Sat Jan 12 11:42:02 2013
+    - original version
