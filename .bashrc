@@ -4,7 +4,7 @@
 [ -z "$PS1" ] && return
 
 # Additional Bash Include Directory
-BASH_INCLUDE_DIR="~/.bash_files"
+export BASH_INCLUDE_DIR=$HOME/.bash_files
 
 # don't put duplicate lines in the history. See bash(1) for more options
 # don't overwrite GNU Midnight Commander's setting of `ignorespace'.
@@ -19,10 +19,9 @@ shopt -s histappend
 # update the values of LINES and COLUMNS.
 shopt -s checkwinsize
 
-
 # Enable Colors
 if [ -x /usr/bin/dircolors ]; then
-    test -r ~/.dircolors && eval "$(dircolors -b ~/.dircolors)" || eval "$(dircolors -b)"
+    test -r $HOME/.dircolors && eval "$(dircolors -b $HOME/.dircolors)" || eval "$(dircolors -b)"
     alias ls='ls --color=auto -F'
     alias grep='grep --color=auto'
     alias fgrep='fgrep --color=auto'
@@ -61,7 +60,6 @@ alias .2='cd ../..'
 alias .3='cd ../../..'
 alias .4='cd ../../../..'
 alias .5='cd ../../../../../..'
-
 
 # Set PATH
 export PATH=$HOME/.vim/bin:/usr/bin:/bin:/sbin:/usr/sbin:/usr/games:/usr/local/games:/usr/local/bin
@@ -139,7 +137,7 @@ if [ -n "$TMUX_BIN" ]; then
     attach $TMUX_SESSION
 fi
 
-# Set Bash Prompt
+### Set Bash Prompt ###
 RED="\[\033[0;31m\]"
 YELLOW="\[\033[0;33m\]"
 GREEN="\[\033[0;32m\]"
