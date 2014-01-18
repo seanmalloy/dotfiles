@@ -83,6 +83,7 @@ if [ -f "$BASH_INCLUDE_DIR/git-completion.bash" ]; then
 fi
 if [ -f "$BASH_INCLUDE_DIR/git-prompt.bash" ]; then
     # Add Git Branch To Prompt
+    export GIT_PS1_SHOWDIRTYSTATE=1
     . $BASH_INCLUDE_DIR/git-prompt.bash
 fi
 
