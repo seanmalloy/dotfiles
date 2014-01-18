@@ -1,9 +1,10 @@
-# ~/.bashrc: executed by bash(1) for non-login shells.
-# see /usr/share/doc/bash/examples/startup-files (in the package bash-doc)
-# for examples
+# Sean Malloy's .bashrc
 
 # If not running interactively, don't do anything
 [ -z "$PS1" ] && return
+
+# Additional Bash Include Directory
+BASH_INCLUDE_DIR="~/.bash_files"
 
 # don't put duplicate lines in the history. See bash(1) for more options
 # don't overwrite GNU Midnight Commander's setting of `ignorespace'.
@@ -14,29 +15,10 @@ HISTCONTROL=ignoreboth
 # append to the history file, don't overwrite it
 shopt -s histappend
 
-# for setting history length see HISTSIZE and HISTFILESIZE in bash(1)
-
 # check the window size after each command and, if necessary,
 # update the values of LINES and COLUMNS.
 shopt -s checkwinsize
 
-# make less more friendly for non-text input files, see lesspipe(1)
-#[ -x /usr/bin/lesspipe ] && eval "$(SHELL=/bin/sh lesspipe)"
-
-if [ $(whoami) == "root" ]; then
-    PS1='\u@\h# '
-else
-    PS1='\u@\h\$ '
-fi
-
-# If this is an xterm set the title to user@host:dir
-case "$TERM" in
-xterm*|rxvt*)
-    PS1="\[\e]0;\u@\h: \w\a\]$PS1"
-    ;;
-*)
-    ;;
-esac
 
 # Enable Colors
 if [ -x /usr/bin/dircolors ]; then
@@ -80,11 +62,6 @@ alias .3='cd ../../..'
 alias .4='cd ../../../..'
 alias .5='cd ../../../../../..'
 
-#### Git Setup ###
-# Enable Git Autocomplete
-if [ -f "~/.git-completion.bash" ]; then
-    . ~/.git-completion.bash
-fi
 
 # Set PATH
 export PATH=$HOME/.vim/bin:/usr/bin:/bin:/sbin:/usr/sbin:/usr/games:/usr/local/games:/usr/local/bin
@@ -99,8 +76,17 @@ fi
 if [ -d "$BIN_DIR" ]; then
     PATH=$BIN_DIR:$PATH
 fi
-
 export MANPATH=$MAN_DIR:$MAN_PATH
+
+#### Git Setup ###
+if [ -f "$BASH_INCLUDE_DIR/git-completion.bash" ]; then
+    # Enable Git Autocomplete
+    . $BASH_INCLUDE_DIR/git-completion.bash
+fi
+if [ -f "$BASH_INCLUDE_DIR/git-prompt.bash" ]; then
+    # Add Git Branch To Prompt
+    . $BASH_INCLUDE_DIR/git-prompt.bash
+fi
 
 ### SSH Setup ##
 SSH_DIR=$HOME/.ssh
@@ -152,6 +138,13 @@ if [ -n "$TMUX_BIN" ]; then
     export TMUX_SOCKET=$TMUX_SOCKET_DIR/$TMUX_SESSION
     attach $TMUX_SESSION
 fi
+
+# Set Bash Prompt
+RED="\[\033[0;31m\]"
+YELLOW="\[\033[0;33m\]"
+GREEN="\[\033[0;32m\]"
+NO_COLOR="\[\033[0m\]"
+PS1="\u@\h $RED\W$YELLOW\$(__git_ps1)$NO_COLOR$ "
 
 ### Shell Functions ###
 function proj() {
