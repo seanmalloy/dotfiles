@@ -80,8 +80,11 @@ alias .3='cd ../../..'
 alias .4='cd ../../../..'
 alias .5='cd ../../../../../..'
 
-# Git Aliases
-alias g='git'
+#### Git Setup ###
+# Enable Git Autocomplete
+if [ -f "~/.git-completion.bash" ]; then
+    . ~/.git-completion.bash
+fi
 
 # Set PATH
 export PATH=$HOME/.vim/bin:/usr/bin:/bin:/sbin:/usr/sbin:/usr/games:/usr/local/games:/usr/local/bin
@@ -99,7 +102,7 @@ fi
 
 export MANPATH=$MAN_DIR:$MAN_PATH
 
-# SSH Setup
+### SSH Setup ##
 SSH_DIR=$HOME/.ssh
 SSH_SOCKET_DIR=$SSH_DIR/sockets
 if [ ! -d "$SSH_SOCKET_DIR" ]; then
@@ -108,7 +111,7 @@ if [ ! -d "$SSH_SOCKET_DIR" ]; then
     chmod 700 $SSH_SOCKET_DIR
 fi
 
-# TMUX Setup
+### TMUX Setup ###
 function attach() {
     local MY_SESSION=$1
     shift
