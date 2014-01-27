@@ -91,45 +91,17 @@ if [ ! -d "$SSH_SOCKET_DIR" ]; then
 fi
 
 ### TMUX Setup ###
-function attach() {
-    local MY_SESSION=$1
-    shift
-
-    if [ -z "$TMUX_BIN" ]; then
-        return
-    fi
-
-    if [ -z "$MY_SESSION" ]; then
-        $TMUX_BIN -S $TMUX_SOCKET list-sessions
-        return
-    fi
-
-    if ! $TMUX_BIN -q -S $TMUX_SOCKET has-session -t $MY_SESSION; then
-        # session does not exist, create one
-        $TMUX_BIN -S $TMUX_SOCKET new-session -d -n $MY_SESSION -s $MY_SESSION
-        $TMUX_BIN -S $TMUX_SOCKET attach -t $MY_SESSION
-    else
-        if [ -z "$TMUX" ]; then
-            local TMUX_CLIENTS=$($TMUX_BIN -S $TMUX_SOCKET list-clients -t $MY_SESSION)
-            if [ -z "$TMUX_CLIENTS" ]; then
-                $TMUX_BIN -S $TMUX_SOCKET attach -t $MY_SESSION
-            fi
-        fi
-    fi
-}
-
-TMUX_BIN=$(which tmux)
-if [ -n "$TMUX_BIN" ]; then
-    export TMUX_DIR=$HOME/.tmux.d
-    export TMUX_SOCKET_DIR=$HOME/.tmux.d/sockets
-    if [ ! -d "$TMUX_SOCKET_DIR" ]; then
-        mkdir -p $TMUX_SOCKET_DIR
-        chmod 700 $TMUX_DIR
-        chmod 700 $TMUX_SOCKET_DIR
-    fi
-    export TMUX_SESSION=$HOSTNAME
-    export TMUX_SOCKET=$TMUX_SOCKET_DIR/$TMUX_SESSION
-    attach $TMUX_SESSION
+TMUX_DIR=$HOME/.tmux.d
+TMUX_SOCKET_DIR=$HOME/.tmux.d/sockets
+if [ ! -d "$TMUX_SOCKET_DIR" ]; then
+    mkdir -p $TMUX_SOCKET_DIR
+    chmod 700 $TMUX_DIR
+    chmod 700 $TMUX_SOCKET_DIR
+fi
+export TMUX_SOCKET=$TMUX_SOCKET_DIR/$USER
+alias tmux='tmux -S $TMUX_SOCKET'
+if [ "$TERM" != "screen-256color" ]; then
+    tmux attach -t $USER || tmux new -s $USER
 fi
 
 ### Set Bash Prompt ###
