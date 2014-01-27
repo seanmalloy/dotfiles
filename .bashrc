@@ -91,14 +91,8 @@ if [ ! -d "$SSH_SOCKET_DIR" ]; then
 fi
 
 ### TMUX Setup ###
-TMUX_DIR=$HOME/.tmux.d
-TMUX_SOCKET_DIR=$HOME/.tmux.d/sockets
-if [ ! -d "$TMUX_SOCKET_DIR" ]; then
-    mkdir -p $TMUX_SOCKET_DIR
-    chmod 700 $TMUX_DIR
-    chmod 700 $TMUX_SOCKET_DIR
-fi
-export TMUX_SOCKET=$TMUX_SOCKET_DIR/$USER
+export TMUX_INCLUDE_FILE="$BASH_INCLUDE_DIR/tmux.bash"
+. $TMUX_INCLUDE_FILE
 alias tmux='tmux -S $TMUX_SOCKET'
 if [ "$TERM" != "screen" ]; then
     tmux attach -t $USER || tmux new -n $HOSTNAME -s $USER

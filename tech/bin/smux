@@ -1,0 +1,106 @@
+#!/bin/bash
+
+# Simple tmux SSH multiplexer.
+
+f_usage()
+{
+    cat <<EOF
+NAME
+    smux - SSH multiplexer
+
+SYNOPSIS
+    $PROG_NAME [ -s SESSION_NAME ] FILE
+    $PROG_NAME -h
+
+DESCRIPTION
+    smux is an SSH multiplexer. Server names must be listed in FILE one per line. The smux
+    command uses the tmux command to do all of the hard work.
+
+OPTIONS
+    -h
+        Display help message and exit.
+
+    -s SESSION_NAME
+        Set tmux session name to SESSION_NAME. The
+        default tmux session name is "smux".
+
+LICENSE
+   Copyright (c) 2014, Sean Malloy
+   All rights reserved.
+
+   Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following
+   conditions are met:
+
+   1. Redistributions of source code must retain the above copyright notice, this list of
+      conditions and the following disclaimer.
+        
+   2. Redistributions in binary form must reproduce the above copyright notice, this list of
+      conditions and the following disclaimer in the documentation and/or other materials provided with the distribution.
+        
+   3. Neither the name of the copyright holder nor the names of its contributors may be used
+      to endorse or promote products derived from this software without specific prior written permission.
+        
+   THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING,
+   BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT
+   SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+   DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+   INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE
+   OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
+
+BUGS
+    No known bugs at this time.
+
+SEE ALSO
+    tmux(1), http://tmux.sourceforge.net
+
+EOF
+}
+
+declare -r PROG_NAME=$(basename $0)
+SESSION_NAME=$PROG_NAME
+while getopts "hs:" OPTION; do
+    case "$OPTION" in
+        h) f_usage
+           exit 0
+           ;;
+        s) SESSION_NAME=$OPTARG
+           ;;
+    esac
+done
+shift $((OPTIND-1))
+
+declare -a SERVER_LIST
+if [ $# -eq 1 ]; then
+    # Files listed on command line
+    INPUT_FILE=$1
+    TOTAL_SERVERS=0
+    if [ ! -f "$INPUT_FILE" ]; then
+        echo "ERROR: '$INPUT_FILE' is not a file"
+        exit 1
+    fi
+    IFS=$'\n' read -d '' -r -a SERVER_LIST < $INPUT_FILE
+else
+    echo "ERROR: Missing FILE argument!"
+    echo ""
+    f_usage
+    exit 1
+fi
+
+. $TMUX_INCLUDE_FILE
+tmux -S $TMUX_SOCKET has -t $SESSION_NAME
+if [ $? != 0 ]; then
+    tmux -S $TMUX_SOCKET new -s $SESSION_NAME -n $SESSION_NAME -d "ssh ${SERVER_LIST[0]}"
+    unset SERVER_LIST[0]
+    for server in "${SERVER_LIST[@]}"
+    do
+        tmux -S $TMUX_SOCKET split-window -d -t $SESSION_NAME:$SESSION_NAME "ssh $server"
+        tmux -S $TMUX_SOCKET select-layout -t $SESSION_NAME:$SESSION_NAME main-horizontal
+    done
+    tmux -S $TMUX_SOCKET set-window-option -t $SESSION_NAME:$SESSION synchronize-panes on
+    tmux -S $TMUX_SOCKET select-layout -t $SESSION_NAME:$SESSION_NAME tiled
+    tmux -S $TMUX_SOCKET attach -t $SESSION_NAME
+else
+    echo "TMUX Session $SESSION_NAME Already Exists!!!"
+    exit 0
+fi
+
