@@ -101,7 +101,7 @@ fi
 export TMUX_SOCKET=$TMUX_SOCKET_DIR/$USER
 alias tmux='tmux -S $TMUX_SOCKET'
 if [ "$TERM" != "screen-256color" ]; then
-    tmux attach -t $USER || tmux new -s $USER
+    tmux attach -t $USER || tmux new -n $HOSTNAME -s $USER
 fi
 
 ### Set Bash Prompt ###
