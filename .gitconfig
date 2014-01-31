@@ -1,6 +1,5 @@
 [color]
-    status = auto
-    branch = auto
+	ui = true
 [core]
 	editor = vim
 [merge]
