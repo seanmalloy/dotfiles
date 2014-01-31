@@ -8,6 +8,7 @@
 	br = branch
 	ci = commit --verbose
 	co = checkout
+	oldest-ancestor = !bash -c 'diff -u <(git rev-list --first-parent "${1:-master}") <(git rev-list --first-parent "${2:-HEAD}") | sed -ne \"s/^ //p\" | head -1' -
 	st = status
 [push]
 	default = nothing
