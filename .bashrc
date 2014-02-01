@@ -61,7 +61,7 @@ alias .4='cd ../../../..'
 alias .5='cd ../../../../../..'
 
 # Set PATH
-export PATH=$HOME/.plenv/bin:$HOME/.vim/bin:/usr/bin:/bin:/sbin:/usr/sbin:/usr/games:/usr/local/games:/usr/local/bin
+export PATH=$HOME/.rbenv/bin:$HOME/.plenv/bin:$HOME/.vim/bin:/usr/bin:/bin:/sbin:/usr/sbin:/usr/games:/usr/local/games:/usr/local/bin
 if [ -d "$BIN_DIR" ]; then
     PATH=$BIN_DIR:$PATH
 fi
@@ -69,6 +69,9 @@ export MANPATH=$MAN_DIR:$MAN_PATH
 
 ### Setup plenv ###
 eval "$(plenv init -)"
+
+### Setup rbenv
+eval "$(rbenv init -)"
 
 #### Git Setup ###
 if [ -f "$BASH_INCLUDE_DIR/git-completion.bash" ]; then
