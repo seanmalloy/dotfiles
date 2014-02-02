@@ -5,12 +5,13 @@ if [ "$SHLVL" = 1 ]; then
     [ -x /usr/bin/clear_console ] && /usr/bin/clear_console -q
 fi
 
-# Kill ssh-agent process, only when not in tmux session
+# lock ssh-agent, only when not in tmux session
 if [ -z "$TMUX" ]; then
     if [ -n "$SSH_AGENT_PID" ]; then
-        ssh-add -D
-        kill $SSH_AGENT_PID
-        unset $SSH_AGENT_PID
+        ssh-add -x
+        while [ "$?" -ne 0 ]; do
+            ssh-add -x
+        done
     fi
 fi
 

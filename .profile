@@ -7,7 +7,23 @@ if [ -n "$BASH_VERSION" ]; then
     fi
 fi
 
-if [ -z "$SSH_AGENT_PID" ]; then
-    eval $(ssh-agent -s)
+EXISTING_SSH_AGENT_PID="$(ps -ef | grep 'ssh-agent -s' | grep ^$USER | grep -v grep | awk '{print $2}')"
+SSH_AGENT_FILE="$HOME/.ssh/agent"
+if [ -z "$EXISTING_SSH_AGENT_PID" ]; then
+    # Existing ssh-agent not running, start one
+    ssh-agent -s >| $SSH_AGENT_FILE
+    . $SSH_AGENT_FILE
     ssh-add
+else
+    # Existing ssh-agent running, connect to it
+    if [ -f "$SSH_AGENT_FILE" ]; then
+        . $SSH_AGENT_FILE
+        ssh-add -X
+        while [ "$?" -ne 0 ]; do
+            ssh-add -X
+        done
+    else
+        echo "ERROR: cannot connect to ssh-agent $EXISTING_SSH_AGENT_PID"
+    fi
 fi
+
