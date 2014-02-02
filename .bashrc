@@ -98,6 +98,10 @@ export TMUX_INCLUDE_FILE="$BASH_INCLUDE_DIR/tmux.bash"
 . $TMUX_INCLUDE_FILE
 alias tmux='tmux -L $TMUX_SOCKET'
 
+### Tmuxinator Setup ###
+export TMUXINATOR_INCLUDE_FILE="$BASH_INCLUDE_DIR/tmuxinator.bash"
+. $TMUXINATOR_INCLUDE_FILE
+
 ### Set Bash Prompt ###
 RED="\[\033[0;31m\]"
 YELLOW="\[\033[0;33m\]"
