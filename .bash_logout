@@ -7,11 +7,14 @@ fi
 
 # lock ssh-agent, only when not in tmux session
 if [ -z "$TMUX" ]; then
-    if [ -n "$SSH_AGENT_PID" ]; then
-        ssh-add -x
-        while [ "$?" -ne 0 ]; do
+    EXISTING_SSH_AGENT_PID="$(ps -ef | grep 'ssh-agent -s' | grep ^$USER | grep -v grep | awk '{print $2}')"
+    if [ -n "$EXISTING_SSH_AGENT_PID" ]; then
+        if [ -n "$SSH_AGENT_PID" ]; then
             ssh-add -x
-        done
+            while [ "$?" -ne 0 ]; do
+                ssh-add -x
+            done
+        fi
     fi
 fi
 
