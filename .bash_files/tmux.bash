@@ -1,9 +1,9 @@
 TMUX_DIR=$HOME/.tmux.d
-TMUX_SOCKET_DIR=$HOME/.tmux.d/sockets
-if [ ! -d "$TMUX_SOCKET_DIR" ]; then
-    mkdir -p $TMUX_SOCKET_DIR
+export TMPDIR=$HOME/.tmux.d/sockets
+if [ ! -d "$TMPDIR" ]; then
+    mkdir -p $TMPDIR
     chmod 700 $TMUX_DIR
-    chmod 700 $TMUX_SOCKET_DIR
+    chmod 700 $TMPDIR
 fi
-export TMUX_SOCKET=$TMUX_SOCKET_DIR/$USER
+export TMUX_SOCKET=$USER
 

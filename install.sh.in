@@ -98,6 +98,15 @@ f_setup_tmux()
     fi
 }
 
+f_setup_tmuxinator()
+{
+    echo "Configuring Tmuxinator Project: default"
+    declare -r TMUX_HOSTNAME=$(hostname -s)
+    perl -pi -e "s/USER/$USER/g" $HOME/.tmuxinator/default.yml
+    perl -pi -e "s/HOSTNAME/$TMUX_HOSTNAME/g" $HOME/.tmuxinator/default.yml
+
+}
+
 read -p "Install files? " ans
 if [[ "${ans:0:1}"  ||  "${ans:0:1}" ]]; then
     f_pre_clean
@@ -109,6 +118,7 @@ if [[ "${ans:0:1}"  ||  "${ans:0:1}" ]]; then
     f_setup_github
     f_setup_ssh
     f_setup_tmux
+    f_setup_tmuxinator
 fi
 exit 0
 

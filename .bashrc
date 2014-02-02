@@ -96,10 +96,7 @@ fi
 ### TMUX Setup ###
 export TMUX_INCLUDE_FILE="$BASH_INCLUDE_DIR/tmux.bash"
 . $TMUX_INCLUDE_FILE
-alias tmux='tmux -S $TMUX_SOCKET'
-if [ "$TERM" != "screen" ]; then
-    tmux attach -t $USER || tmux new -n $HOSTNAME -s $USER
-fi
+alias tmux='tmux -L $TMUX_SOCKET'
 
 ### Set Bash Prompt ###
 RED="\[\033[0;31m\]"
