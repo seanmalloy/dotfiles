@@ -48,3 +48,6 @@ au FileType sh     let b:delimitMate_expand_cr = 1
 
 let delimitMate_matchpairs = '(:),{:},[:]'
 
+" in command mode expand %% to the path of the current buffer
+cnoremap <expr> %% getcmdtype() == ':' ? expand('%:h').'/' : '%%'
+
