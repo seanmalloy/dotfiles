@@ -136,7 +136,7 @@ function pmg() {
         return 1
     fi
 
-    puppet module generate ${PUPPET_MODULE_NAME_WITH_AUTHOR}
+    puppet module generate --skip-interview ${PUPPET_MODULE_NAME_WITH_AUTHOR}
     if [[ $? -ne 0 ]]; then
         echo "ERROR: command 'puppet module generate
         ${PUPPET_MODULE_NAME_WITH_AUTHOR}' failed!!!"
