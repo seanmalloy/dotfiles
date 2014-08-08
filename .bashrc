@@ -60,6 +60,11 @@ alias .3='cd ../../..'
 alias .4='cd ../../../..'
 alias .5='cd ../../../../../..'
 
+# Puppet Aliases
+alias p='puppet'
+alias pd='puppet describe'
+alias pr='puppet resource'
+
 # Set PATH
 export PATH=$HOME/.rbenv/bin:$HOME/.plenv/bin:$HOME/.vim/bin:/usr/bin:/bin:/sbin:/usr/sbin:/usr/games:/usr/local/games:/usr/local/bin
 if [ -d "$BIN_DIR" ]; then
@@ -110,6 +115,38 @@ NO_COLOR="\[\033[0m\]"
 PS1="\u@\h $RED\W$YELLOW\$(__git_ps1)$NO_COLOR$ "
 
 ### Shell Functions ###
+
+# Create new puppet module
+function pmg() {
+    local PUPPET_MODULE_NAME="$1"
+
+    if [[ -z $PUPPET_MODULE_NAME ]]; then
+        echo "ERROR: must sepcify puppet module name!!!"
+        return 1
+    fi
+
+    if [[ -e $PUPPET_MODULE_NAME ]]; then
+        echo "ERROR: file $PUPPET_MODULE_NAME already exists!!!"
+        return 1
+    fi
+
+    local PUPPET_MODULE_NAME_WITH_AUTHOR="seanmalloy-${PUPPET_MODULE_NAME}"
+    if [[ -e $PUPPET_MODULE_NAME_WITH_AUTHOR ]]; then
+        echo "ERROR: file $PUPPET_MODULE_NAME_WITH_AUTHOR already exists!!!"
+        return 1
+    fi
+
+    puppet module generate ${PUPPET_MODULE_NAME_WITH_AUTHOR}
+    if [[ $? -ne 0 ]]; then
+        echo "ERROR: command 'puppet module generate
+        ${PUPPET_MODULE_NAME_WITH_AUTHOR}' failed!!!"
+        return 1
+    fi
+
+    mv $PUPPET_MODULE_NAME_WITH_AUTHOR $PUPPET_MODULE_NAME
+    cd $PUPPET_MODULE_NAME
+}
+
 function proj() {
     if [ -z "$PROJ_DIR" ]; then
         echo "Environment Varialbe PROJ_DIR not set"
