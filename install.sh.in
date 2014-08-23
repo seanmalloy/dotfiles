@@ -33,6 +33,7 @@ f_pre_clean()
     rm -rf $HOME/.dzil/
     rm -rf $HOME/.terminfo/
     rm -rf $HOME/.vim/
+    rm -rf $HOME/.puppet/var/puppet-module/skeleton/
 }
 
 f_setup_git()

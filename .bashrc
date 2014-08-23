@@ -119,32 +119,27 @@ PS1="\u@\h $RED\W$YELLOW\$(__git_ps1)$NO_COLOR$ "
 # Create new puppet module
 function pmg() {
     local PUPPET_MODULE_NAME="$1"
+    local PUPPET_MODULE_AUTHOR="seanmalloy"
+    local PUPPET_MODULE_FULL_NAME="${PUPPET_MODULE_AUTHOR}-${PUPPET_MODULE_NAME}"
 
     if [[ -z $PUPPET_MODULE_NAME ]]; then
         echo "ERROR: must sepcify puppet module name!!!"
         return 1
     fi
 
-    if [[ -e $PUPPET_MODULE_NAME ]]; then
-        echo "ERROR: file $PUPPET_MODULE_NAME already exists!!!"
+    if [[ -e $PUPPET_MODULE_FULL_NAME ]]; then
+        echo "ERROR: file $PUPPET_MODULE_FULL_NAME already exists!!!"
         return 1
     fi
 
-    local PUPPET_MODULE_NAME_WITH_AUTHOR="seanmalloy-${PUPPET_MODULE_NAME}"
-    if [[ -e $PUPPET_MODULE_NAME_WITH_AUTHOR ]]; then
-        echo "ERROR: file $PUPPET_MODULE_NAME_WITH_AUTHOR already exists!!!"
-        return 1
-    fi
-
-    puppet module generate --skip-interview ${PUPPET_MODULE_NAME_WITH_AUTHOR}
+    puppet module generate --skip-interview ${PUPPET_MODULE_FULL_NAME}
     if [[ $? -ne 0 ]]; then
-        echo "ERROR: command 'puppet module generate
-        ${PUPPET_MODULE_NAME_WITH_AUTHOR}' failed!!!"
+        echo "ERROR: command 'puppet module generate ${PUPPET_MODULE_FULL_NAME}' failed!!!"
         return 1
     fi
 
-    mv $PUPPET_MODULE_NAME_WITH_AUTHOR $PUPPET_MODULE_NAME
-    cd $PUPPET_MODULE_NAME
+    cd $PUPPET_MODULE_FULL_NAME
+    git init .
 }
 
 function proj() {

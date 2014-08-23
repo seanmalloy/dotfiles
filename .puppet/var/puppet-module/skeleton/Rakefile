@@ -1,0 +1,58 @@
+require 'rake'
+require 'puppet-lint/tasks/puppet-lint'
+require 'find'
+
+task :default => 'help'
+
+desc "Remove puppet module build files"
+task :clean do
+  sh 'rm -rf pkg'
+end
+
+desc "Build puppet module."
+task :build do
+  sh 'puppet module build'
+end
+
+desc "Display help message."
+task :help do
+  sh 'rake -T'
+end
+
+PuppetLint.configuration.send("disable_80chars")
+PuppetLint.configuration.log_format = "%{path}:%{linenumber}:%{check}:%{KIND}:%{message}"
+PuppetLint.configuration.fail_on_warnings = true
+PuppetLint.configuration.send('disable_class_inherits_from_params_class')
+PuppetLint.configuration.ignore_paths = ["spec/**/*.pp",  "pkg/**/*.pp"]
+
+desc "Check puppet manifest and ERB template syntax"
+task :syntax do
+  # Puppet manifests
+  Find.find('.') do |path|
+    if FileTest.directory?(path)
+      if File.basename(path) =~ /^pkg$/
+        Find.prune
+      end
+    else
+      if FileTest.file?(path)
+        if File.basename(path) =~ /\.pp$/
+          sh "puppet parser validate #{path}"
+        else
+          next
+        end
+      end
+    end
+  end 
+
+  # ERB templates
+  Find.find('templates') do |path|
+    if FileTest.file?(path)
+      if File.basename(path) =~ /^.gitkeep$/
+        next
+      else
+	sh "erb -P -x -T '-' #{path} | ruby -c"
+      end
+    end
+  end
+end
+
