@@ -41,6 +41,10 @@ export EDITOR=vim                  # vim is my editor
 export RELEASE_TESTING=1           # For Perl Module Development
 export HOSTNAME=$(hostname -s)     # Short hostname of this computer
 
+# Go Lang Variables
+export GOROOT=$TECH_DIR/go
+export GOPATH=$HOME/go
+
 # Generic Aliases
 alias ll='ls -l'
 alias la='ls -A'
@@ -66,7 +70,7 @@ alias pd='puppet describe'
 alias pr='puppet resource'
 
 # Set PATH
-export PATH=$HOME/.rbenv/bin:$HOME/.plenv/bin:$HOME/.vim/bin:/usr/bin:/bin:/sbin:/usr/sbin:/usr/games:/usr/local/games:/usr/local/bin
+export PATH=$GOROOT/bin:$GOPATH/bin:$HOME/.rbenv/bin:$HOME/.plenv/bin:$HOME/.vim/bin:/usr/bin:/bin:/sbin:/usr/sbin:/usr/games:/usr/local/games:/usr/local/bin
 if [ -d "$BIN_DIR" ]; then
     PATH=$BIN_DIR:$PATH
 fi
