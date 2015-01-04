@@ -66,9 +66,7 @@ tar xvzf tmux-${TMUX_VERSION}.tar.gz
 cd tmux-${TMUX_VERSION}${TMUX_MINOR_VERSION}
 ./configure CFLAGS="-I$TMUX_INSTALL_DIR/include -I$TMUX_INSTALL_DIR/include/ncurses" LDFLAGS="-L$TMUX_INSTALL_DIR/lib -L$TMUX_INSTALL_DIR/include/ncurses -L$TMUX_INSTALL_DIR/include"
 CPPFLAGS="-I$TMUX_INSTALL_DIR/include -I$TMUX_INSTALL_DIR/include/ncurses" LDFLAGS="-static -L$TMUX_INSTALL_DIR/include -L$TMUX_INSTALL_DIR/include/ncurses -L$TMUX_INSTALL_DIR/lib" make
-cp tmux $TMUX_INSTALL_DIR/bin/
-cd ..
 
 echo ""
-echo "tmux binary instaled at $TMUX_INSTALL_DIR/bin/tmux"
+echo "tmux binary instaled at $(pwd)/tmux"
 
