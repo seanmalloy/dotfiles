@@ -116,7 +116,7 @@ f_setup_ssh()
 f_setup_tmux()
 {
     if [[ -f $HOME/tech/bin/tmux_${OS_VERSION} ]]; then
-        ln -s $HOME/tech/bin/tmux_${OS_VERSION} $HOME/tech/bin/tmux
+        ln -s tmux_${OS_VERSION} $HOME/tech/bin/tmux
     else
         echo "binary tmux_${OS_VERSION} does not exist"
     fi
