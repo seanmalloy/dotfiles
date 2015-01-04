@@ -3,6 +3,28 @@
 # If not running interactively, don't do anything
 [ -z "$PS1" ] && return
 
+# source global bash configuration
+if [[ -f /etc/bashrc ]]; then
+    . /etc/bashrc
+fi
+
+# set OS type and version
+if [[ -n $(which facter 2> /dev/null) ]]; then
+    OS_VERSION="$(facter osfamily)" # RedHat, Debian, etc
+    OS_VERSION="${OS_VERSION}$(facter operatingsystemmajrelease)"
+else
+    # no facter ... must check stuff manually :-(
+    if [[ -f /etc/centos-release ]]; then
+        OS_VERSION="RedHat$(awk '{print $4}' /etc/centos-release | awk -F. '{print $1}')"
+    elif [[ -f /etc/redhat-release ]]; then
+        OS_VERSION="RedHat$(awk '{print $7}' /etc/redhat-release | awk -F. '{print $1}')"
+    elif [[ -f /etc/debian_version ]]; then
+        OS_VERSION="Debian"
+    else
+        OS_VERSION=""
+    fi
+fi
+
 # Additional Bash Include Directory
 export BASH_INCLUDE_DIR=$HOME/.bash_files
 
@@ -83,10 +105,14 @@ eval "$(plenv init -)"
 eval "$(rbenv init -)"
 
 #### Git Setup ###
-if [ -f "$BASH_INCLUDE_DIR/git-completion.bash" ]; then
-    # Enable Git Autocomplete
-    . $BASH_INCLUDE_DIR/git-completion.bash
+if [[ $OS_VERSION != 'RedHat7' ]]; then
+    if [ -f "$BASH_INCLUDE_DIR/git-completion.bash" ]; then
+        # Enable Git Autocomplete
+        echo "enabling git completion"
+        . $BASH_INCLUDE_DIR/git-completion.bash
+    fi
 fi
+
 if [ -f "$BASH_INCLUDE_DIR/git-prompt.bash" ]; then
     # Add Git Branch To Prompt
     export GIT_PS1_SHOWDIRTYSTATE=1
