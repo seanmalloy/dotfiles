@@ -137,6 +137,10 @@ alias tmux='tmux -L $TMUX_SOCKET'
 export TMUXINATOR_INCLUDE_FILE="$BASH_INCLUDE_DIR/tmuxinator.bash"
 . $TMUXINATOR_INCLUDE_FILE
 
+### FZF Setup ###
+export FZF_INCLUDE_FILE="$BASH_INCLUDE_DIR/fzf.bash"
+. $FZF_INCLUDE_FILE
+
 ### Set Bash Prompt ###
 RED="\[\033[0;31m\]"
 YELLOW="\[\033[0;33m\]"
