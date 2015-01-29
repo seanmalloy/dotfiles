@@ -92,17 +92,26 @@ alias pd='puppet describe'
 alias pr='puppet resource'
 
 # Set PATH
-export PATH=$GOROOT/bin:$GOPATH/bin:$HOME/.rbenv/bin:$HOME/.plenv/bin:$HOME/.vim/bin:/usr/bin:/bin:/sbin:/usr/sbin:/usr/games:/usr/local/games:/usr/local/bin
-if [ -d "$BIN_DIR" ]; then
-    PATH=$BIN_DIR:$PATH
-fi
+export PATH=/usr/bin:/bin:/sbin:/usr/sbin:/usr/games:/usr/local/games:/usr/local/bin
+for DIR in $GOROOT/bin $GOPATH/bin $HOME/.rbenv/bin HOME/.plenv/bin $HOME/.vim/bin $BIN_DIR; do
+    if [[ -d $DIR ]]; then
+        if [[ ! $PATH =~ $DIR ]]; then
+            PATH=$DIR:$PATH
+        fi
+    fi
+done
+
 export MANPATH=$MAN_DIR:$MAN_PATH
 
 ### Setup plenv ###
-eval "$(plenv init -)"
+if [[ -n "$(which plenv 2> /dev/null)" ]]; then
+    eval "$(plenv init -)"
+fi
 
 ### Setup rbenv
-eval "$(rbenv init -)"
+if [[ -n "$(which rbenv 2> /dev/null)" ]]; then
+    eval "$(rbenv init -)"
+fi
 
 #### Git Setup ###
 if [[ $OS_VERSION != 'RedHat7' ]]; then
