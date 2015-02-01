@@ -160,7 +160,7 @@ PS1="\u@\h $RED\W$YELLOW\$(__git_ps1)$NO_COLOR$ "
 ### Shell Functions ###
 
 # Create new puppet module
-function pmg() {
+pmg() {
     local PUPPET_MODULE_NAME="$1"
     local PUPPET_MODULE_AUTHOR="seanmalloy"
     local PUPPET_MODULE_FULL_NAME="${PUPPET_MODULE_AUTHOR}-${PUPPET_MODULE_NAME}"
@@ -185,25 +185,20 @@ function pmg() {
     git init .
 }
 
-function proj() {
+proj() {
     if [ -z "$PROJ_DIR" ]; then
-        echo "Environment Varialbe PROJ_DIR not set"
-        return
+        local PROJ_DIR="$HOME/projects"
     fi
 
     if [ ! -d "$PROJ_DIR" ]; then
         mkdir -p $PROJ_DIR
     fi
 
-    if [ -z "$1" ]; then
-        cd $PROJ_DIR
+    if [[ -z $1 ]]; then
+        local DIR=$(find $PROJ_DIR -maxdepth 1 -type d -print | grep -v "^$PROJ_DIR$" | awk -F / '{print $NF}' | fzf +m)
     else
-        if [ -d "$PROJ_DIR/$1" ]; then
-            cd $PROJ_DIR/$1
-        else
-            echo "Project Directory for $1 does not exist"
-            return
-        fi
+        local DIR=$(find $PROJ_DIR -maxdepth 1 -type d -print | grep -v "^$PROJ_DIR$" | awk -F / '{print $NF}' | fzf +m -q $1 -1)
     fi
+    cd $PROJ_DIR/$DIR
 }
 
