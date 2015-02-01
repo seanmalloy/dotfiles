@@ -4,8 +4,6 @@
 #
 # Self extracting shell script to install Sean Malloy's dotfiles.
 
-set -u
-
 f_install()
 {
     declare -r MATCH=$(grep --text --line-number '^PAYLOAD:$' $0 | cut -d ':' -f 1)
@@ -78,22 +76,35 @@ f_setup_fzf()
 f_setup_git()
 {
     if [[ -n $GIT_CMD ]]; then
-        read -p "Name: "  MYNAME
-        read -p "Email: " MYEMAIL
-        $(which git) config --global user.name  "$MYNAME"
-        $(which git) config --global user.email "$MYEMAIL"
+        if [[ -z "$DOTFILES_NAME" ]]; then
+            read -p "Name: "  DOTFILES_NAME
+            echo "DOTFILES_NAME=\"$DOTFILES_NAME\"" >> $ANSWER_FILE
+        fi
+        $(which git) config --global user.name  "$DOTFILES_NAME"
+
+        if [[ -z $DOTFILES_EMAIL ]]; then
+            read -p "Email: " DOTFILES_EMAIL
+            echo "DOTFILES_EMAIL=\"$DOTFILES_EMAIL\"" >> $ANSWER_FILE
+        fi
+        $(which git) config --global user.email "$DOTFILES_EMAIL"
     fi
 }
 
 f_setup_github()
 {
     if [[ -n $GIT_CMD ]]; then
-        read -p "Setup Github? " ans
-        if [[ "$ans" =  "y" ]]; then
-            read -p "Name: "  GITHUB_USER
-            $(which git) config --global github.user $GITHUB_USER
-        else
-            echo "Skipping Github Configuration!"
+        if [[ -z $DOTFILES_SETUP_GITHUB ]]; then
+            read -p "Setup Github? " DOTFILES_SETUP_GITHUB
+            echo "DOTFILES_SETUP_GITHUB=\"$DOTFILES_SETUP_GITHUB\"" >> $ANSWER_FILE
+            if [[ "$DOTFILES_SETUP_GITHUB" =  "y" ]]; then
+                if [[ -z $DOTFILES_GITHUB_USER ]]; then
+                    read -p "Name: "  DOTFILES_GITHUB_USER
+                    echo "DOTFILES_GITHUB_USER=\"$DOTFILES_GITHUB_USER\"" >> $ANSWER_FILE
+                fi
+                $(which git) config --global github.user $DOTFILES_GITHUB_USER
+            else
+                echo "Skipping Github Configuration!"
+            fi
         fi
     fi
 }
@@ -105,8 +116,11 @@ f_setup_ssh()
     fi
 
     # Setup jump host
-    read -p "SSH Jump Host: " MYSSHJUMPHOST
-    sed -i "s/JUMPHOST/$MYSSHJUMPHOST/g" $HOME/.ssh/config
+    if [[ -z $DOTFILES_SSH_JUMP_HOST ]]; then
+        read -p "SSH Jump Host: " DOTFILES_SSH_JUMP_HOST
+        echo "DOTFILES_SSH_JUMP_HOST=\"$DOTFILES_SSH_JUMP_HOST\"" >> $ANSWER_FILE
+    fi
+    sed -i "s/JUMPHOST/$DOTFILES_SSH_JUMP_HOST/g" $HOME/.ssh/config
 
     # Enable ControlPersist option
     if [[ $SSH_MAJOR_VERSION -gt 5 ]]; then
@@ -142,6 +156,16 @@ f_setup_tmux()
         echo "### DO NOT EDIT BELOW THIS LINE ###" >> $HOME/.tmux.conf
         echo "bind P command-prompt -p \"Proxy SSH Target: \" \"new-window -n %1 \\\"exec ssh -o ProxyCommand='ssh jump nc %h 22' %1\\\"\" # ssh via proxy" >> $HOME/.tmux.conf
     fi
+
+    if [[ -z $DOTFILES_ENABLE_TMUX_SCREEN_256_COLOR ]]; then
+        read -p "Enable tmux 256 colors? " DOTFILES_ENABLE_TMUX_SCREEN_256_COLOR
+        echo "DOTFILES_ENABLE_TMUX_SCREEN_256_COLOR=\"$DOTFILES_ENABLE_TMUX_SCREEN_256_COLOR\"" >> $ANSWER_FILE
+    fi
+    if [[ $DOTFILES_ENABLE_TMUX_SCREEN_256_COLOR = "y" ]]; then
+        sed -i "s/TERMTYPE/screen-256color/g" $HOME/.tmux.conf
+    else
+        sed -i "s/TERMTYPE/screen/g" $HOME/.tmux.conf
+    fi
 }
 
 f_setup_tmuxinator()
@@ -155,6 +179,12 @@ f_setup_tmuxinator()
 
 read -p "Install files? " ans
 if [[ "${ans:0:1}"  ||  "${ans:0:1}" ]]; then
+    declare -r ANSWER_FILE="$HOME/.dotfiles_answers"
+    if [[ -f $ANSWER_FILE ]]; then
+        source $ANSWER_FILE
+    else
+        touch $ANSWER_FILE
+    fi
     f_pre_clean
     f_set_env
     f_install
