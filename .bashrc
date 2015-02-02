@@ -148,6 +148,7 @@ export TMUXINATOR_INCLUDE_FILE="$BASH_INCLUDE_DIR/tmuxinator.bash"
 
 ### FZF Setup ###
 export FZF_INCLUDE_FILE="$BASH_INCLUDE_DIR/fzf.bash"
+export FZF_DEFAULT_OPTS='-m -x'
 . $FZF_INCLUDE_FILE
 
 ### Set Bash Prompt ###
