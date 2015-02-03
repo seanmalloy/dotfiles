@@ -186,6 +186,7 @@ pmg() {
     git init .
 }
 
+# switch to a project directory
 proj() {
     if [ -z "$PROJ_DIR" ]; then
         local PROJ_DIR="$HOME/projects"
@@ -202,4 +203,15 @@ proj() {
     fi
     cd $PROJ_DIR/$DIR
 }
+
+# fuzzy find RPM packages
+fzpkg() {
+    repoquery -a --qf "%{name}.%{arch}" | fzf
+}
+
+
+### Custom Key Bindings ###
+
+# CTRL-P: fzf RPM packages
+bind '"\C-p":"$(fzpkg)\n"'
 
