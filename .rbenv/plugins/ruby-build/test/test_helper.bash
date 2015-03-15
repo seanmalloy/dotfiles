@@ -15,7 +15,7 @@ teardown() {
 
 stub() {
   local program="$1"
-  local prefix="$(echo "$program" | tr a-z A-Z)"
+  local prefix="$(echo "$program" | tr a-z- A-Z_)"
   shift
 
   export "${prefix}_STUB_PLAN"="${TMP}/${program}-stub-plan"
@@ -31,7 +31,7 @@ stub() {
 
 unstub() {
   local program="$1"
-  local prefix="$(echo "$program" | tr a-z A-Z)"
+  local prefix="$(echo "$program" | tr a-z- A-Z_)"
   local path="${TMP}/bin/${program}"
 
   export "${prefix}_STUB_END"=1
@@ -115,7 +115,11 @@ assert_output() {
 
 assert_output_contains() {
   local expected="$1"
-  echo "$output" | grep -F "$expected" >/dev/null || {
+  if [ -z "$expected" ]; then
+    echo "assert_output_contains needs an argument" >&2
+    return 1
+  fi
+  echo "$output" | $(type -p ggrep grep | head -1) -F "$expected" >/dev/null || {
     { echo "expected output to contain $expected"
       echo "actual: $output"
     } | flunk
