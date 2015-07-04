@@ -11,9 +11,10 @@ which wget 2> /dev/null
 which make 2> /dev/null
 
 TMUX_VERSION=$1
+LIBEVENT_VERSION="2.0.22"
 
 if [[ -z $TMUX_VERSION ]]; then
-    TMUX_VERSION="1.9"
+    TMUX_VERSION="2.0"
 fi
 
 TMUX_MINOR_VERSION=""
@@ -33,8 +34,8 @@ fi
 
 # download source files for tmux, libevent, and ncurses
 cd $TMUX_BUILD_DIR
-wget -O tmux-${TMUX_VERSION}.tar.gz http://sourceforge.net/projects/tmux/files/tmux/tmux-${TMUX_VERSION}/tmux-${TMUX_VERSION}${TMUX_MINOR_VERSION}.tar.gz/download
-wget https://github.com/downloads/libevent/libevent/libevent-2.0.19-stable.tar.gz
+wget -O tmux-${TMUX_VERSION}.tar.gz https://github.com/tmux/tmux/releases/download/${TMUX_VERSION}${TMUX_MINOR_VERSION}/tmux-${TMUX_VERSION}${TMUX_MINOR_VERSION}.tar.gz
+wget https://github.com/libevent/libevent/releases/download/release-${LIBEVENT_VERSION}-stable/libevent-${LIBEVENT_VERSION}-stable.tar.gz
 wget ftp://ftp.gnu.org/gnu/ncurses/ncurses-5.9.tar.gz
 
 # extract files, configure, and compile
@@ -42,8 +43,8 @@ wget ftp://ftp.gnu.org/gnu/ncurses/ncurses-5.9.tar.gz
 ############
 # libevent #
 ############
-tar xvzf libevent-2.0.19-stable.tar.gz
-cd libevent-2.0.19-stable
+tar xvzf libevent-${LIBEVENT_VERSION}-stable.tar.gz
+cd libevent-${LIBEVENT_VERSION}-stable
 ./configure --prefix=$TMUX_INSTALL_DIR --disable-shared
 make
 make install
