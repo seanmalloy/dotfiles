@@ -9,7 +9,7 @@ unset fzf 2> /dev/null
 
 # Key bindings
 # ------------
-__fsel() {
+__fzf_select__() {
   command find -L . \( -path '*/\.*' -o -fstype 'dev' -o -fstype 'proc' \) -prune \
     -o -type f -print \
     -o -type d -print \
@@ -21,7 +21,11 @@ __fsel() {
 
 if [[ $- =~ i ]]; then
 
-__fsel_tmux() {
+__fzfcmd() {
+  [ ${FZF_TMUX:-1} -eq 1 ] && echo "fzf-tmux -d${FZF_TMUX_HEIGHT:-40%}" || echo "fzf"
+}
+
+__fzf_select_tmux__() {
   local height
   height=${FZF_TMUX_HEIGHT:-40%}
   if [[ $height =~ %$ ]]; then
@@ -29,13 +33,21 @@ __fsel_tmux() {
   else
     height="-l $height"
   fi
-  tmux split-window $height "bash -c 'source ~/.bash_files/fzf.bash; tmux send-keys -t $TMUX_PANE \"\$(__fsel)\"'"
+  tmux split-window $height "cd $(printf %q "$PWD");bash -c 'source ~/.fzf.bash; tmux send-keys -t $TMUX_PANE \"\$(__fzf_select__)\"'"
 }
 
-__fcd() {
+__fzf_cd__() {
   local dir
   dir=$(command find -L ${1:-.} \( -path '*/\.*' -o -fstype 'dev' -o -fstype 'proc' \) -prune \
-    -o -type d -print 2> /dev/null | sed 1d | cut -b3- | fzf +m) && printf 'cd %q' "$dir"
+    -o -type d -print 2> /dev/null | sed 1d | cut -b3- | $(__fzfcmd) +m) && printf 'cd %q' "$dir"
+}
+
+__fzf_history__() {
+  local line
+  line=$(
+    HISTTIMEFORMAT= history |
+    $(__fzfcmd) +s --tac +m -n2..,.. --tiebreak=index --toggle-sort=ctrl-r |
+    \grep '^ *[0-9]') && sed 's/ *\([0-9]*\)\** .*/!\1/' <<< "$line"
 }
 
 __use_tmux=0
@@ -44,38 +56,40 @@ __use_tmux=0
 if [ -z "$(set -o | \grep '^vi.*on')" ]; then
   # Required to refresh the prompt after fzf
   bind '"\er": redraw-current-line'
+  bind '"\e^": history-expand-line'
 
   # CTRL-T - Paste the selected file path into the command line
   if [ $__use_tmux -eq 1 ]; then
-    bind '"\C-t": " \C-u \C-a\C-k$(__fsel_tmux)\e\C-e\C-y\C-a\C-d\C-y\ey\C-h"'
+    bind '"\C-t": " \C-u \C-a\C-k$(__fzf_select_tmux__)\e\C-e\C-y\C-a\C-d\C-y\ey\C-h"'
   else
-    bind '"\C-t": " \C-u \C-a\C-k$(__fsel)\e\C-e\C-y\C-a\C-y\ey\C-h\C-e\er \C-h"'
+    bind '"\C-t": " \C-u \C-a\C-k$(__fzf_select__)\e\C-e\C-y\C-a\C-y\ey\C-h\C-e\er \C-h"'
   fi
 
   # CTRL-R - Paste the selected command from history into the command line
-  bind '"\C-r": " \C-e\C-u$(HISTTIMEFORMAT= history | fzf +s --tac +m -n2..,.. | sed \"s/ *[0-9]* *//\")\e\C-e\er"'
+  bind '"\C-r": " \C-e\C-u$(__fzf_history__)\e\C-e\e^\er"'
 
   # ALT-C - cd into the selected directory
-  bind '"\ec": " \C-e\C-u$(__fcd)\e\C-e\er\C-m"'
+  bind '"\ec": " \C-e\C-u$(__fzf_cd__)\e\C-e\er\C-m"'
 else
   bind '"\C-x\C-e": shell-expand-line'
   bind '"\C-x\C-r": redraw-current-line'
+  bind '"\C-x^": history-expand-line'
 
   # CTRL-T - Paste the selected file path into the command line
   # - FIXME: Selected items are attached to the end regardless of cursor position
   if [ $__use_tmux -eq 1 ]; then
-    bind '"\C-t": "\e$a \eddi$(__fsel_tmux)\C-x\C-e\e0P$xa"'
+    bind '"\C-t": "\e$a \eddi$(__fzf_select_tmux__)\C-x\C-e\e0P$xa"'
   else
-    bind '"\C-t": "\e$a \eddi$(__fsel)\C-x\C-e\e0Px$a \C-x\C-r\exa "'
+    bind '"\C-t": "\e$a \eddi$(__fzf_select__)\C-x\C-e\e0Px$a \C-x\C-r\exa "'
   fi
   bind -m vi-command '"\C-t": "i\C-t"'
 
   # CTRL-R - Paste the selected command from history into the command line
-  bind '"\C-r": "\eddi$(HISTTIMEFORMAT= history | fzf +s --tac +m -n2..,.. | sed \"s/ *[0-9]* *//\")\C-x\C-e\e$a\C-x\C-r"'
+  bind '"\C-r": "\eddi$(__fzf_history__)\C-x\C-e\C-x^\e$a\C-x\C-r"'
   bind -m vi-command '"\C-r": "i\C-r"'
 
   # ALT-C - cd into the selected directory
-  bind '"\ec": "\eddi$(__fcd)\C-x\C-e\C-x\C-r\C-m"'
+  bind '"\ec": "\eddi$(__fzf_cd__)\C-x\C-e\C-x\C-r\C-m"'
   bind -m vi-command '"\ec": "i\ec"'
 fi
 

@@ -5,6 +5,8 @@
 #  / __/ / /_/ __/
 # /_/   /___/_/-completion.bash
 #
+# - $FZF_TMUX               (default: 1)
+# - $FZF_TMUX_HEIGHT        (default: '40%')
 # - $FZF_COMPLETION_TRIGGER (default: '**')
 # - $FZF_COMPLETION_OPTS    (default: empty)
 
@@ -24,23 +26,41 @@ _fzf_opts_completion() {
     -i +i
     -n --nth
     -d --delimiter
-    -s --sort +s
+    +s --no-sort
+    --tac
+    --tiebreak
+    --bind
     -m --multi
     --no-mouse
-    +c --no-color
-    +2 --no-256
+    --color
     --black
     --reverse
+    --no-hscroll
+    --inline-info
     --prompt
     -q --query
     -1 --select-1
     -0 --exit-0
     -f --filter
-    --print-query"
+    --print-query
+    --expect
+    --toggle-sort
+    --sync
+    --cycle
+    --history
+    --history-size"
 
   case "${prev}" in
-  --sort|-s)
-    COMPREPLY=( $(compgen -W "$(seq 2000 1000 10000)" -- ${cur}) )
+  --tiebreak)
+    COMPREPLY=( $(compgen -W "length begin end index" -- ${cur}) )
+    return 0
+    ;;
+  --color)
+    COMPREPLY=( $(compgen -W "dark light 16 bw" -- ${cur}) )
+    return 0
+    ;;
+  --history)
+    COMPREPLY=()
     return 0
     ;;
   esac
@@ -71,10 +91,11 @@ _fzf_handle_dynamic_completion() {
 }
 
 _fzf_path_completion() {
-  local cur base dir leftover matches trigger cmd
+  local cur base dir leftover matches trigger cmd fzf
+  [ ${FZF_TMUX:-1} -eq 1 ] && fzf="fzf-tmux -d ${FZF_TMUX_HEIGHT:-40%}" || fzf="fzf"
   cmd=$(echo ${COMP_WORDS[0]} | sed 's/[^a-z0-9_=]/_/g')
   COMPREPLY=()
-  trigger=${FZF_COMPLETION_TRIGGER:-**}
+  trigger=${FZF_COMPLETION_TRIGGER-'**'}
   cur="${COMP_WORDS[COMP_CWORD]}"
   if [[ ${cur} == *"$trigger" ]]; then
     base=${cur:0:${#cur}-${#trigger}}
@@ -87,8 +108,8 @@ _fzf_path_completion() {
         leftover=${leftover/#\/}
         [ "$dir" = './' ] && dir=''
         tput sc
-        matches=$(find -L "$dir"* $1 2> /dev/null | fzf $FZF_COMPLETION_OPTS $2 -q "$leftover" | while read item; do
-          printf '%q ' "$item"
+        matches=$(find -L "$dir"* $1 2> /dev/null | $fzf $FZF_COMPLETION_OPTS $2 -q "$leftover" | while read item; do
+          printf "%q$3 " "$item"
         done)
         matches=${matches% }
         if [ -n "$matches" ]; then
@@ -105,21 +126,23 @@ _fzf_path_completion() {
   else
     shift
     shift
+    shift
     _fzf_handle_dynamic_completion "$cmd" "$@"
   fi
 }
 
 _fzf_list_completion() {
-  local cur selected trigger cmd src
+  local cur selected trigger cmd src fzf
+  [ ${FZF_TMUX:-1} -eq 1 ] && fzf="fzf-tmux -d ${FZF_TMUX_HEIGHT:-40%}" || fzf="fzf"
   read -r src
   cmd=$(echo ${COMP_WORDS[0]} | sed 's/[^a-z0-9_=]/_/g')
-  trigger=${FZF_COMPLETION_TRIGGER:-**}
+  trigger=${FZF_COMPLETION_TRIGGER-'**'}
   cur="${COMP_WORDS[COMP_CWORD]}"
   if [[ ${cur} == *"$trigger" ]]; then
     cur=${cur:0:${#cur}-${#trigger}}
 
     tput sc
-    selected=$(eval "$src | fzf $FZF_COMPLETION_OPTS $1 -q '$cur'" | tr '\n' ' ')
+    selected=$(eval "$src | $fzf $FZF_COMPLETION_OPTS $1 -q '$cur'" | tr '\n' ' ')
     selected=${selected% }
     tput rc
 
@@ -136,27 +159,28 @@ _fzf_list_completion() {
 _fzf_all_completion() {
   _fzf_path_completion \
     "-name .git -prune -o -name .svn -prune -o -type d -print -o -type f -print -o -type l -print" \
-    "-m" "$@"
+    "-m" "" "$@"
 }
 
 _fzf_file_completion() {
   _fzf_path_completion \
     "-name .git -prune -o -name .svn -prune -o -type f -print -o -type l -print" \
-    "-m" "$@"
+    "-m" "" "$@"
 }
 
 _fzf_dir_completion() {
   _fzf_path_completion \
     "-name .git -prune -o -name .svn -prune -o -type d -print" \
-    "" "$@"
+    "" "/" "$@"
 }
 
 _fzf_kill_completion() {
   [ -n "${COMP_WORDS[COMP_CWORD]}" ] && return 1
 
-  local selected
+  local selected fzf
+  [ ${FZF_TMUX:-1} -eq 1 ] && fzf="fzf-tmux -d ${FZF_TMUX_HEIGHT:-40%}" || fzf="fzf"
   tput sc
-  selected=$(ps -ef | sed 1d | fzf -m $FZF_COMPLETION_OPTS | awk '{print $2}' | tr '\n' ' ')
+  selected=$(ps -ef | sed 1d | $fzf -m $FZF_COMPLETION_OPTS | awk '{print $2}' | tr '\n' ' ')
   tput rc
 
   if [ -n "$selected" ]; then
@@ -167,13 +191,13 @@ _fzf_kill_completion() {
 
 _fzf_telnet_completion() {
   _fzf_list_completion '+m' "$@" << "EOF"
-  \grep -v '^\s*\(#\|$\)' /etc/hosts | awk '{if (length($2) > 0) {print $2}}' | sort -u
+  \grep -v '^\s*\(#\|$\)' /etc/hosts | \grep -Fv '0.0.0.0' | awk '{if (length($2) > 0) {print $2}}' | sort -u
 EOF
 }
 
 _fzf_ssh_completion() {
   _fzf_list_completion '+m' "$@" << "EOF"
-    cat <(cat ~/.ssh/config /etc/ssh/ssh_config 2> /dev/null | \grep -i ^host | \grep -v '*') <(\grep -v '^\s*\(#\|$\)' /etc/hosts) | awk '{print $2}' | sort -u
+    cat <(cat ~/.ssh/config /etc/ssh/ssh_config 2> /dev/null | \grep -i '^host' | \grep -v '*') <(\grep -v '^\s*\(#\|$\)' /etc/hosts | \grep -Fv '0.0.0.0') | awk '{if (length($2) > 0) {print $2}}' | sort -u
 EOF
 }
 
@@ -190,7 +214,7 @@ EOF
 }
 
 # fzf options
-complete -F _fzf_opts_completion fzf
+complete -o default -F _fzf_opts_completion fzf
 
 d_cmds="cd pushd rmdir"
 f_cmds="
@@ -206,11 +230,11 @@ a_cmds="
 x_cmds="kill ssh telnet unset unalias export"
 
 # Preserve existing completion
-if [ "$_fzf_completion_loaded" != '0.8.6-1' ]; then
+if [ "$_fzf_completion_loaded" != '0.9.12' ]; then
   # Really wish I could use associative array but OSX comes with bash 3.2 :(
   eval $(complete | \grep '\-F' | \grep -v _fzf_ |
     \grep -E " ($(echo $d_cmds $f_cmds $a_cmds $x_cmds | sed 's/ /|/g' | sed 's/+/\\+/g'))$" | _fzf_orig_completion_filter)
-  export _fzf_completion_loaded=0.8.6-1
+  export _fzf_completion_loaded=0.9.12
 fi
 
 if type _completion_loader > /dev/null 2>&1; then
@@ -219,7 +243,7 @@ fi
 
 # Directory
 for cmd in $d_cmds; do
-  complete -F _fzf_dir_completion -o default -o bashdefault $cmd
+  complete -F _fzf_dir_completion -o nospace -o plusdirs $cmd
 done
 
 # File
