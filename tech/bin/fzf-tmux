@@ -82,7 +82,7 @@ while [ $# -gt 0 ]; do
   shift
 done
 
-if [ -z "$TMUX_PANE" ]; then
+if [ -z "$TMUX_PANE" ] || tmux list-panes -F '#F' | grep -q Z; then
   fzf "${args[@]}"
   exit $?
 fi
@@ -107,7 +107,7 @@ fail() {
 fzf="$(which fzf 2> /dev/null)" || fzf="$(dirname "$0")/fzf"
 [ -x "$fzf" ] || fail "fzf executable not found"
 
-envs="env "
+envs="env TERM=$TERM "
 [ -n "$FZF_DEFAULT_OPTS"    ] && envs="$envs FZF_DEFAULT_OPTS=$(printf %q "$FZF_DEFAULT_OPTS")"
 [ -n "$FZF_DEFAULT_COMMAND" ] && envs="$envs FZF_DEFAULT_COMMAND=$(printf %q "$FZF_DEFAULT_COMMAND")"
 
