@@ -108,9 +108,11 @@ if [[ -n "$(which plenv 2> /dev/null)" ]]; then
     eval "$(plenv init -)"
 fi
 
-### Setup rbenv
-if [[ -n "$(which rbenv 2> /dev/null)" ]]; then
-    eval "$(rbenv init -)"
+# Enable Ruby 2.2 SCL
+# See RH solution # 527703
+unset X_SCLS
+if [[ -n "$(which scl 2> /dev/null)" ]]; then
+    source scl_source enable rh-ruby22
 fi
 
 #### Git Setup ###
