@@ -93,7 +93,7 @@ alias pr='puppet resource'
 
 # Set PATH
 export PATH=/usr/bin:/bin:/sbin:/usr/sbin:/usr/games:/usr/local/games:/usr/local/bin
-for DIR in $GOROOT/bin $GOPATH/bin $HOME/.rbenv/bin HOME/.plenv/bin $HOME/.vim/bin $BIN_DIR; do
+for DIR in $GOROOT/bin $GOPATH/bin HOME/.plenv/bin $HOME/.vim/bin $BIN_DIR; do
     if [[ -d $DIR ]]; then
         if [[ ! $PATH =~ $DIR ]]; then
             PATH=$DIR:$PATH
