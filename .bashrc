@@ -108,11 +108,22 @@ if [[ -n "$(which plenv 2> /dev/null)" ]]; then
     eval "$(plenv init -)"
 fi
 
-# Enable Ruby 2.2 SCL
+### Enable RH Software Collections ###
 # See RH solution # 527703
 unset X_SCLS
 if [[ -n "$(which scl 2> /dev/null)" ]]; then
-    source scl_source enable rh-ruby22
+    # Enable Ruby 2.2 or 2.0
+    if
+        scl -l | grep -q rh-ruby22
+    then
+        source scl_source enable rh-ruby22
+    elif
+        scl -l | grep -q ruby200
+    then
+        source scl_source enable ruby200
+    else
+        echo "Using system Ruby"
+    fi
 fi
 
 #### Git Setup ###

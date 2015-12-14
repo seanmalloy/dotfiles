@@ -109,6 +109,19 @@ f_setup_github()
     fi
 }
 
+f_setup_rubygems()
+{
+    if [[ -z $DOTFILES_RUBY_GEM_SOURCE ]]; then
+        read -p "Ruby Gem Source: " DOTFILES_RUBY_GEM_SOURCE
+        echo "DOTFILES_RUBY_GEM_SOURCE=\"$DOTFILES_RUBY_GEM_SOURCE\"" >> $ANSWER_FILE
+    fi
+    cat > ~/.gemrc << EOF
+sources:
+- $DOTFILES_RUBY_GEM_SOURCE
+gem: --bindir ~/tech/bin
+EOF
+}
+
 f_setup_ssh()
 {
     if [[ -z $SSH_CMD ]]; then
@@ -193,6 +206,7 @@ if [[ "${ans:0:1}"  ||  "${ans:0:1}" ]]; then
     f_setup_fzf
     f_setup_git
     f_setup_github
+    f_setup_rubygems
     f_setup_ssh
     f_setup_tmux
     f_setup_tmuxinator
