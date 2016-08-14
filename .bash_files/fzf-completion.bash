@@ -10,6 +10,26 @@
 # - $FZF_COMPLETION_TRIGGER (default: '**')
 # - $FZF_COMPLETION_OPTS    (default: empty)
 
+# To use custom commands instead of find, override _fzf_compgen_{path,dir}
+if ! declare -f _fzf_compgen_path > /dev/null; then
+  _fzf_compgen_path() {
+    echo "$1"
+    command find -L "$1" \
+      -name .git -prune -o -name .svn -prune -o \( -type d -o -type f -o -type l \) \
+      -a -not -path "$1" -print 2> /dev/null | sed 's@^\./@@'
+  }
+fi
+
+if ! declare -f _fzf_compgen_dir > /dev/null; then
+  _fzf_compgen_dir() {
+    command find -L "$1" \
+      -name .git -prune -o -name .svn -prune -o -type d \
+      -a -not -path "$1" -print 2> /dev/null | sed 's@^\./@@'
+  }
+fi
+
+###########################################################
+
 _fzf_orig_completion_filter() {
   sed 's/^\(.*-F\) *\([^ ]*\).* \([^ ]*\)$/export _fzf_orig_completion_\3="\1 %s \3 #\2";/' |
   awk -F= '{gsub(/[^a-z0-9_= ;]/, "_", $1); print $1"="$2}'
@@ -55,11 +75,11 @@ _fzf_opts_completion() {
 
   case "${prev}" in
   --tiebreak)
-    COMPREPLY=( $(compgen -W "length begin end index" -- ${cur}) )
+    COMPREPLY=( $(compgen -W "length begin end index" -- "$cur") )
     return 0
     ;;
   --color)
-    COMPREPLY=( $(compgen -W "dark light 16 bw" -- ${cur}) )
+    COMPREPLY=( $(compgen -W "dark light 16 bw" -- "$cur") )
     return 0
     ;;
   --history)
@@ -68,8 +88,8 @@ _fzf_opts_completion() {
     ;;
   esac
 
-  if [[ ${cur} =~ ^-|\+ ]]; then
-    COMPREPLY=( $(compgen -W "${opts}" -- ${cur}) )
+  if [[ "$cur" =~ ^-|\+ ]]; then
+    COMPREPLY=( $(compgen -W "${opts}" -- "$cur") )
     return 0
   fi
 
@@ -88,31 +108,32 @@ _fzf_handle_dynamic_completion() {
   elif [ -n "$_fzf_completion_loader" ]; then
     _completion_loader "$@"
     ret=$?
-    eval $(complete | \grep "\-F.* $orig_cmd$" | _fzf_orig_completion_filter)
-    source $BASH_SOURCE
+    eval "$(complete | command grep "\-F.* $orig_cmd$" | _fzf_orig_completion_filter)"
+    source "${BASH_SOURCE[0]}"
     return $ret
   fi
 }
 
 __fzf_generic_path_completion() {
   local cur base dir leftover matches trigger cmd fzf
-  [ ${FZF_TMUX:-1} -eq 1 ] && fzf="fzf-tmux -d ${FZF_TMUX_HEIGHT:-40%}" || fzf="fzf"
-  cmd=$(echo ${COMP_WORDS[0]} | sed 's/[^a-z0-9_=]/_/g')
+  [ "${FZF_TMUX:-1}" != 0 ] && fzf="fzf-tmux -d ${FZF_TMUX_HEIGHT:-40%}" || fzf="fzf"
+  cmd=$(echo "${COMP_WORDS[0]}" | sed 's/[^a-z0-9_=]/_/g')
   COMPREPLY=()
   trigger=${FZF_COMPLETION_TRIGGER-'**'}
   cur="${COMP_WORDS[COMP_CWORD]}"
-  if [[ ${cur} == *"$trigger" ]]; then
+  if [[ "$cur" == *"$trigger" ]]; then
     base=${cur:0:${#cur}-${#trigger}}
-    eval base=$base
+    eval "base=$base"
 
     dir="$base"
-    while [ 1 ]; do
-      if [ -z "$dir" -o -d "$dir" ]; then
+    while true; do
+      if [ -z "$dir" ] || [ -d "$dir" ]; then
         leftover=${base/#"$dir"}
         leftover=${leftover/#\/}
-        [ "$dir" = './' ] && dir=''
+        [ -z "$dir" ] && dir='.'
+        [ "$dir" != "/" ] && dir="${dir/%\//}"
         tput sc
-        matches=$(find -L "$dir"* $1 2> /dev/null | $fzf $FZF_COMPLETION_OPTS $2 -q "$leftover" | while read item; do
+        matches=$(eval "$1 $(printf %q "$dir")" | $fzf $FZF_COMPLETION_OPTS $2 -q "$leftover" | while read -r item; do
           printf "%q$3 " "$item"
         done)
         matches=${matches% }
@@ -135,29 +156,22 @@ __fzf_generic_path_completion() {
   fi
 }
 
-_fzf_feed_fifo() (
-  rm -f "$fifo"
-  mkfifo "$fifo"
-  cat <&0 > "$fifo" &
-)
-
 _fzf_complete() {
-  local fifo cur selected trigger cmd fzf
-  fifo="${TMPDIR:-/tmp}/fzf-complete-fifo-$$"
-  [ ${FZF_TMUX:-1} -eq 1 ] && fzf="fzf-tmux -d ${FZF_TMUX_HEIGHT:-40%}" || fzf="fzf"
+  local cur selected trigger cmd fzf post
+  post="$(caller 0 | awk '{print $2}')_post"
+  type -t "$post" > /dev/null 2>&1 || post=cat
+  [ "${FZF_TMUX:-1}" != 0 ] && fzf="fzf-tmux -d ${FZF_TMUX_HEIGHT:-40%}" || fzf="fzf"
 
-  cmd=$(echo ${COMP_WORDS[0]} | sed 's/[^a-z0-9_=]/_/g')
+  cmd=$(echo "${COMP_WORDS[0]}" | sed 's/[^a-z0-9_=]/_/g')
   trigger=${FZF_COMPLETION_TRIGGER-'**'}
   cur="${COMP_WORDS[COMP_CWORD]}"
-  if [[ ${cur} == *"$trigger" ]]; then
+  if [[ "$cur" == *"$trigger" ]]; then
     cur=${cur:0:${#cur}-${#trigger}}
 
-    _fzf_feed_fifo "$fifo"
     tput sc
-    selected=$(eval "cat '$fifo' | $fzf $FZF_COMPLETION_OPTS $1 -q '$cur'" | tr '\n' ' ')
+    selected=$(cat | $fzf $FZF_COMPLETION_OPTS $1 -q "$cur" | $post | tr '\n' ' ')
     selected=${selected% } # Strip trailing space not to repeat "-o nospace"
     tput rc
-    rm -f "$fifo"
 
     if [ -n "$selected" ]; then
       COMPREPLY=("$selected")
@@ -170,28 +184,23 @@ _fzf_complete() {
 }
 
 _fzf_path_completion() {
-  __fzf_generic_path_completion \
-    "-name .git -prune -o -name .svn -prune -o -type d -print -o -type f -print -o -type l -print" \
-    "-m" "" "$@"
+  __fzf_generic_path_completion _fzf_compgen_path "-m" "" "$@"
 }
 
+# Deprecated. No file only completion.
 _fzf_file_completion() {
-  __fzf_generic_path_completion \
-    "-name .git -prune -o -name .svn -prune -o -type f -print -o -type l -print" \
-    "-m" "" "$@"
+  _fzf_path_completion "$@"
 }
 
 _fzf_dir_completion() {
-  __fzf_generic_path_completion \
-    "-name .git -prune -o -name .svn -prune -o -type d -print" \
-    "" "/" "$@"
+  __fzf_generic_path_completion _fzf_compgen_dir "" "/" "$@"
 }
 
 _fzf_complete_kill() {
   [ -n "${COMP_WORDS[COMP_CWORD]}" ] && return 1
 
   local selected fzf
-  [ ${FZF_TMUX:-1} -eq 1 ] && fzf="fzf-tmux -d ${FZF_TMUX_HEIGHT:-40%}" || fzf="fzf"
+  [ "${FZF_TMUX:-1}" != 0 ] && fzf="fzf-tmux -d ${FZF_TMUX_HEIGHT:-40%}" || fzf="fzf"
   tput sc
   selected=$(ps -ef | sed 1d | $fzf -m $FZF_COMPLETION_OPTS | awk '{print $2}' | tr '\n' ' ')
   tput rc
@@ -204,15 +213,16 @@ _fzf_complete_kill() {
 
 _fzf_complete_telnet() {
   _fzf_complete '+m' "$@" < <(
-    \grep -v '^\s*\(#\|$\)' /etc/hosts | \grep -Fv '0.0.0.0' |
+    command grep -v '^\s*\(#\|$\)' /etc/hosts | command grep -Fv '0.0.0.0' |
         awk '{if (length($2) > 0) {print $2}}' | sort -u
   )
 }
 
 _fzf_complete_ssh() {
   _fzf_complete '+m' "$@" < <(
-    cat <(cat ~/.ssh/config /etc/ssh/ssh_config 2> /dev/null | \grep -i '^host' | \grep -v '*') \
-        <(\grep -v '^\s*\(#\|$\)' /etc/hosts | \grep -Fv '0.0.0.0') |
+    cat <(cat ~/.ssh/config /etc/ssh/ssh_config 2> /dev/null | command grep -i '^host' | command grep -v '*') \
+        <(command grep -oE '^[^ ]+' ~/.ssh/known_hosts | tr ',' '\n' | awk '{ print $1 " " $1 }') \
+        <(command grep -v '^\s*\(#\|$\)' /etc/hosts | command grep -Fv '0.0.0.0') |
         awk '{if (length($2) > 0) {print $2}}' | sort -u
   )
 }
@@ -238,13 +248,12 @@ _fzf_complete_unalias() {
 # fzf options
 complete -o default -F _fzf_opts_completion fzf
 
-d_cmds="cd pushd rmdir"
-f_cmds="
+d_cmds="${FZF_COMPLETION_DIR_COMMANDS:-cd pushd rmdir}"
+a_cmds="
   awk cat diff diff3
   emacs emacsclient ex file ftp g++ gcc gvim head hg java
   javac ld less more mvim nvim patch perl python ruby
-  sed sftp sort source tail tee uniq vi view vim wc xdg-open"
-a_cmds="
+  sed sftp sort source tail tee uniq vi view vim wc xdg-open
   basename bunzip2 bzip2 chmod chown curl cp dirname du
   find git grep gunzip gzip hg jar
   ln ls mv open rm rsync scp
@@ -252,11 +261,11 @@ a_cmds="
 x_cmds="kill ssh telnet unset unalias export"
 
 # Preserve existing completion
-if [ "$_fzf_completion_loaded" != '0.10.8' ]; then
+if [ "$_fzf_completion_loaded" != '0.11.3' ]; then
   # Really wish I could use associative array but OSX comes with bash 3.2 :(
-  eval $(complete | \grep '\-F' | \grep -v _fzf_ |
-    \grep -E " ($(echo $d_cmds $f_cmds $a_cmds $x_cmds | sed 's/ /|/g' | sed 's/+/\\+/g'))$" | _fzf_orig_completion_filter)
-  export _fzf_completion_loaded=0.10.8
+  eval $(complete | command grep '\-F' | command grep -v _fzf_ |
+    command grep -E " ($(echo $d_cmds $a_cmds $x_cmds | sed 's/ /|/g' | sed 's/+/\\+/g'))$" | _fzf_orig_completion_filter)
+  export _fzf_completion_loaded=0.11.3
 fi
 
 if type _completion_loader > /dev/null 2>&1; then
@@ -264,32 +273,28 @@ if type _completion_loader > /dev/null 2>&1; then
 fi
 
 _fzf_defc() {
-  local cmd func opts orig_var orig
+  local cmd func opts orig_var orig def
   cmd="$1"
   func="$2"
   opts="$3"
   orig_var="_fzf_orig_completion_$cmd"
   orig="${!orig_var}"
   if [ -n "$orig" ]; then
-    eval "$(printf "$orig" "$func")"
+    printf -v def "$orig" "$func"
+    eval "$def"
   else
     complete -F "$func" $opts "$cmd"
   fi
 }
 
-# Directory
-for cmd in $d_cmds; do
-  _fzf_defc "$cmd" _fzf_dir_completion "-o nospace -o plusdirs"
-done
-
-# File
-for cmd in $f_cmds; do
-  _fzf_defc "$cmd" _fzf_file_completion "-o default -o bashdefault"
-done
-
 # Anything
 for cmd in $a_cmds; do
   _fzf_defc "$cmd" _fzf_path_completion "-o default -o bashdefault"
+done
+
+# Directory
+for cmd in $d_cmds; do
+  _fzf_defc "$cmd" _fzf_dir_completion "-o nospace -o plusdirs"
 done
 
 unset _fzf_defc
@@ -306,4 +311,4 @@ complete -F _fzf_complete_unset -o default -o bashdefault unset
 complete -F _fzf_complete_export -o default -o bashdefault export
 complete -F _fzf_complete_unalias -o default -o bashdefault unalias
 
-unset cmd d_cmds f_cmds a_cmds x_cmds
+unset cmd d_cmds a_cmds x_cmds
