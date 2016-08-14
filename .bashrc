@@ -171,6 +171,13 @@ GREEN="\[\033[0;32m\]"
 NO_COLOR="\[\033[0m\]"
 PS1="\u@\h $RED\W$YELLOW\$(__git_ps1)$NO_COLOR$ "
 
+### Source Site Config ###
+export BASH_SITE_INCLUDE_FILE="$BASH_INCLUDE_DIR/site.bash"
+if [[ ! -e $BASH_SITE_INCLUDE_FILE ]]; then
+    touch $BASH_SITE_INCLUDE_FILE
+fi
+. $BASH_SITE_INCLUDE_FILE
+
 ### Shell Functions ###
 
 # Create new puppet module
