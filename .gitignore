@@ -2,4 +2,3 @@
 *.gz
 *.tar
 tmp/
-install.sh

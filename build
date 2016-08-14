@@ -14,7 +14,6 @@ tar --delete -f $BUILD_FILE install.sh
 tar --delete -f $BUILD_FILE install.sh.in
 tar --delete -f $BUILD_FILE tmp
 tar --delete -f $BUILD_FILE tmux_install.sh
-tar --delete --wildcards -f $BUILD_FILE .*.swp
 
 gzip $BUILD_FILE
 if [[ "$?" -ne 0 ]]; then
