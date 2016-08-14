@@ -127,12 +127,17 @@ if [[ -n "$(which scl 2> /dev/null)" ]]; then
 fi
 
 #### Git Setup ###
+eval "$(hub alias -s)"
 if [[ $OS_VERSION != 'RedHat7' ]]; then
     if [ -f "$BASH_INCLUDE_DIR/git-completion.bash" ]; then
         # Enable Git Autocomplete
-        echo "enabling git completion"
         . $BASH_INCLUDE_DIR/git-completion.bash
     fi
+fi
+
+if [ -f "$BASH_INCLUDE_DIR/hub-completion.bash" ]; then
+    # Enable Hub Autocomplete
+    . $BASH_INCLUDE_DIR/hub-completion.bash
 fi
 
 if [ -f "$BASH_INCLUDE_DIR/git-prompt.bash" ]; then
