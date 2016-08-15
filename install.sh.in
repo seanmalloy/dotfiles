@@ -134,11 +134,10 @@ f_setup_rubygems()
         read -p "Ruby Gem Source: " DOTFILES_RUBY_GEM_SOURCE
         echo "DOTFILES_RUBY_GEM_SOURCE=\"$DOTFILES_RUBY_GEM_SOURCE\"" >> $ANSWER_FILE
     fi
-    cat > ~/.gemrc << EOF
-sources:
-- $DOTFILES_RUBY_GEM_SOURCE
-gem: --bindir ~/tech/bin
-EOF
+    if [[ $DOTFILES_RUBY_GEM_SOURCE != "n" ]]; then
+        gem sources -a $DOTFILES_RUBY_GEM_SOURCE
+        gem sources -r https://rubygems.org/
+    fi
 }
 
 f_setup_ssh()
