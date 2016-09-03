@@ -70,7 +70,7 @@ f_pre_clean()
 
 f_setup_fzf()
 {
-    ln -fs fzf-0.13.3-linux_amd64 $HOME/tech/bin/fzf
+    ln -fs fzf-0.13.5-linux_amd64 $HOME/tech/bin/fzf
 }
 
 f_setup_git()
@@ -161,6 +161,7 @@ f_setup_ssh()
         echo "Enabling SSH ControlPersist"
         sed -i 's/\#ControlPersist/ControlPersist/g' $HOME/.ssh/config
     fi
+    chmod 700 $HOME/.ssh 2> /dev/null
 }
 
 f_setup_tmux()
