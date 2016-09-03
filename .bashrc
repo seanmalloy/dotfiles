@@ -8,6 +8,14 @@ if [[ -f /etc/bashrc ]]; then
     . /etc/bashrc
 fi
 
+### Source Site Specific Config ###
+export BASH_SITE_FILE="$HOME/.site_env"
+if [[ ! -e $BASH_SITE_FILE ]]; then
+    touch $BASH_SITE_FILE
+fi
+. $BASH_SITE_FILE
+
+
 # set OS type and version
 if [[ -n $(which facter 2> /dev/null) ]]; then
     OS_VERSION="$(facter osfamily)" # RedHat, Debian, etc
@@ -110,19 +118,21 @@ fi
 
 ### Enable RH Software Collections ###
 # See RH solution # 527703
-unset X_SCLS
-if [[ -n "$(which scl 2> /dev/null)" ]]; then
-    # Enable Ruby 2.2 or 2.0
-    if
-        scl -l | grep -q rh-ruby22
-    then
-        source scl_source enable rh-ruby22
-    elif
-        scl -l | grep -q ruby200
-    then
-        source scl_source enable ruby200
-    else
-        echo "Using system Ruby"
+if (( $ENABLE_RUBY_SCL )); then
+    unset X_SCLS
+    if [[ -n "$(which scl 2> /dev/null)" ]]; then
+        # Enable Ruby 2.2 or 2.0
+        if
+            scl -l | grep -q rh-ruby22
+        then
+            source scl_source enable rh-ruby22
+        elif
+            scl -l | grep -q ruby200
+        then
+            source scl_source enable ruby200
+        else
+            echo "Using system Ruby"
+        fi
     fi
 fi
 
@@ -175,13 +185,6 @@ YELLOW="\[\033[0;33m\]"
 GREEN="\[\033[0;32m\]"
 NO_COLOR="\[\033[0m\]"
 PS1="\u@\h $RED\W$YELLOW\$(__git_ps1)$NO_COLOR$ "
-
-### Source Site Config ###
-export BASH_SITE_INCLUDE_FILE="$BASH_INCLUDE_DIR/site.bash"
-if [[ ! -e $BASH_SITE_INCLUDE_FILE ]]; then
-    touch $BASH_SITE_INCLUDE_FILE
-fi
-. $BASH_SITE_INCLUDE_FILE
 
 ### Shell Functions ###
 
