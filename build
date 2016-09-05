@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set -e
+
 PAYLOAD_FILE="install.tar.gz"
 BUILD_FILE="install.tar"
 rm -f $BUILD_FILE $PAYLOAD_FILE
