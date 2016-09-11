@@ -216,20 +216,25 @@ pmg() {
 
 # switch to a project directory
 proj() {
-    if [ -z "$PROJ_DIR" ]; then
-        local PROJ_DIR="$HOME/projects"
+    local BASE_DIR
+    if [[ -n $2 ]]; then
+        BASE_DIR=$2
+    elif [[ -n $PROJ_DIR ]]; then
+        BASE_DIR=$PROJ_DIR
+    else
+        BASE_DIR="$HOME/projects"
     fi
 
-    if [ ! -d "$PROJ_DIR" ]; then
-        mkdir -p $PROJ_DIR
+    if [[ ! -d $BASE_DIR ]]; then
+        mkdir $BASE_DIR
     fi
 
     if [[ -z $1 ]]; then
-        local DIR=$(find $PROJ_DIR -maxdepth 1 -type d -print | grep -v "^$PROJ_DIR$" | awk -F / '{print $NF}' | fzf +m)
+        local DIR=$(find $BASE_DIR -maxdepth 1 -type d -print | grep -v "^$BASE_DIR$" | grep -v '.git$' | awk -F / '{print $NF}' | fzf +m)
     else
-        local DIR=$(find $PROJ_DIR -maxdepth 1 -type d -print | grep -v "^$PROJ_DIR$" | awk -F / '{print $NF}' | fzf +m -q $1 -1)
+        local DIR=$(find $BASE_DIR -maxdepth 1 -type d -print | grep -v "^$BASE_DIR$" | grep -v '.git$' | awk -F / '{print $NF}' | fzf +m -q $1 -1)
     fi
-    cd $PROJ_DIR/$DIR
+    cd $BASE_DIR/$DIR
 }
 
 # fuzzy find RPM packages
