@@ -73,7 +73,7 @@ export HOSTNAME=$(hostname -s)     # Short hostname of this computer
 
 # Go Lang Variables
 export GOROOT=$TECH_DIR/go
-export GOPATH=$HOME/go
+export GOPATH=$PROJ_DIR/go
 
 # Generic Aliases
 alias ll='ls -l'
