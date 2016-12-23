@@ -17,6 +17,7 @@ swap=""
 close=""
 term=""
 [[ -n "$LINES" ]] && lines=$LINES || lines=$(tput lines)
+[[ -n "$COLUMNS" ]] && columns=$COLUMNS || columns=$(tput cols)
 
 help() {
   >&2 echo 'usage: fzf-tmux [-u|-d [HEIGHT[%]]] [-l|-r [WIDTH[%]]] [--] [FZF OPTIONS]
@@ -83,7 +84,7 @@ while [[ $# -gt 0 ]]; do
       else
         if [[ -n "$swap" ]]; then
           if [[ "$arg" =~ ^.l ]]; then
-            [[ -n "$COLUMNS" ]] && max=$COLUMNS || max=$(tput cols)
+            max=$columns
           else
             max=$lines
           fi
@@ -108,7 +109,7 @@ while [[ $# -gt 0 ]]; do
   [[ -n "$skip" ]] && args+=("$arg")
 done
 
-if [[ -z "$TMUX" ]] || [[ "$lines" -le 15 ]]; then
+if [[ -z "$TMUX" || "$opt" =~ ^-h && "$columns" -le 40 || ! "$opt" =~ ^-h && "$lines" -le 15 ]]; then
   "$fzf" "${args[@]}"
   exit $?
 fi
@@ -125,10 +126,10 @@ set -e
 
 # Clean up named pipes on exit
 id=$RANDOM
-argsf="${TMUX_TMPDIR:-/tmp}/fzf-args-$id"
-fifo1="${TMUX_TMPDIR:-/tmp}/fzf-fifo1-$id"
-fifo2="${TMUX_TMPDIR:-/tmp}/fzf-fifo2-$id"
-fifo3="${TMUX_TMPDIR:-/tmp}/fzf-fifo3-$id"
+argsf="${TMPDIR:-/tmp}/fzf-args-$id"
+fifo1="${TMPDIR:-/tmp}/fzf-fifo1-$id"
+fifo2="${TMPDIR:-/tmp}/fzf-fifo2-$id"
+fifo3="${TMPDIR:-/tmp}/fzf-fifo3-$id"
 cleanup() {
   rm -f $argsf $fifo1 $fifo2 $fifo3
 
@@ -161,14 +162,14 @@ done
 
 if [[ -n "$term" ]] || [[ -t 0 ]]; then
   cat <<< "\"$fzf\" $opts > $fifo2; echo \$? > $fifo3 $close" > $argsf
-  tmux set-window-option synchronize-panes off \;\
+  TMUX=$(echo $TMUX | cut -d , -f 1,2) tmux set-window-option synchronize-panes off \;\
     set-window-option remain-on-exit off \;\
     split-window $opt "cd $(printf %q "$PWD");$envs bash $argsf" $swap \
     > /dev/null 2>&1
 else
   mkfifo $fifo1
   cat <<< "\"$fzf\" $opts < $fifo1 > $fifo2; echo \$? > $fifo3 $close" > $argsf
-  tmux set-window-option synchronize-panes off \;\
+  TMUX=$(echo $TMUX | cut -d , -f 1,2) tmux set-window-option synchronize-panes off \;\
     set-window-option remain-on-exit off \;\
     split-window $opt "$envs bash $argsf" $swap \
     > /dev/null 2>&1
