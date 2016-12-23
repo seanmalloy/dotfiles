@@ -170,6 +170,11 @@ export TMUX_INCLUDE_FILE="$BASH_INCLUDE_DIR/tmux.bash"
 . $TMUX_INCLUDE_FILE
 alias tmux='tmux -L $TMUX_SOCKET'
 
+# Enable tmux Autocomplete
+if [ -f "$BASH_INCLUDE_DIR/tmux-completion.bash" ]; then
+    . $BASH_INCLUDE_DIR/tmux-completion.bash
+fi
+
 ### Tmuxinator Setup ###
 export TMUXINATOR_INCLUDE_FILE="$BASH_INCLUDE_DIR/tmuxinator.bash"
 . $TMUXINATOR_INCLUDE_FILE
