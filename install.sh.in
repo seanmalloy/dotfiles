@@ -188,16 +188,6 @@ f_setup_tmux()
         echo "### DO NOT EDIT BELOW THIS LINE ###" >> $HOME/.tmux.conf
         echo "bind P command-prompt -p \"Proxy SSH Target: \" \"new-window -n %1 \\\"exec ssh -o ProxyCommand='ssh jump nc %h 22' %1\\\"\" # ssh via proxy" >> $HOME/.tmux.conf
     fi
-
-    if [[ -z $DOTFILES_ENABLE_TMUX_SCREEN_256_COLOR ]]; then
-        read -p "Enable tmux 256 colors? " DOTFILES_ENABLE_TMUX_SCREEN_256_COLOR
-        echo "DOTFILES_ENABLE_TMUX_SCREEN_256_COLOR=\"$DOTFILES_ENABLE_TMUX_SCREEN_256_COLOR\"" >> $ANSWER_FILE
-    fi
-    if [[ $DOTFILES_ENABLE_TMUX_SCREEN_256_COLOR = "y" ]]; then
-        sed -i "s/TERMTYPE/screen-256color/g" $HOME/.tmux.conf
-    else
-        sed -i "s/TERMTYPE/screen/g" $HOME/.tmux.conf
-    fi
 }
 
 f_setup_tmuxinator()
