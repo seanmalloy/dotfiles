@@ -219,7 +219,7 @@ pmg() {
     git init .
 }
 
-# switch to a project directory
+# Dynamically start tmux sessions
 proj() {
     if [[ -z $PROJ_DIR ]]; then
         echo "ERROR: PROJ_DIR environment variable not set"
@@ -236,7 +236,15 @@ proj() {
     else
         local DIR=$(find $BASE_DIR -maxdepth 1 -type d -print | grep -v "^$BASE_DIR$" | grep -v '.git$' | awk -F / '{print $NF}' | fzf +m -q $1 -1)
     fi
-    mux start dynamic -n $DIR workspace=$BASE_DIR/$DIR
+
+    tmux has-session -t $DIR
+    if [[ $? -ne 0 ]]; then
+        # create new session
+        mux start dynamic -n $DIR workspace=$BASE_DIR/$DIR
+    else
+        # attach existing session
+        tmux attach -t $DIR
+    fi
 }
 
 # fuzzy find RPM packages
