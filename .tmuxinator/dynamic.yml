@@ -26,5 +26,6 @@ windows:
       layout: main-horizontal
       panes:
         - vim
-        - 
+        - git checkout master && git pull origin master
+  - shell:
 
