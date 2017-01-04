@@ -221,14 +221,11 @@ pmg() {
 
 # switch to a project directory
 proj() {
-    local BASE_DIR
-    if [[ -n $2 ]]; then
-        BASE_DIR=$2
-    elif [[ -n $PROJ_DIR ]]; then
-        BASE_DIR=$PROJ_DIR
-    else
-        BASE_DIR="$HOME/projects"
+    if [[ -z $PROJ_DIR ]]; then
+        echo "ERROR: PROJ_DIR environment variable not set"
+        return 1
     fi
+    local BASE_DIR=$PROJ_DIR
 
     if [[ ! -d $BASE_DIR ]]; then
         mkdir $BASE_DIR
@@ -239,7 +236,7 @@ proj() {
     else
         local DIR=$(find $BASE_DIR -maxdepth 1 -type d -print | grep -v "^$BASE_DIR$" | grep -v '.git$' | awk -F / '{print $NF}' | fzf +m -q $1 -1)
     fi
-    cd $BASE_DIR/$DIR
+    mux start dynamic -n $DIR workspace=$BASE_DIR/$DIR
 }
 
 # fuzzy find RPM packages

@@ -194,7 +194,6 @@ f_setup_tmuxinator()
 {
     echo "Configuring Tmuxinator Project: default"
     declare -r TMUX_HOSTNAME=$(hostname -s)
-    perl -pi -e "s/USER/$USER/g" $HOME/.tmuxinator/default.yml
     perl -pi -e "s/HOSTNAME/$TMUX_HOSTNAME/g" $HOME/.tmuxinator/default.yml
 
 }

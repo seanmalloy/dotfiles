@@ -4,7 +4,7 @@ name: default
 root: ~/
 
 # Optional tmux socket
-socket_name: USER
+socket_name: <%= ENV['TMUX_SOCKET'] %>
 
 # Runs before everything. Use it to start daemons etc.
 # pre: sudo /etc/rc.d/mysqld start
