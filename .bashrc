@@ -232,18 +232,19 @@ proj() {
     fi
 
     if [[ -z $1 ]]; then
-        local DIR=$(find $BASE_DIR -maxdepth 1 -type d -print | grep -v "^$BASE_DIR$" | grep -v '.git$' | awk -F / '{print $NF}' | fzf +m)
+        local DIR=$(find $BASE_DIR -name .git -type d -prune | sed s'/\/\.git//' | fzf +m)
     else
-        local DIR=$(find $BASE_DIR -maxdepth 1 -type d -print | grep -v "^$BASE_DIR$" | grep -v '.git$' | awk -F / '{print $NF}' | fzf +m -q $1 -1)
+        local DIR=$(find $BASE_DIR -name .git -type d -prune | sed s'/\/\.git//' | fzf +m -q $1 -1)
     fi
+    local SESSION=$(echo $DIR | awk -F / '{print $NF}')
 
-    tmux has-session -t $DIR
+    tmux has-session -t $SESSION
     if [[ $? -ne 0 ]]; then
         # create new session
-        mux start dynamic -n $DIR workspace=$BASE_DIR/$DIR
+        mux start dynamic -n $SESSION workspace=$DIR
     else
         # attach existing session
-        tmux attach -t $DIR
+        tmux attach -t $SESSION
     fi
 }
 
