@@ -153,6 +153,9 @@ fi
 if [ -f "$BASH_INCLUDE_DIR/git-prompt.bash" ]; then
     # Add Git Branch To Prompt
     export GIT_PS1_SHOWDIRTYSTATE=1
+    export GIT_PS1_SHOWSTASHSTATE=1
+    export GIT_PS1_SHOWUNTRACKEDFILES=1
+    export GIT_PS1_SHOWUPSTREAM="verbose"
     . $BASH_INCLUDE_DIR/git-prompt.bash
 fi
 
