@@ -6,14 +6,14 @@ f_usage()
 {
     cat <<EOF
 NAME
-    smux - SSH multiplexer
+    sshmux - SSH multiplexer
 
 SYNOPSIS
     $PROG_NAME [ -s SESSION_NAME ] FILE
     $PROG_NAME -h
 
 DESCRIPTION
-    smux is an SSH multiplexer. Server names must be listed in FILE one per line. The smux
+    sshmux is an SSH multiplexer. Server names must be listed in FILE one per line. The sshmux
     command uses the tmux command to do all of the hard work.
 
 OPTIONS
@@ -22,7 +22,7 @@ OPTIONS
 
     -s SESSION_NAME
         Set tmux session name to SESSION_NAME. The
-        default tmux session name is "smux".
+        default tmux session name is "sshmux".
 
 LICENSE
    Copyright (c) 2014, Sean Malloy
