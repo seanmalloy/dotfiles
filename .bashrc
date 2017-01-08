@@ -150,13 +150,10 @@ if [ -f "$BASH_INCLUDE_DIR/hub-completion.bash" ]; then
     . $BASH_INCLUDE_DIR/hub-completion.bash
 fi
 
-if [ -f "$BASH_INCLUDE_DIR/git-prompt.bash" ]; then
-    # Add Git Branch To Prompt
-    export GIT_PS1_SHOWDIRTYSTATE=1
-    export GIT_PS1_SHOWSTASHSTATE=1
-    export GIT_PS1_SHOWUNTRACKEDFILES=1
-    export GIT_PS1_SHOWUPSTREAM="verbose"
-    . $BASH_INCLUDE_DIR/git-prompt.bash
+if [ -f "$BASH_INCLUDE_DIR/bash-git-prompt/gitprompt.sh" ]; then
+    # Add Git Magic to Prompt
+    export GIT_PROMPT_ONLY_IN_REPO=1
+    . $BASH_INCLUDE_DIR/bash-git-prompt/gitprompt.sh
 fi
 
 ### SSH Setup ##
@@ -192,7 +189,7 @@ RED="\[\033[0;31m\]"
 YELLOW="\[\033[0;33m\]"
 GREEN="\[\033[0;32m\]"
 NO_COLOR="\[\033[0m\]"
-PS1="\u@\h $RED\W$YELLOW\$(__git_ps1)$NO_COLOR$ "
+PS1="\u@\h$ "
 
 ### Shell Functions ###
 
