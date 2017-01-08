@@ -150,6 +150,7 @@ if [ -f "$BASH_INCLUDE_DIR/hub-completion.bash" ]; then
     . $BASH_INCLUDE_DIR/hub-completion.bash
 fi
 
+# From https://github.com/magicmonty/bash-git-prompt
 if [ -f "$BASH_INCLUDE_DIR/bash-git-prompt/gitprompt.sh" ]; then
     # Add Git Magic to Prompt
     export GIT_PROMPT_ONLY_IN_REPO=1
