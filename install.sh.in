@@ -140,6 +140,11 @@ f_setup_rubygems()
     fi
 }
 
+f_setup_shfmt()
+{
+    ln -fs shfmt_v1.3.0_linux_amd64 $HOME/tech/bin/shfmt
+}
+
 f_setup_ssh()
 {
     if [[ -z $SSH_CMD ]]; then
@@ -216,6 +221,7 @@ if [[ "${ans:0:1}"  ||  "${ans:0:1}" ]]; then
     f_setup_github
     f_setup_github_enterprise
     f_setup_rubygems
+    f_setup_shfmt
     f_setup_ssh
     f_setup_tmux
     f_setup_tmuxinator
