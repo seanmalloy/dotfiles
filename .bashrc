@@ -156,6 +156,7 @@ if [ -f "$BASH_INCLUDE_DIR/bash-git-prompt/gitprompt.sh" ]; then
     GIT_PROMPT_ONLY_IN_REPO=1
     GIT_PROMPT_FETCH_REMOTE_STATUS=1
     GIT_PROMPT_UNTRACKED_FILES=all
+    GIT_PROMPT_SHOW_UPSTREAM=1
     . $BASH_INCLUDE_DIR/bash-git-prompt/gitprompt.sh
 fi
 
