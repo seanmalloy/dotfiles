@@ -1,26 +1,18 @@
 #!/bin/bash
 
-# Statically compiles the tmux binary.
+# Statically compiles the tmux binary
 
-# exit on error
+# Installed this RPM package on CentOS 7
+#
+# yum install glibc-static libstdc++-static
+
 set -e
+set -u
 
 which gcc  2> /dev/null
 which g++  2> /dev/null
 which wget 2> /dev/null
 which make 2> /dev/null
-
-TMUX_VERSION=$1
-LIBEVENT_VERSION="2.0.22"
-
-if [[ -z $TMUX_VERSION ]]; then
-    TMUX_VERSION="2.3"
-fi
-
-TMUX_MINOR_VERSION=""
-if [[ $TMUX_VERSION = "1.9" ]]; then
-    TMUX_MINOR_VERSION="a"
-fi
 
 CURRENT_DIR="$(pwd)"
 declare -r TMUX_BUILD_DIR="$CURRENT_DIR/tmp/tmux_build"
@@ -31,21 +23,16 @@ declare -r TMUX_INSTALL_DIR="$CURRENT_DIR/tech"
 if [[ ! -d $TMUX_INSTALL_DIR ]]; then
     mkdir -p $TMUX_INSTALL_DIR
 fi
-
-# download source files for tmux, libevent, and ncurses
 cd $TMUX_BUILD_DIR
-wget -O tmux-${TMUX_VERSION}.tar.gz https://github.com/tmux/tmux/releases/download/${TMUX_VERSION}${TMUX_MINOR_VERSION}/tmux-${TMUX_VERSION}${TMUX_MINOR_VERSION}.tar.gz
-wget https://github.com/libevent/libevent/releases/download/release-${LIBEVENT_VERSION}-stable/libevent-${LIBEVENT_VERSION}-stable.tar.gz
-wget ftp://ftp.gnu.org/gnu/ncurses/ncurses-5.9.tar.gz
-
-# extract files, configure, and compile
 
 ############
 # libevent #
 ############
+LIBEVENT_VERSION="2.0.22"
+wget https://github.com/libevent/libevent/releases/download/release-${LIBEVENT_VERSION}-stable/libevent-${LIBEVENT_VERSION}-stable.tar.gz
 tar xvzf libevent-${LIBEVENT_VERSION}-stable.tar.gz
 cd libevent-${LIBEVENT_VERSION}-stable
-./configure --prefix=$TMUX_INSTALL_DIR --disable-shared
+CFLAGS="-fPIC" LDFLAGS="-static" ./configure --prefix=$TMUX_BUILD_DIR/libevent --disable-shared --enable-static
 make
 make install
 cd ..
@@ -53,9 +40,11 @@ cd ..
 ############
 # ncurses  #
 ############
-tar xvzf ncurses-5.9.tar.gz
-cd ncurses-5.9
-./configure --prefix=$TMUX_INSTALL_DIR
+NCURSES_VERSION="5.9"
+wget ftp://ftp.gnu.org/gnu/ncurses/ncurses-${NCURSES_VERSION}.tar.gz
+tar xvzf ncurses-${NCURSES_VERSION}.tar.gz
+cd ncurses-${NCURSES_VERSION}
+CXXFLAGS="-fPIC" CFLAGS="-fPIC" LDFLAGS="-static" ./configure --prefix=$TMUX_BUILD_DIR/ncurses --disable-shared --enable-static
 make
 make install
 cd ..
@@ -63,10 +52,20 @@ cd ..
 ############
 # tmux     #
 ############
+TMUX_VERSION="2.3"
+wget https://github.com/tmux/tmux/releases/download/${TMUX_VERSION}/tmux-${TMUX_VERSION}.tar.gz
 tar xvzf tmux-${TMUX_VERSION}.tar.gz
-cd tmux-${TMUX_VERSION}${TMUX_MINOR_VERSION}
-./configure CFLAGS="-I$TMUX_INSTALL_DIR/include -I$TMUX_INSTALL_DIR/include/ncurses" LDFLAGS="-L$TMUX_INSTALL_DIR/lib -L$TMUX_INSTALL_DIR/include/ncurses -L$TMUX_INSTALL_DIR/include"
-CPPFLAGS="-I$TMUX_INSTALL_DIR/include -I$TMUX_INSTALL_DIR/include/ncurses" LDFLAGS="-static -L$TMUX_INSTALL_DIR/include -L$TMUX_INSTALL_DIR/include/ncurses -L$TMUX_INSTALL_DIR/lib" make
+cd tmux-${TMUX_VERSION}
+CFLAGS="-fPIC" \
+    CPPFLAGS="-I${TMUX_BUILD_DIR}/libevent/include -I${TMUX_BUILD_DIR}/ncurses/include/ncurses" \
+    LDFLAGS="-static" \
+    LIBEVENT_LIBS="-L${TMUX_BUILD_DIR}/libevent/lib -llibevent"         \
+    LIBEVENT_CFLAGS="-I${TMUX_BUILD_DIR}/libevent/include"              \
+    LIBNCURSES_LIBS="-L${TMUX_BUILD_DIR}/ncurses/lib -lncurses -ltinfo" \
+    LIBNCURSES_CFLAGS="-I${TMUX_BUILD_DIR}/ncurses/include/ncurses"     \
+./configure --enable-static
+make
+#strep $(pwd)/tmux
 
 echo ""
 echo "tmux binary instaled at $(pwd)/tmux"

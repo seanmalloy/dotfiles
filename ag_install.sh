@@ -2,8 +2,7 @@
 
 # Statically compiles the ag binary
 
-# Installed this RPM package on CentOS 7. Not
-# sure if it is needed or not.
+# Installed this RPM package on CentOS 7
 #
 # yum install glibc-static
 
