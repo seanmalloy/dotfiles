@@ -74,7 +74,7 @@ cd ..
 ############
 # ag       #
 ############
-AG_VERSION="1.0.3"
+AG_VERSION="2.0.0"
 wget https://geoff.greer.fm/ag/releases/the_silver_searcher-${AG_VERSION}.tar.gz
 tar xvzf the_silver_searcher-${AG_VERSION}.tar.gz
 cd the_silver_searcher-${AG_VERSION}

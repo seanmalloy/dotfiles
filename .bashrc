@@ -183,6 +183,11 @@ fi
 export TMUXINATOR_INCLUDE_FILE="$BASH_INCLUDE_DIR/tmuxinator.bash"
 . $TMUXINATOR_INCLUDE_FILE
 
+# Enable ag auto complete
+if [ -f "$BASH_INCLUDE_DIR/ag.bashcomp.sh" ]; then
+    . $BASH_INCLUDE_DIR/ag.bashcomp.sh
+fi
+
 # Enable ripgrep Autocomplete
 if [ -f "$BASH_INCLUDE_DIR/rg.bash-completion" ]; then
     . $BASH_INCLUDE_DIR/rg.bash-completion
