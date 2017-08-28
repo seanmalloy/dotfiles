@@ -30,3 +30,7 @@ if [ -z "$SSH_AGENT_PID" -a -z "$TMUX" ]; then
     fi
 fi
 
+# Udate my local locate DB if not running in tmux
+if [[ -z "$TMUX" ]]; then
+    build_locate_db &
+fi

@@ -246,9 +246,9 @@ proj() {
     fi
 
     if [[ -z $1 ]]; then
-        local DIR=$(find $BASE_DIR -name .git -type d -prune | sed s'/\/\.git//' | fzf +m)
+        local DIR=$(locate --database $HOME/mlocate.db '.git' | grep "^$PROJ_DIR" | grep '.git$' | sed s'/\/\.git//' | fzf +m)
     else
-        local DIR=$(find $BASE_DIR -name .git -type d -prune | sed s'/\/\.git//' | fzf +m -q $1 -1)
+        local DIR=$(locate --database $HOME/mlocate.db '.git' | grep "^$BASE_DIR" | grep '.git$' | sed s'/\/\.git//' | fzf +m -q $1 -1)
     fi
     local SESSION=$(echo $DIR | awk -F / '{print $NF}')
 
@@ -265,6 +265,17 @@ proj() {
 # fuzzy find RPM packages
 fzpkg() {
     repoquery -a --qf "%{name}.%{arch}" | fzf
+}
+
+# Build a locate database for my home dir
+build_locate_db() {
+    touch $HOME/.updatadb.lock
+    flock --nonblock $HOME/.updatedb.lock updatedb --require-visibility no --database-root $HOME --output $HOME/mlocate.db
+    local UPDATE_DB_RET_CODE=$?
+    if [[ -e $HOME/mlocate.db ]]; then
+        chmod 600 $HOME/mlocate.db
+    fi
+    return $UPDATE_DB_RET_CODE
 }
 
 

@@ -120,6 +120,7 @@ f_setup_github_enterprise()
                     read -p "GHE Host: "  DOTFILES_GITHUB_ENTERPRISE_HOST
                     echo "DOTFILES_GITHUB_ENTERPRISE_HOST=\"$DOTFILES_GITHUB_ENTERPRISE_HOST\"" >> $ANSWER_FILE
                 fi
+                echo "Configuring GitHub Enterprise"
                 git config --global --add hub.host $DOTFILES_GITHUB_ENTERPRISE_HOST
             else
                 echo "Skipping GitHub Enterprise Configuration!"
