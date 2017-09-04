@@ -2,8 +2,14 @@
 
 ### Install Instructions
 ```
-$ wget -O /tmp/install.sh https://github.com/seanmalloy/dotfiles/releases/download/v0.3/install.sh
-$ bash /tmp/install.sh && rm -f /tmp/install.sh
+$ wget -O ~/install.sh https://github.com/seanmalloy/dotfiles/raw/master/install.sh
+$ bash ~/install.sh
+```
+
+#### Install Behind Proxy
+```
+$ https_proxy="proxy.example.com:3128" wget -O ~/install.sh https://github.com/seanmalloy/dotfiles/raw/master/install.sh
+$ bash ~/install.sh
 ```
 
 ### PuTTY Configuration
