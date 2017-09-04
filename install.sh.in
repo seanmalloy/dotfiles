@@ -143,7 +143,7 @@ f_setup_rubygems()
 
 f_setup_shfmt()
 {
-    ln -fs shfmt_v1.3.1_linux_amd64 $HOME/tech/bin/shfmt
+    ln -fs shfmt_v2.0.0_linux_amd64 $HOME/tech/bin/shfmt
 }
 
 f_setup_ssh()
