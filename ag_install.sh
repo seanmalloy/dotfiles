@@ -45,7 +45,7 @@ cd ..
 ############
 # pcre     #
 ############
-PCRE_VERSION="8.40"
+PCRE_VERSION="8.41"
 wget ftp://ftp.csx.cam.ac.uk/pub/software/programming/pcre/pcre-${PCRE_VERSION}.tar.bz2
 tar xvjf pcre-${PCRE_VERSION}.tar.bz2
 cd pcre-${PCRE_VERSION}
@@ -74,7 +74,7 @@ cd ..
 ############
 # ag       #
 ############
-AG_VERSION="2.0.0"
+AG_VERSION="2.1.0"
 wget https://geoff.greer.fm/ag/releases/the_silver_searcher-${AG_VERSION}.tar.gz
 tar xvzf the_silver_searcher-${AG_VERSION}.tar.gz
 cd the_silver_searcher-${AG_VERSION}
