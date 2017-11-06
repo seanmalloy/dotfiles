@@ -274,8 +274,11 @@ Only show path of each file with no matches.
 .RE
 .TP
 .B \-H, \-\-with\-filename
-Prefix each match with the file name that contains it.
+Display the file name for matches.
 This is the default when more than one file is searched.
+If \-\-heading is enabled, the file name will be shown above clusters of
+matches from each file; otherwise, the file name will be shown on each
+match.
 .RS
 .RE
 .TP
@@ -445,8 +448,8 @@ rg\ \[aq]^.*([0\-9]{3}\-[0\-9]{3}\-[0\-9]{4}).*$\[aq]\ \-\-replace\ \[aq]$1\[aq]
 .RE
 .TP
 .B \-s, \-\-case\-sensitive
-Search case sensitively.
-This overrides \-\-ignore\-case and \-\-smart\-case.
+Search case sensitively (default).
+Overrides \-\-ignore\-case and \-\-smart\-case.
 .RS
 .RE
 .TP
