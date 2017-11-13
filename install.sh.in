@@ -21,6 +21,8 @@ f_set_env()
             OS_VERSION="RedHat$(awk '{print $4}' /etc/centos-release | awk -F. '{print $1}')"
         elif [[ -f /etc/redhat-release ]]; then
             OS_VERSION="RedHat$(awk '{print $7}' /etc/redhat-release | awk -F. '{print $1}')"
+        elif [[ -f /etc/fedora-release ]]; then
+            OS_VERSION="Fedora$(awk '{print $3}' /etc/fedora-release)"
         elif [[ -f /etc/debian_version ]]; then
             OS_VERSION="Debian"
         else
@@ -28,7 +30,7 @@ f_set_env()
         fi
     fi
 
-    if [[ $OS_VERSION =~ 'RedHat' ]]; then
+    if [[ $OS_VERSION =~ 'RedHat' || $OS_VERSION =~ 'Fedora' ]]; then
         SSH_MAJOR_VERSION="$(rpm -qi openssh-clients | grep ^Version | awk -F: '{print $2}' | sed -e 's/ //g' | cut -b 1-3 | awk -F. '{print $1}')"
         SSH_MINOR_VERSION="$(rpm -qi openssh-clients | grep ^Version | awk -F: '{print $2}' | sed -e 's/ //g' | cut -b 1-3 | awk -F. '{print $2}')"
     elif [[ $OS_VERSION =~ 'Debian' ]]; then
@@ -131,13 +133,15 @@ f_setup_github_enterprise()
 
 f_setup_rubygems()
 {
-    if [[ -z $DOTFILES_RUBY_GEM_SOURCE ]]; then
-        read -p "Ruby Gem Source: " DOTFILES_RUBY_GEM_SOURCE
-        echo "DOTFILES_RUBY_GEM_SOURCE=\"$DOTFILES_RUBY_GEM_SOURCE\"" >> $ANSWER_FILE
-    fi
-    if [[ $DOTFILES_RUBY_GEM_SOURCE != "n" ]]; then
-        gem sources -a $DOTFILES_RUBY_GEM_SOURCE
-        gem sources -r https://rubygems.org/
+    if [[ -n $(which gem 2> /dev/null) ]]; then
+        if [[ -z $DOTFILES_RUBY_GEM_SOURCE ]]; then
+            read -p "Ruby Gem Source: " DOTFILES_RUBY_GEM_SOURCE
+            echo "DOTFILES_RUBY_GEM_SOURCE=\"$DOTFILES_RUBY_GEM_SOURCE\"" >> $ANSWER_FILE
+        fi
+        if [[ $DOTFILES_RUBY_GEM_SOURCE != "n" ]]; then
+            gem sources -a $DOTFILES_RUBY_GEM_SOURCE
+            gem sources -r https://rubygems.org/
+        fi
     fi
 }
 
