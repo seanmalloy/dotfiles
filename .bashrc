@@ -26,6 +26,8 @@ else
         OS_VERSION="RedHat$(awk '{print $4}' /etc/centos-release | awk -F. '{print $1}')"
     elif [[ -f /etc/redhat-release ]]; then
         OS_VERSION="RedHat$(awk '{print $7}' /etc/redhat-release | awk -F. '{print $1}')"
+    elif [[ -f /etc/fedora-release ]]; then
+        OS_VERSION="Fedora$(awk '{print $3}' /etc/fedora-release)"
     elif [[ -f /etc/debian_version ]]; then
         OS_VERSION="Debian"
     else
@@ -138,7 +140,7 @@ fi
 
 #### Git Setup ###
 eval "$(hub alias -s)"
-if [[ $OS_VERSION != 'RedHat7' ]]; then
+if [[ $OS_VERSION = 'RedHat6' ]]; then
     if [ -f "$BASH_INCLUDE_DIR/git-completion.bash" ]; then
         # Enable Git Autocomplete
         . $BASH_INCLUDE_DIR/git-completion.bash
