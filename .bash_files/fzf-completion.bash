@@ -113,7 +113,7 @@ _fzf_opts_completion() {
 }
 
 _fzf_handle_dynamic_completion() {
-  local cmd orig_var orig ret orig_cmd
+  local cmd orig_var orig ret orig_cmd orig_complete
   cmd="$1"
   shift
   orig_cmd="$1"
@@ -122,10 +122,14 @@ _fzf_handle_dynamic_completion() {
   if [ -n "$orig" ] && type "$orig" > /dev/null 2>&1; then
     $orig "$@"
   elif [ -n "$_fzf_completion_loader" ]; then
+    orig_complete=$(complete -p "$cmd")
     _completion_loader "$@"
     ret=$?
-    eval "$(complete | command grep "\-F.* $orig_cmd$" | _fzf_orig_completion_filter)"
-    source "${BASH_SOURCE[0]}"
+    # _completion_loader may not have updated completion for the command
+    if [ "$(complete -p "$cmd")" != "$orig_complete" ]; then
+      eval "$(complete | command grep "\-F.* $orig_cmd$" | _fzf_orig_completion_filter)"
+      eval "$orig_complete"
+    fi
     return $ret
   fi
 }
@@ -215,7 +219,7 @@ _fzf_complete_kill() {
 
   local selected fzf
   fzf="$(__fzfcmd_complete)"
-  selected=$(ps -ef | sed 1d | FZF_DEFAULT_OPTS="--height ${FZF_TMUX_HEIGHT:-50%} --min-height 15 --reverse $FZF_DEFAULT_OPTS --preview 'echo {}' --preview-window down:3:wrap $FZF_COMPLETION_OPTS" $fzf -m | awk '{print $2}' | tr '\n' ' ')
+  selected=$(command ps -ef | sed 1d | FZF_DEFAULT_OPTS="--height ${FZF_TMUX_HEIGHT:-50%} --min-height 15 --reverse $FZF_DEFAULT_OPTS --preview 'echo {}' --preview-window down:3:wrap $FZF_COMPLETION_OPTS" $fzf -m | awk '{print $2}' | tr '\n' ' ')
   printf '\e[5n'
 
   if [ -n "$selected" ]; then
@@ -234,7 +238,7 @@ _fzf_complete_telnet() {
 _fzf_complete_ssh() {
   _fzf_complete '+m' "$@" < <(
     cat <(cat ~/.ssh/config /etc/ssh/ssh_config 2> /dev/null | command grep -i '^host' | command grep -v '*' | awk '{for (i = 2; i <= NF; i++) print $1 " " $i}') \
-        <(command grep -oE '^[a-z0-9.,:-]+' ~/.ssh/known_hosts | tr ',' '\n' | awk '{ print $1 " " $1 }') \
+        <(command grep -oE '^[[a-z0-9.,:-]+' ~/.ssh/known_hosts | tr ',' '\n' | tr -d '[' | awk '{ print $1 " " $1 }') \
         <(command grep -v '^\s*\(#\|$\)' /etc/hosts | command grep -Fv '0.0.0.0') |
         awk '{if (length($2) > 0) {print $2}}' | sort -u
   )

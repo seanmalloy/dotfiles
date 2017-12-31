@@ -72,7 +72,7 @@ f_pre_clean()
 
 f_setup_fzf()
 {
-    ln -fs fzf-0.17.1-linux_amd64 $HOME/tech/bin/fzf
+    ln -fs fzf-0.17.3-linux_amd64 $HOME/tech/bin/fzf
 }
 
 f_setup_git()
