@@ -58,13 +58,16 @@ f_set_env()
 f_pre_clean()
 {
     # Clean Ununsed Files
+    rm -f $HOME/.ackrc
     rm -f $HOME/.bash_profile
+    rm -f $HOME/.perltidyrc
     rm -rf $HOME/.perlbrew/
     rm -rf $HOME/tech/bin/tmux
 
     # Clean Up Used Directories Before Install
     rm -rf $HOME/.bash_files/
     rm -rf $HOME/.dzil/
+    rm -rf $HOME/.plenv/
     rm -rf $HOME/.terminfo/
     rm -rf $HOME/.vim/
     rm -rf $HOME/.puppet/var/puppet-module/skeleton/
