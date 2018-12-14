@@ -118,35 +118,8 @@ if [[ -n "$(which plenv 2> /dev/null)" ]]; then
     eval "$(plenv init -)"
 fi
 
-### Enable RH Software Collections ###
-# See RH solution # 527703
-if (( $ENABLE_RUBY_SCL )); then
-    unset X_SCLS
-    if [[ -n "$(which scl 2> /dev/null)" ]]; then
-        # Enable Ruby 2.2 or 2.0
-        if
-            scl -l | grep -q rh-ruby22
-        then
-            source scl_source enable rh-ruby22
-        elif
-            scl -l | grep -q ruby200
-        then
-            source scl_source enable ruby200
-        else
-            echo "Using system Ruby"
-        fi
-    fi
-fi
-
 #### Git Setup ###
 eval "$(hub alias -s)"
-if [[ $OS_VERSION = 'RedHat6' ]]; then
-    if [ -f "$BASH_INCLUDE_DIR/git-completion.bash" ]; then
-        # Enable Git Autocomplete
-        . $BASH_INCLUDE_DIR/git-completion.bash
-    fi
-fi
-
 if [ -f "$BASH_INCLUDE_DIR/hub-completion.bash" ]; then
     # Enable Hub Autocomplete
     . $BASH_INCLUDE_DIR/hub-completion.bash

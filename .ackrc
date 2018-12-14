@@ -1,3 +1,0 @@
-# Add file type for puppet
---type-set=puppet:ext:pp,epp,erb
-
