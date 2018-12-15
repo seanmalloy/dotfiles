@@ -1,23 +1,22 @@
 #!/bin/bash
 
 # Statically compiles the ag binary
-
-# Installed this RPM package on CentOS 7. Not
-# sure if it is needed or not.
 #
-# yum install glibc-static
+# Tested CentOS 7 and Fedora 29. Requires
+# that RPM package glibc-static is installed
 
 set -e
 set -u
 
-which gcc        2> /dev/null
-which g++        2> /dev/null
-which wget       2> /dev/null
-which make       2> /dev/null
-which aclocal    2> /dev/null
-which autoconf   2> /dev/null
-which autoheader 2> /dev/null
-which automake   2> /dev/null
+which gcc            2> /dev/null
+which g++            2> /dev/null
+which wget           2> /dev/null
+which make           2> /dev/null
+which aclocal        2> /dev/null
+which autoconf       2> /dev/null
+which autoheader     2> /dev/null
+which automake       2> /dev/null
+rpm -qi glibc-static 2> /dev/null
 
 CURRENT_DIR="$(pwd)"
 declare -r AG_BUILD_DIR="$CURRENT_DIR/tmp/ag_build"
@@ -45,7 +44,7 @@ cd ..
 ############
 # pcre     #
 ############
-PCRE_VERSION="8.41"
+PCRE_VERSION="8.42"
 wget ftp://ftp.csx.cam.ac.uk/pub/software/programming/pcre/pcre-${PCRE_VERSION}.tar.bz2
 tar xvjf pcre-${PCRE_VERSION}.tar.bz2
 cd pcre-${PCRE_VERSION}
@@ -62,7 +61,7 @@ cd ..
 ############
 # lzma     #
 ############
-XZ_UTILS_VERSION="5.2.3"
+XZ_UTILS_VERSION="5.2.4"
 wget https://tukaani.org/xz/xz-${XZ_UTILS_VERSION}.tar.gz
 tar xvzf xz-${XZ_UTILS_VERSION}.tar.gz
 cd xz-${XZ_UTILS_VERSION}
@@ -74,7 +73,7 @@ cd ..
 ############
 # ag       #
 ############
-AG_VERSION="2.1.0"
+AG_VERSION="2.2.0"
 wget https://geoff.greer.fm/ag/releases/the_silver_searcher-${AG_VERSION}.tar.gz
 tar xvzf the_silver_searcher-${AG_VERSION}.tar.gz
 cd the_silver_searcher-${AG_VERSION}
