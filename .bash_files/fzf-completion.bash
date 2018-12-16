@@ -1,4 +1,3 @@
-#!/bin/bash
 #     ____      ____
 #    / __/___  / __/
 #   / /_/_  / / /_
@@ -38,9 +37,9 @@ __fzfcmd_complete() {
     echo "fzf-tmux -d${FZF_TMUX_HEIGHT:-40%}" || echo "fzf"
 }
 
-_fzf_orig_completion_filter() {
-  sed 's/^\(.*-F\) *\([^ ]*\).* \([^ ]*\)$/export _fzf_orig_completion_\3="\1 %s \3 #\2";/' |
-  awk -F= '{gsub(/[^A-Za-z0-9_= ;]/, "_", $1); print $1"="$2}'
+__fzf_orig_completion_filter() {
+  sed 's/^\(.*-F\) *\([^ ]*\).* \([^ ]*\)$/export _fzf_orig_completion_\3="\1 %s \3 #\2"; [[ "\1" = *" -o nospace "* ]] \&\& [[ ! "$__fzf_nospace_commands" = *" \3 "* ]] \&\& __fzf_nospace_commands="$__fzf_nospace_commands \3 ";/' |
+  awk -F= '{OFS = FS} {gsub(/[^A-Za-z0-9_= ;]/, "_", $1);}1'
 }
 
 _fzf_opts_completion() {
@@ -122,13 +121,17 @@ _fzf_handle_dynamic_completion() {
   if [ -n "$orig" ] && type "$orig" > /dev/null 2>&1; then
     $orig "$@"
   elif [ -n "$_fzf_completion_loader" ]; then
-    orig_complete=$(complete -p "$cmd")
+    orig_complete=$(complete -p "$cmd" 2> /dev/null)
     _completion_loader "$@"
     ret=$?
     # _completion_loader may not have updated completion for the command
-    if [ "$(complete -p "$cmd")" != "$orig_complete" ]; then
-      eval "$(complete | command grep "\-F.* $orig_cmd$" | _fzf_orig_completion_filter)"
-      eval "$orig_complete"
+    if [ "$(complete -p "$cmd" 2> /dev/null)" != "$orig_complete" ]; then
+      eval "$(complete | command grep " -F.* $orig_cmd$" | __fzf_orig_completion_filter)"
+      if [[ "$__fzf_nospace_commands" = *" $orig_cmd "* ]]; then
+        eval "${orig_complete/ -F / -o nospace -F }"
+      else
+        eval "$orig_complete"
+      fi
     fi
     return $ret
   fi
@@ -145,7 +148,7 @@ __fzf_generic_path_completion() {
     base=${cur:0:${#cur}-${#trigger}}
     eval "base=$base"
 
-    dir="$base"
+    [[ $base = *"/"* ]] && dir="$base"
     while true; do
       if [ -z "$dir" ] || [ -d "$dir" ]; then
         leftover=${base/#"$dir"}
@@ -156,6 +159,7 @@ __fzf_generic_path_completion() {
           printf "%q$3 " "$item"
         done)
         matches=${matches% }
+        [[ -z "$3" ]] && [[ "$__fzf_nospace_commands" = *" ${COMP_WORDS[0]} "* ]] && matches="$matches "
         if [ -n "$matches" ]; then
           COMPREPLY=( "$matches" )
         else
@@ -237,7 +241,7 @@ _fzf_complete_telnet() {
 
 _fzf_complete_ssh() {
   _fzf_complete '+m' "$@" < <(
-    cat <(cat ~/.ssh/config /etc/ssh/ssh_config 2> /dev/null | command grep -i '^host' | command grep -v '*' | awk '{for (i = 2; i <= NF; i++) print $1 " " $i}') \
+    cat <(cat ~/.ssh/config /etc/ssh/ssh_config 2> /dev/null | command grep -i '^host ' | command grep -v '[*?]' | awk '{for (i = 2; i <= NF; i++) print $1 " " $i}') \
         <(command grep -oE '^[[a-z0-9.,:-]+' ~/.ssh/known_hosts | tr ',' '\n' | tr -d '[' | awk '{ print $1 " " $1 }') \
         <(command grep -v '^\s*\(#\|$\)' /etc/hosts | command grep -Fv '0.0.0.0') |
         awk '{if (length($2) > 0) {print $2}}' | sort -u
@@ -278,9 +282,9 @@ a_cmds="
 x_cmds="kill ssh telnet unset unalias export"
 
 # Preserve existing completion
-eval $(complete |
+eval "$(complete |
   sed -E '/-F/!d; / _fzf/d; '"/ ($(echo $d_cmds $a_cmds $x_cmds | sed 's/ /|/g; s/+/\\+/g'))$/"'!d' |
-  _fzf_orig_completion_filter)
+  __fzf_orig_completion_filter)"
 
 if type _completion_loader > /dev/null 2>&1; then
   _fzf_completion_loader=1
