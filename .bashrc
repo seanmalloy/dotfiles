@@ -70,7 +70,6 @@ export MAN_DIR=$TECH_DIR/share/man # directory for man pages
 export PROJ_DIR=$HOME/projects     # directory for code projects
 export VISUAL=vim                  # vim is my editor
 export EDITOR=vim                  # vim is my editor
-export RELEASE_TESTING=1           # For Perl Module Development
 export HOSTNAME=$(hostname -s)     # Short hostname of this computer
 
 # Go Lang Variables
@@ -112,11 +111,6 @@ for DIR in $GOROOT/bin $GOPATH/bin $HOME/.vim/bin $BIN_DIR $TECH_DIR/usr/local/b
 done
 
 export MANPATH=$MAN_DIR:$MAN_PATH
-
-### Setup plenv ###
-if [[ -n "$(which plenv 2> /dev/null)" ]]; then
-    eval "$(plenv init -)"
-fi
 
 #### Git Setup ###
 eval "$(hub alias -s)"
