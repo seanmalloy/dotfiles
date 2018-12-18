@@ -65,7 +65,6 @@ f_pre_clean()
 
     # Clean Up Used Directories Before Install
     rm -rf $HOME/.bash_files/
-    rm -rf $HOME/.dzil/
     rm -rf $HOME/.terminfo/
     rm -rf $HOME/.vim/
     rm -rf $HOME/.puppet/var/puppet-module/skeleton/
