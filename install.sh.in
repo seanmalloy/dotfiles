@@ -62,7 +62,6 @@ f_pre_clean()
     rm -f $HOME/.bash_profile
     rm -f $HOME/.perltidyrc
     rm -rf $HOME/.perlbrew/
-    rm -rf $HOME/tech/bin/tmux
 
     # Clean Up Used Directories Before Install
     rm -rf $HOME/.bash_files/
@@ -171,32 +170,6 @@ f_setup_ssh()
     chmod 700 $HOME/.ssh 2> /dev/null
 }
 
-f_setup_tmux()
-{
-    if [[ -f $HOME/tech/bin/tmux_${OS_VERSION} ]]; then
-        ln -fs tmux_${OS_VERSION} $HOME/tech/bin/tmux
-    else
-        echo "binary tmux_${OS_VERSION} does not exist"
-    fi
-
-    if [[ $SSH_MAJOR_VERSION -gt 5 ]]; then
-        echo "Enabling TMUX Proxy Command ssh -W"
-        echo ""                                    >> $HOME/.tmux.conf
-        echo "### DO NOT EDIT BELOW THIS LINE ###" >> $HOME/.tmux.conf
-        echo "bind P command-prompt -p \"Proxy SSH Target: \" \"new-window -n %1 \\\"exec ssh -o ProxyCommand='ssh jump -W %1:22' %1\\\"\" # ssh via proxy" >> $HOME/.tmux.conf
-    elif [[ $SSH_MAJOR_VERSION -eq 5 && $SSH_MINOR_VERSION -ge 4 ]]; then
-        echo "Enabling TMUX Proxy Command ssh -W"
-        echo ""                                    >> $HOME/.tmux.conf
-        echo "### DO NOT EDIT BELOW THIS LINE ###" >> $HOME/.tmux.conf
-        echo "bind P command-prompt -p \"Proxy SSH Target: \" \"new-window -n %1 \\\"exec ssh -o ProxyCommand='ssh jump -W %1:22' %1\\\"\" # ssh via proxy" >> $HOME/.tmux.conf
-    else
-        echo "Enabling TMUX Proxy Command nc"
-        echo ""                                    >> $HOME/.tmux.conf
-        echo "### DO NOT EDIT BELOW THIS LINE ###" >> $HOME/.tmux.conf
-        echo "bind P command-prompt -p \"Proxy SSH Target: \" \"new-window -n %1 \\\"exec ssh -o ProxyCommand='ssh jump nc %h 22' %1\\\"\" # ssh via proxy" >> $HOME/.tmux.conf
-    fi
-}
-
 f_setup_tmuxinator()
 {
     echo "Configuring Tmuxinator Project: default"
@@ -224,7 +197,6 @@ if [[ "${ans:0:1}"  ||  "${ans:0:1}" ]]; then
     f_setup_rubygems
     f_setup_shfmt
     f_setup_ssh
-    f_setup_tmux
     f_setup_tmuxinator
 fi
 exit 0
