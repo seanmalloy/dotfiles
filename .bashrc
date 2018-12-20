@@ -68,8 +68,8 @@ export TECH_DIR=$HOME/tech         # top level dir for locally installed softwar
 export BIN_DIR=$TECH_DIR/bin       # directory for scripts, binaries, etc.
 export MAN_DIR=$TECH_DIR/share/man # directory for man pages
 export PROJ_DIR=$HOME/projects     # directory for code projects
-export VISUAL=vim                  # vim is my editor
-export EDITOR=vim                  # vim is my editor
+export VISUAL=nvim                 # neovim is my editor
+export EDITOR=nvim                 # neovim is my editor
 export HOSTNAME=$(hostname -s)     # Short hostname of this computer
 
 # Go Lang Variables
@@ -80,7 +80,7 @@ export GOPATH=$PROJ_DIR/go
 alias ll='ls -l'
 alias la='ls -A'
 alias ltr='ls -ltr'
-alias vi='vim'
+alias vi='nvim'
 alias c='clear'
 alias h='history'
 alias j='jobs -l'
