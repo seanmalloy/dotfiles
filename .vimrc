@@ -1,17 +1,3 @@
-" Sean Malloy's .vimrc file.
-
-" Example of nvim specific config
-"
-" if has('nvim')
-"   tnoremap <Esc> <C-\><C-n>
-" endif
-"
-" Example of vim specific config
-"
-" if !has('nvim')
-"   set ttymouse=xterm2
-" endif
-
 " Load plugins using pathogen
 filetype on
 execute pathogen#infect()
