@@ -1,8 +1,8 @@
-" start load plugins
+" start load plugins using junegunn/vim-plug
 call plug#begin('~/.local/share/nvim/plugged')
 
+Plug 'junegunn/fzf'
 Plug 'junegunn/fzf.vim'
-Plug 'mhinz/vim-grepper'
 Plug 'scrooloose/nerdtree'
 
 call plug#end()
