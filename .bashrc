@@ -8,15 +8,8 @@ if [[ -f /etc/bashrc ]]; then
     . /etc/bashrc
 fi
 
-### Source Site Specific Config ###
-export BASH_SITE_FILE="$HOME/.site_env"
-if [[ ! -e $BASH_SITE_FILE ]]; then
-    touch $BASH_SITE_FILE
-fi
-. $BASH_SITE_FILE
-
-
 # set OS type and version
+OS_TYPE="$(uname -s)" # Linux or Darwin
 if [[ -f /etc/centos-release ]]; then
     OS_VERSION="RedHat$(awk '{print $4}' /etc/centos-release | awk -F. '{print $1}')"
 elif [[ -f /etc/fedora-release ]]; then
@@ -95,7 +88,7 @@ alias pd='puppet describe'
 alias pr='puppet resource'
 
 # Set PATH
-export PATH=/usr/bin:/bin:/sbin:/usr/sbin:/usr/games:/usr/local/games:/usr/local/bin
+export PATH=/usr/local/bin:/usr/bin:/bin:/sbin:/usr/sbin:/usr/games:/usr/local/games:/usr/local/MacGPG2/bin
 for DIR in $GOROOT/bin $GOPATH/bin $HOME/.vim/bin $BIN_DIR $TECH_DIR/usr/local/bin; do
     if [[ -d $DIR ]]; then
         if [[ ! $PATH =~ $DIR ]]; then
@@ -104,6 +97,25 @@ for DIR in $GOROOT/bin $GOPATH/bin $HOME/.vim/bin $BIN_DIR $TECH_DIR/usr/local/b
     fi
 done
 
+# Mac OSX Specific PATH
+if [[ $OS_TYPE == "Darwin" ]]; then
+    for DIR in $TECH_DIR/brew/bin $TECH_DIR/nvim-osx64/bin $TECH_DIR/brew/opt/gnu-tar/libexec/gnubin $TECH_DIR/brew/opt/coreutils/libexec/gnubin $TECH_DIR/brew/opt/findutils/libexec/gnubin $TECH_DIR/brew/opt/gnu-sed/libexec/gnubin $TECH_DIR/brew/opt/grep/libexec/gnubin; do
+        if [[ -d $DIR ]]; then
+            if [[ ! $PATH =~ $DIR ]]; then
+                PATH=$DIR:$PATH
+            fi
+        fi
+    done
+fi
+
+# TODO: set MANPATH for OSX
+#
+# $TECH_DIR/brew/opt/*/libexec/gnuman
+# $TECH_DIR/brew/opt/gnu-tar/libexec/gnuman
+# $TECH_DIR/brew/opt/coreutils/libexec/gnuman
+# $TECH_DIR/brew/opt/findutils/libexec/gnuman
+# $TECH_DIR/brew/opt/gnu-sed/libexec/gnuman
+# $TECH_DIR/brew/opt/grep/libexec/gnuman
 if [[ -n $MANPATH ]]; then
     export MANPATH=$MAN_DIR:$MANPATH
 else
@@ -111,6 +123,10 @@ else
 fi
 
 #### Git Setup ###
+if [[ $OS_TYPE == "Darwin" ]]; then
+    . /Library/Developer/CommandLineTools/usr/share/git-core/git-completion.bash
+fi
+
 eval "$(hub alias -s)"
 if [ -f "$BASH_INCLUDE_DIR/hub-completion.bash" ]; then
     # Enable Hub Autocomplete
@@ -245,4 +261,11 @@ build_locate_db() {
 
 # CTRL-P: fzf RPM packages
 bind '"\C-p":"$(fzpkg)\n"'
+
+### Source Site Specific Config ###
+export BASH_SITE_FILE="$HOME/.site_env"
+if [[ ! -e $BASH_SITE_FILE ]]; then
+    touch $BASH_SITE_FILE
+fi
+. $BASH_SITE_FILE
 

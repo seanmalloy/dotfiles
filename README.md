@@ -12,14 +12,31 @@ $ https_proxy="proxy.example.com:3128" wget -O ~/install.sh https://github.com/s
 $ bash ~/install.sh
 ```
 
-### PuTTY Configuration
-When using PuTTY the "remote character set" option must be set to UTF-8. This makes the tmux window separator appear as a line instead of a bunch of random characters. 
-![My image](http://seanmalloy.github.io/dotfiles/putty_config.png)
-
-### Tmuxinator Install
+#### Tmuxinator Install
 ```
 $ gem install --user-install --bindir ~/tech/usr/local/bin/ tmuxinator
 ```
+
+#### Mac OSX Install
+Setup brew in $HOME.
+```
+$ cd ~/tech
+$ git clone https://github.com/Homebrew/brew.git
+$ git checkout 1.6.9
+$ brew update
+```
+
+Install packages.
+```
+$ brew install the_silver_searcher
+$ brew install tmux
+$ brew install shellcheck
+$ brew install coreutils findutils gnu-tar gnu-sed gawk gnu-indent gnu-getopt grep
+```
+
+### PuTTY Configuration
+When using PuTTY the "remote character set" option must be set to UTF-8. This makes the tmux window separator appear as a line instead of a bunch of random characters. 
+![My image](http://seanmalloy.github.io/dotfiles/putty_config.png)
 
 ### Other Useful Tools Not Included
 * ack
