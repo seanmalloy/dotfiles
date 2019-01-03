@@ -2,6 +2,7 @@
 
 ### Install Instructions
 ```
+$ brew install wget # only for Mac OSX
 $ wget -O ~/install.sh https://github.com/seanmalloy/dotfiles/raw/master/install.sh
 $ bash ~/install.sh
 ```
