@@ -113,7 +113,7 @@ done
 if [[ -n $MANPATH ]]; then
     export MANPATH=$MAN_DIR:$MANPATH
 else
-    export MANPATH=$MAN_DIR
+    export MANPATH=$MAN_DIR: # trailing : is required
 fi
 
 #### Git Setup ###
