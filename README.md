@@ -18,6 +18,9 @@ $ bash ~/install.sh
 $ gem install --user-install --bindir ~/tech/usr/local/bin/ tmuxinator
 ```
 
+#### Install Neovim Plugins
+Run `:PlugInstall` command in nvim.
+
 #### Mac OSX Install
 Setup brew in $HOME.
 ```
