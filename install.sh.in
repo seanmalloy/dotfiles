@@ -13,42 +13,18 @@ f_install()
 
 f_set_env()
 {
-    if [[ -n $(which facter 2> /dev/null) ]]; then
-        OS_VERSION="$(facter osfamily)$(facter operatingsystemmajrelease)" # RedHat, Debian, etc
+    OS_TYPE="$(uname -s)" # Linux or Darwin
+
+    if [[ -f /etc/centos-release ]]; then
+        OS_VERSION="RedHat$(awk '{print $4}' /etc/centos-release | awk -F. '{print $1}')"
+    elif [[ -f /etc/fedora-release ]]; then
+        OS_VERSION="Fedora$(awk '{print $3}' /etc/fedora-release)"
+    elif [[ -f /etc/redhat-release ]]; then
+        OS_VERSION="RedHat$(awk '{print $7}' /etc/redhat-release | awk -F. '{print $1}')"
+    elif [[ -f /etc/debian_version ]]; then
+        OS_VERSION="Debian"
     else
-        # no facter ... must check stuff manually :-(
-        if [[ -f /etc/centos-release ]]; then
-            OS_VERSION="RedHat$(awk '{print $4}' /etc/centos-release | awk -F. '{print $1}')"
-        elif [[ -f /etc/fedora-release ]]; then
-            OS_VERSION="Fedora$(awk '{print $3}' /etc/fedora-release)"
-        elif [[ -f /etc/redhat-release ]]; then
-            OS_VERSION="RedHat$(awk '{print $7}' /etc/redhat-release | awk -F. '{print $1}')"
-        elif [[ -f /etc/debian_version ]]; then
-            OS_VERSION="Debian"
-        else
-            OS_VERSION=""
-        fi
-    fi
-
-    if [[ $OS_VERSION =~ 'RedHat' || $OS_VERSION =~ 'Fedora' ]]; then
-        SSH_MAJOR_VERSION="$(rpm -qi openssh-clients | grep ^Version | awk -F: '{print $2}' | sed -e 's/ //g' | cut -b 1-3 | awk -F. '{print $1}')"
-        SSH_MINOR_VERSION="$(rpm -qi openssh-clients | grep ^Version | awk -F: '{print $2}' | sed -e 's/ //g' | cut -b 1-3 | awk -F. '{print $2}')"
-    elif [[ $OS_VERSION =~ 'Debian' ]]; then
-        SSH_MAJOR_VERSION="$(dpkg -s openssh-client | grep ^Version: | awk -F: '{print $3}' | cut -b 1-3 | awk -F. '{print $1}')"
-        SSH_MINOR_VERSION="$(dpkg -s openssh-client | grep ^Version: | awk -F: '{print $3}' | cut -b 1-3 | awk -F. '{print $2}')"
-    else
-        SSH_MAJOR_VERSION=""
-        SSH_MINOR_VERSION=""
-    fi
-
-    if [[ -z $SSH_MAJOR_VERSION ]]; then
-        echo "FATAL ERROR: count not determine ssh major version"
-        exit 1
-    fi
-
-    if [[ -z $SSH_MINOR_VERSION ]]; then
-        echo "FATAL ERROR: count not determine ssh minor version"
-        exit 1
+        OS_VERSION=""
     fi
 
     SSH_CMD=$(which ssh 2> /dev/null)
@@ -57,7 +33,7 @@ f_set_env()
 
 f_pre_clean()
 {
-    # Clean Ununsed Files
+    # Clean Obsolete Files, not longer used
     rm -f $HOME/.ackrc
     rm -f $HOME/.bash_profile
     rm -f $HOME/.perltidyrc
@@ -157,15 +133,6 @@ f_setup_ssh()
         echo "DOTFILES_SSH_JUMP_HOST=\"$DOTFILES_SSH_JUMP_HOST\"" >> $ANSWER_FILE
     fi
     sed -i "s/JUMPHOST/$DOTFILES_SSH_JUMP_HOST/g" $HOME/.ssh/config
-
-    # Enable ControlPersist option
-    if [[ $SSH_MAJOR_VERSION -gt 5 ]]; then
-        echo "Enabling SSH ControlPersist"
-        sed -i 's/\#ControlPersist/ControlPersist/g' $HOME/.ssh/config
-    elif [[ $SSH_MAJOR_VERSION -eq 5 && $SSH_MINOR_VERSION -ge 6 ]]; then
-        echo "Enabling SSH ControlPersist"
-        sed -i 's/\#ControlPersist/ControlPersist/g' $HOME/.ssh/config
-    fi
     chmod 700 $HOME/.ssh 2> /dev/null
 }
 

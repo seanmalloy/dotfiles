@@ -17,22 +17,16 @@ fi
 
 
 # set OS type and version
-if [[ -n $(which facter 2> /dev/null) ]]; then
-    OS_VERSION="$(facter osfamily)" # RedHat, Debian, etc
-    OS_VERSION="${OS_VERSION}$(facter operatingsystemmajrelease)"
+if [[ -f /etc/centos-release ]]; then
+    OS_VERSION="RedHat$(awk '{print $4}' /etc/centos-release | awk -F. '{print $1}')"
+elif [[ -f /etc/fedora-release ]]; then
+    OS_VERSION="Fedora$(awk '{print $3}' /etc/fedora-release)"
+elif [[ -f /etc/redhat-release ]]; then
+    OS_VERSION="RedHat$(awk '{print $7}' /etc/redhat-release | awk -F. '{print $1}')"
+elif [[ -f /etc/debian_version ]]; then
+    OS_VERSION="Debian"
 else
-    # no facter ... must check stuff manually :-(
-    if [[ -f /etc/centos-release ]]; then
-        OS_VERSION="RedHat$(awk '{print $4}' /etc/centos-release | awk -F. '{print $1}')"
-    elif [[ -f /etc/fedora-release ]]; then
-        OS_VERSION="Fedora$(awk '{print $3}' /etc/fedora-release)"
-    elif [[ -f /etc/redhat-release ]]; then
-        OS_VERSION="RedHat$(awk '{print $7}' /etc/redhat-release | awk -F. '{print $1}')"
-    elif [[ -f /etc/debian_version ]]; then
-        OS_VERSION="Debian"
-    else
-        OS_VERSION=""
-    fi
+    OS_VERSION=""
 fi
 
 # Additional Bash Include Directory
