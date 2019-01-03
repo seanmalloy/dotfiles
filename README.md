@@ -34,6 +34,12 @@ $ brew install shellcheck
 $ brew install coreutils findutils gnu-tar gnu-sed gawk gnu-indent gnu-getopt grep
 ```
 
+Install Neovim.
+```
+$ rm -rf ~/tech/nvim-osx64
+$ tar xzf nvim-macos.tar.gz -C ~/tech
+```
+
 ### PuTTY Configuration
 When using PuTTY the "remote character set" option must be set to UTF-8. This makes the tmux window separator appear as a line instead of a bunch of random characters. 
 ![My image](http://seanmalloy.github.io/dotfiles/putty_config.png)
