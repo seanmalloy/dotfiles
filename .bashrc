@@ -247,6 +247,7 @@ fzpkg() {
 
 # Build a locate database for my home dir
 build_locate_db() {
+    # TODO; flock not present on Mac OSX
     touch $HOME/.updatadb.lock
     flock --nonblock $HOME/.updatedb.lock updatedb --require-visibility no --database-root $HOME --output $HOME/mlocate.db
     local UPDATE_DB_RET_CODE=$?
