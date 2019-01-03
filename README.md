@@ -36,6 +36,8 @@ $ brew install the_silver_searcher
 $ brew install tmux
 $ brew install shellcheck
 $ brew install coreutils findutils gnu-tar gnu-sed gawk gnu-indent gnu-getopt grep
+$ brew tap discoteq/discoteq
+$ brew install flock
 ```
 
 Install Neovim.

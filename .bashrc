@@ -247,9 +247,14 @@ fzpkg() {
 
 # Build a locate database for my home dir
 build_locate_db() {
-    # TODO; flock not present on Mac OSX
+    # requires https://github.com/discoteq/flock on Mac OSX
+    if ! which flock > /dev/null 2>&1; then
+        echo "build_locate_db: flock command not found"
+        return 1
+    fi
+
     touch $HOME/.updatadb.lock
-    flock --nonblock $HOME/.updatedb.lock updatedb --require-visibility no --database-root $HOME --output $HOME/mlocate.db
+    flock -n $HOME/.updatedb.lock updatedb --require-visibility no --database-root $HOME --output $HOME/mlocate.db
     local UPDATE_DB_RET_CODE=$?
     if [[ -e $HOME/mlocate.db ]]; then
         chmod 600 $HOME/mlocate.db
