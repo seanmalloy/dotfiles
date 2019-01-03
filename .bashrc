@@ -24,10 +24,10 @@ else
     # no facter ... must check stuff manually :-(
     if [[ -f /etc/centos-release ]]; then
         OS_VERSION="RedHat$(awk '{print $4}' /etc/centos-release | awk -F. '{print $1}')"
-    elif [[ -f /etc/redhat-release ]]; then
-        OS_VERSION="RedHat$(awk '{print $7}' /etc/redhat-release | awk -F. '{print $1}')"
     elif [[ -f /etc/fedora-release ]]; then
         OS_VERSION="Fedora$(awk '{print $3}' /etc/fedora-release)"
+    elif [[ -f /etc/redhat-release ]]; then
+        OS_VERSION="RedHat$(awk '{print $7}' /etc/redhat-release | awk -F. '{print $1}')"
     elif [[ -f /etc/debian_version ]]; then
         OS_VERSION="Debian"
     else
@@ -110,7 +110,11 @@ for DIR in $GOROOT/bin $GOPATH/bin $HOME/.vim/bin $BIN_DIR $TECH_DIR/usr/local/b
     fi
 done
 
-export MANPATH=$MAN_DIR:$MAN_PATH
+if [[ -n $MANPATH ]]; then
+    export MANPATH=$MAN_DIR:$MANPATH
+else
+    export MANPATH=$MAN_DIR
+fi
 
 #### Git Setup ###
 eval "$(hub alias -s)"

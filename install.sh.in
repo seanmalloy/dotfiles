@@ -19,10 +19,10 @@ f_set_env()
         # no facter ... must check stuff manually :-(
         if [[ -f /etc/centos-release ]]; then
             OS_VERSION="RedHat$(awk '{print $4}' /etc/centos-release | awk -F. '{print $1}')"
-        elif [[ -f /etc/redhat-release ]]; then
-            OS_VERSION="RedHat$(awk '{print $7}' /etc/redhat-release | awk -F. '{print $1}')"
         elif [[ -f /etc/fedora-release ]]; then
             OS_VERSION="Fedora$(awk '{print $3}' /etc/fedora-release)"
+        elif [[ -f /etc/redhat-release ]]; then
+            OS_VERSION="RedHat$(awk '{print $7}' /etc/redhat-release | awk -F. '{print $1}')"
         elif [[ -f /etc/debian_version ]]; then
             OS_VERSION="Debian"
         else
