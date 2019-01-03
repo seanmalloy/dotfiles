@@ -16,6 +16,11 @@ $ bash ~/install.sh
 When using PuTTY the "remote character set" option must be set to UTF-8. This makes the tmux window separator appear as a line instead of a bunch of random characters. 
 ![My image](http://seanmalloy.github.io/dotfiles/putty_config.png)
 
+### Tmuxinator Install
+```
+$ gem install --user-install --bindir ~/tech/usr/local/bin/ tmuxinator
+```
+
 ### Other Useful Tools Not Included
 * ack
 * cpustat
