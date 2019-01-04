@@ -38,15 +38,6 @@ shopt -s histappend
 # update the values of LINES and COLUMNS.
 shopt -s checkwinsize
 
-# Enable Colors
-if [ -x /usr/bin/dircolors ]; then
-    test -r $HOME/.dircolors && eval "$(dircolors -b $HOME/.dircolors)" || eval "$(dircolors -b)"
-    alias ls='ls --color=auto -F'
-    alias grep='grep --color=auto'
-    alias fgrep='fgrep --color=auto'
-    alias egrep='egrep --color=auto'
-fi
-
 # Set Shell Options
 set -o vi
 set -o noclobber
@@ -121,6 +112,16 @@ if [[ -n $MANPATH ]]; then
 else
     export MANPATH=$MAN_DIR: # trailing : is required
 fi
+
+# enable colors
+if which dircolors > /dev/null 2>&1; then
+    test -r $HOME/.dircolors && eval "$(dircolors -b $HOME/.dircolors)" || eval "$(dircolors -b)"
+    alias ls='ls --color=auto -F'
+    alias grep='grep --color=auto'
+    alias fgrep='fgrep --color=auto'
+    alias egrep='egrep --color=auto'
+fi
+
 
 #### Git Setup ###
 if [[ $OS_TYPE == "Darwin" ]]; then
