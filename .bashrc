@@ -254,7 +254,12 @@ build_locate_db() {
     fi
 
     touch $HOME/.updatadb.lock
-    flock -n $HOME/.updatedb.lock updatedb --require-visibility no --database-root $HOME --output $HOME/mlocate.db
+    if [[ $OS_TYPE == "Darwin" ]]; then
+        flock -n $HOME/.updatedb.lock updatedb --local-paths $HOME --output $HOME/mlocate.db
+    else
+        # Linux
+        flock -n $HOME/.updatedb.lock updatedb --require-visibility no --database-root $HOME --output $HOME/mlocate.db
+    fi
     local UPDATE_DB_RET_CODE=$?
     if [[ -e $HOME/mlocate.db ]]; then
         chmod 600 $HOME/mlocate.db
