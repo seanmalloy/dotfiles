@@ -122,7 +122,6 @@ if which dircolors > /dev/null 2>&1; then
     alias egrep='egrep --color=auto'
 fi
 
-
 #### Git Setup ###
 if [[ $OS_TYPE == "Darwin" ]]; then
     . /Library/Developer/CommandLineTools/usr/share/git-core/git-completion.bash
@@ -132,16 +131,6 @@ eval "$(hub alias -s)"
 if [ -f "$BASH_INCLUDE_DIR/hub-completion.bash" ]; then
     # Enable Hub Autocomplete
     . $BASH_INCLUDE_DIR/hub-completion.bash
-fi
-
-# From https://github.com/magicmonty/bash-git-prompt
-if [ -f "$BASH_INCLUDE_DIR/bash-git-prompt/gitprompt.sh" ]; then
-    # Add Git Magic to Prompt
-    GIT_PROMPT_ONLY_IN_REPO=1
-    GIT_PROMPT_FETCH_REMOTE_STATUS=1
-    GIT_PROMPT_UNTRACKED_FILES=all
-    GIT_PROMPT_SHOW_UPSTREAM=1
-    . $BASH_INCLUDE_DIR/bash-git-prompt/gitprompt.sh
 fi
 
 ### SSH Setup ##
@@ -177,14 +166,12 @@ export FZF_INCLUDE_FILE="$BASH_INCLUDE_DIR/fzf.bash"
 export FZF_DEFAULT_OPTS='-m -x'
 . $FZF_INCLUDE_FILE
 
-### Set Bash Prompt ###
-RED="\[\033[0;31m\]"
-YELLOW="\[\033[0;33m\]"
-GREEN="\[\033[0;32m\]"
-NO_COLOR="\[\033[0m\]"
-PS1="\u@\h$ "
-
 ### Shell Functions ###
+
+# setup powerline-go prompt
+_update_ps1() {
+    PS1="$(powerline-go -error $?)"
+}
 
 # Create new puppet module
 pmg() {
@@ -268,11 +255,13 @@ build_locate_db() {
     return $UPDATE_DB_RET_CODE
 }
 
+### Set Bash Prompt ###
+if [ "$TERM" != "linux" ] && which powerline-go > /dev/null 2>&1; then
+    PROMPT_COMMAND="_update_ps1; $PROMPT_COMMAND"
+fi
 
 ### Custom Key Bindings ###
-
-# CTRL-P: fzf RPM packages
-bind '"\C-p":"$(fzpkg)\n"'
+bind '"\C-p":"$(fzpkg)\n"' # CTRL-P: fzf RPM packages
 
 ### Source Site Specific Config ###
 export BASH_SITE_FILE="$HOME/.site_env"

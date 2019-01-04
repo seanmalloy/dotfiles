@@ -18,6 +18,11 @@ $ bash ~/install.sh
 $ gem install --user-install --bindir ~/tech/usr/local/bin/ tmuxinator
 ```
 
+#### Install Power Line Fonts
+```
+# dnf install powerline-fonts
+```
+
 #### Install Neovim Plugins
 Run `:PlugInstall` command in nvim.
 
