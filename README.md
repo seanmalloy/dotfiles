@@ -19,9 +19,15 @@ $ gem install --user-install --bindir ~/tech/usr/local/bin/ tmuxinator
 ```
 
 #### Install Power Line Fonts
+For Fedora.
 ```
 # dnf install powerline-fonts
 ```
+
+For Mac OSX.
+1. Download https://github.com/powerline/fonts
+2. Run `install.sh`
+3. In iTerm2 change font(Preferences > Profiles > Text)
 
 #### Install Neovim Plugins
 Run `:PlugInstall` command in nvim.
