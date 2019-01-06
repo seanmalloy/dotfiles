@@ -6,20 +6,57 @@
 
 f_usage() {
     cat <<EOF
+USAGE
+    $PROG_NAME [ -f FILE ] [ -s SESSION_NAME ] SERVER...
+    $PROG_NAME -h
+    $PROG_NAME -m
+
+OPTIONS
+    -f FILE
+        Read server names from FILE instead of the command
+        line. Server names listed in file must be listed
+        one per line.
+
+    -h
+        Display help message and exit.
+
+    -m
+        Display full manual and exit.
+
+    -s SESSION_NAME
+        Set tmux session name to SESSION_NAME. The
+        default tmux session name defaults to the
+        last used tmux session name. It falls back to
+        "sshmux" if no previous session name is found.
+EOF
+}
+
+f_manpage() {
+    cat <<EOF
 NAME
     sshmux - SSH multiplexer
 
 SYNOPSIS
-    $PROG_NAME [ -s SESSION_NAME ] FILE
+    $PROG_NAME [ -f FILE ] [ -s SESSION_NAME ] SERVER...
     $PROG_NAME -h
+    $PROG_NAME -m
 
 DESCRIPTION
-    sshmux is an SSH multiplexer. Server names must be listed in FILE one per line. The sshmux
-    command uses the tmux command to do all of the hard work.
+    sshmux is an SSH multiplexer. Server names can be specified on the command
+    line, from a file, or from STDIN. The sshmux command uses the tmux command
+    to do all of the hard work.
 
 OPTIONS
+    -f FILE
+        Read server names from FILE instead of the command
+        line. Server names listed in file must be listed
+        one per line.
+
     -h
         Display help message and exit.
+
+    -m
+        Display full manual and exit.
 
     -s SESSION_NAME
         Set tmux session name to SESSION_NAME. The
@@ -28,7 +65,7 @@ OPTIONS
         "sshmux" if no previous session name is found.
 
 LICENSE
-   Copyright (c) 2014-2016, Sean Malloy
+   Copyright (c) 2014-2018, Sean Malloy
    All rights reserved.
 
    Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following
@@ -55,7 +92,6 @@ BUGS
 
 SEE ALSO
     tmux(1), https://tmux.github.io
-
 EOF
 }
 
@@ -67,10 +103,14 @@ if [[ -z $SESSION_NAME ]]; then
     SESSION_NAME=$PROG_NAME
 fi
 
-while getopts "hs:" OPTION; do
+while getopts "hms:" OPTION; do
     case "$OPTION" in
     h)
         f_usage
+        exit 0
+        ;;
+    m)
+        f_manpage
         exit 0
         ;;
     s)
