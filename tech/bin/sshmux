@@ -4,8 +4,7 @@
 
 # shellcheck source=/dev/null
 
-f_usage()
-{
+f_usage() {
     cat <<EOF
 NAME
     sshmux - SSH multiplexer
@@ -63,25 +62,28 @@ EOF
 . "$TMUX_INCLUDE_FILE"
 PROG_NAME=$(basename "$0")
 readonly PROG_NAME
-SESSION_NAME=$(tmux display-message -p '#S' 2> /dev/null)
+SESSION_NAME=$(tmux display-message -p '#S' 2>/dev/null)
 if [[ -z $SESSION_NAME ]]; then
     SESSION_NAME=$PROG_NAME
 fi
 
 while getopts "hs:" OPTION; do
     case "$OPTION" in
-        h) f_usage
-           exit 0
-           ;;
-        s) SESSION_NAME=$OPTARG
-           ;;
-        *) echo ""
-           f_usage
-           exit 1
-           ;;
+    h)
+        f_usage
+        exit 0
+        ;;
+    s)
+        SESSION_NAME=$OPTARG
+        ;;
+    *)
+        echo ""
+        f_usage
+        exit 1
+        ;;
     esac
 done
-shift $((OPTIND-1))
+shift $((OPTIND - 1))
 
 declare -a SERVER_LIST
 if [ $# -eq 1 ]; then
@@ -92,7 +94,7 @@ if [ $# -eq 1 ]; then
         echo "ERROR: '$INPUT_FILE' is not a file"
         exit 1
     fi
-    IFS=$'\n' read -d '' -r -a SERVER_LIST < "$INPUT_FILE"
+    IFS=$'\n' read -d '' -r -a SERVER_LIST <"$INPUT_FILE"
 else
     echo "ERROR: Missing FILE argument!"
     echo ""
@@ -103,8 +105,7 @@ fi
 if tmux -S "$TMUX_SOCKET" has -t "$SESSION_NAME"; then
     tmux -S "$TMUX_SOCKET" new -s "$SESSION_NAME" -n "$PROG_NAME" -d "ssh ${SERVER_LIST[0]}"
     unset "SERVER_LIST[0]"
-    for server in "${SERVER_LIST[@]}"
-    do
+    for server in "${SERVER_LIST[@]}"; do
         tmux -S "$TMUX_SOCKET" split-window -d -t "$SESSION_NAME:$PROG_NAME" "ssh $server"
         tmux -S "$TMUX_SOCKET" select-layout -t "$SESSION_NAME:$PROG_NAME" main-horizontal
     done
@@ -112,8 +113,7 @@ if tmux -S "$TMUX_SOCKET" has -t "$SESSION_NAME"; then
     tmux -S "$TMUX_SOCKET" select-layout -t "$SESSION_NAME:$PROG_NAME" tiled
     tmux -S "$TMUX_SOCKET" attach -t "$SESSION_NAME"
 else
-    for server in "${SERVER_LIST[@]}"
-    do
+    for server in "${SERVER_LIST[@]}"; do
         tmux -S "$TMUX_SOCKET" split-window -d -t "$SESSION_NAME:$PROG_NAME" "ssh $server"
         tmux -S "$TMUX_SOCKET" select-layout -t "$SESSION_NAME:$PROG_NAME" main-horizontal
     done
