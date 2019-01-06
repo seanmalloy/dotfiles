@@ -2,6 +2,8 @@
 
 # Simple tmux SSH multiplexer.
 
+# shellcheck source=/dev/null
+
 f_usage()
 {
     cat <<EOF
@@ -58,8 +60,9 @@ SEE ALSO
 EOF
 }
 
-. $TMUX_INCLUDE_FILE
-declare -r PROG_NAME=$(basename $0)
+. "$TMUX_INCLUDE_FILE"
+PROG_NAME=$(basename "$0")
+readonly PROG_NAME
 SESSION_NAME=$(tmux display-message -p '#S' 2> /dev/null)
 if [[ -z $SESSION_NAME ]]; then
     SESSION_NAME=$PROG_NAME
@@ -71,6 +74,10 @@ while getopts "hs:" OPTION; do
            exit 0
            ;;
         s) SESSION_NAME=$OPTARG
+           ;;
+        *) echo ""
+           f_usage
+           exit 1
            ;;
     esac
 done
@@ -85,7 +92,7 @@ if [ $# -eq 1 ]; then
         echo "ERROR: '$INPUT_FILE' is not a file"
         exit 1
     fi
-    IFS=$'\n' read -d '' -r -a SERVER_LIST < $INPUT_FILE
+    IFS=$'\n' read -d '' -r -a SERVER_LIST < "$INPUT_FILE"
 else
     echo "ERROR: Missing FILE argument!"
     echo ""
@@ -93,26 +100,24 @@ else
     exit 1
 fi
 
-tmux -S $TMUX_SOCKET has -t $SESSION_NAME
-if [ $? != 0 ]; then
-    tmux -S $TMUX_SOCKET new -s $SESSION_NAME -n $PROG_NAME -d "ssh ${SERVER_LIST[0]}"
-    unset SERVER_LIST[0]
+if tmux -S "$TMUX_SOCKET" has -t "$SESSION_NAME"; then
+    tmux -S "$TMUX_SOCKET" new -s "$SESSION_NAME" -n "$PROG_NAME" -d "ssh ${SERVER_LIST[0]}"
+    unset "SERVER_LIST[0]"
     for server in "${SERVER_LIST[@]}"
     do
-        tmux -S $TMUX_SOCKET split-window -d -t $SESSION_NAME:$PROG_NAME "ssh $server"
-        tmux -S $TMUX_SOCKET select-layout -t $SESSION_NAME:$PROG_NAME main-horizontal
+        tmux -S "$TMUX_SOCKET" split-window -d -t "$SESSION_NAME:$PROG_NAME" "ssh $server"
+        tmux -S "$TMUX_SOCKET" select-layout -t "$SESSION_NAME:$PROG_NAME" main-horizontal
     done
-    tmux -S $TMUX_SOCKET set-window-option -t $SESSION_NAME:$PROG_NAME synchronize-panes on
-    tmux -S $TMUX_SOCKET select-layout -t $SESSION_NAME:$PROG_NAME tiled
-    tmux -S $TMUX_SOCKET attach -t $SESSION_NAME
+    tmux -S "$TMUX_SOCKET" set-window-option -t "$SESSION_NAME:$PROG_NAME" synchronize-panes on
+    tmux -S "$TMUX_SOCKET" select-layout -t "$SESSION_NAME:$PROG_NAME" tiled
+    tmux -S "$TMUX_SOCKET" attach -t "$SESSION_NAME"
 else
     for server in "${SERVER_LIST[@]}"
     do
-        tmux -S $TMUX_SOCKET split-window -d -t $SESSION_NAME:$PROG_NAME "ssh $server"
-        tmux -S $TMUX_SOCKET select-layout -t $SESSION_NAME:$PROG_NAME main-horizontal
+        tmux -S "$TMUX_SOCKET" split-window -d -t "$SESSION_NAME:$PROG_NAME" "ssh $server"
+        tmux -S "$TMUX_SOCKET" select-layout -t "$SESSION_NAME:$PROG_NAME" main-horizontal
     done
-    tmux -S $TMUX_SOCKET set-window-option -t $SESSION_NAME:$PROG_NAME synchronize-panes on
-    tmux -S $TMUX_SOCKET select-layout -t $SESSION_NAME:$PROG_NAME tiled
-    tmux -S $TMUX_SOCKET attach -t $SESSION_NAME
+    tmux -S "$TMUX_SOCKET" set-window-option -t "$SESSION_NAME:$PROG_NAME" synchronize-panes on
+    tmux -S "$TMUX_SOCKET" select-layout -t "$SESSION_NAME:$PROG_NAME" tiled
+    tmux -S "$TMUX_SOCKET" attach -t "$SESSION_NAME"
 fi
-
