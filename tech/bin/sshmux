@@ -13,9 +13,10 @@ USAGE
 
 OPTIONS
     -f FILE
-        Read server names from FILE instead of the command
-        line. Server names listed in file must be listed
-        one per line.
+        Read server names from file FILE instead of the command
+        line. Server names listed in FILE must be listed
+        one per line. Passing "-" for FILE will read server
+        names from STDIN.
 
     -h
         Display help message and exit.
@@ -48,9 +49,10 @@ DESCRIPTION
 
 OPTIONS
     -f FILE
-        Read server names from FILE instead of the command
-        line. Server names listed in file must be listed
-        one per line.
+        Read server names from file FILE instead of the command
+        line. Server names listed in FILE must be listed
+        one per line. Passing "-" for FILE will read server
+        names from STDIN.
 
     -h
         Display help message and exit.
@@ -135,15 +137,27 @@ declare -a SERVER_LIST
 
 # Get list of servers from file
 if [ -n "$INPUT_FILE" ]; then
-    if [ ! -f "$INPUT_FILE" ]; then
-        echo "ERROR: '$INPUT_FILE' is not a regular file"
-        exit 1
+    # Read from STDIN
+    if [ "$INPUT_FILE" == "-" ]; then
+        while read -r server; do
+            SERVER_LIST+=("$server")
+        done </dev/stdin
     fi
-    IFS=$'\n' read -d '' -r -a SERVER_LIST <"$INPUT_FILE"
+
+    # Read from file
+    if [ "$INPUT_FILE" != "-" ]; then
+        if [ ! -f "$INPUT_FILE" ]; then
+            echo "ERROR: '$INPUT_FILE' is not a regular file"
+            exit 1
+        fi
+        if [ ! -r "$INPUT_FILE" ]; then
+            echo "ERROR: '$INPUT_FILE' permission denied"
+            exit 1
+        fi
+        IFS=$'\n' read -d '' -r -a SERVER_LIST <"$INPUT_FILE"
+    fi
 else
     # Get list of servers from the CLI
-
-    # TODO: also allow ready from STDIN
     if [ $# -eq 0 ]; then
         echo "ERROR: missing server to connect to"
         echo ""
