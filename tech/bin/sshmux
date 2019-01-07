@@ -1,8 +1,8 @@
 #!/bin/bash
 
-# Simple tmux SSH multiplexer.
+set -u
 
-# shellcheck source=/dev/null
+# Simple tmux SSH multiplexer.
 
 f_usage() {
     cat <<EOF
@@ -95,16 +95,22 @@ SEE ALSO
 EOF
 }
 
+# shellcheck source=/dev/null
 . "$TMUX_INCLUDE_FILE"
+
 PROG_NAME=$(basename "$0")
 readonly PROG_NAME
 SESSION_NAME=$(tmux display-message -p '#S' 2>/dev/null)
-if [[ -z $SESSION_NAME ]]; then
+if [ -z "$SESSION_NAME" ]; then
     SESSION_NAME=$PROG_NAME
 fi
 
-while getopts "hms:" OPTION; do
+INPUT_FILE=""
+while getopts "f:hms:" OPTION; do
     case "$OPTION" in
+    f)
+        INPUT_FILE=$OPTARG
+        ;;
     h)
         f_usage
         exit 0
@@ -126,20 +132,27 @@ done
 shift $((OPTIND - 1))
 
 declare -a SERVER_LIST
-if [ $# -eq 1 ]; then
-    # Files listed on command line
-    INPUT_FILE=$1
-    TOTAL_SERVERS=0
+
+# Get list of servers from file
+if [ -n "$INPUT_FILE" ]; then
     if [ ! -f "$INPUT_FILE" ]; then
-        echo "ERROR: '$INPUT_FILE' is not a file"
+        echo "ERROR: '$INPUT_FILE' is not a regular file"
         exit 1
     fi
     IFS=$'\n' read -d '' -r -a SERVER_LIST <"$INPUT_FILE"
 else
-    echo "ERROR: Missing FILE argument!"
-    echo ""
-    f_usage
-    exit 1
+    # Get list of servers from the CLI
+
+    # TODO: also allow ready from STDIN
+    if [ $# -eq 0 ]; then
+        echo "ERROR: missing server to connect to"
+        echo ""
+        f_usage
+        exit 1
+    fi
+    for server in "$@"; do
+        SERVER_LIST+=("$server")
+    done
 fi
 
 if tmux -S "$TMUX_SOCKET" has -t "$SESSION_NAME"; then
