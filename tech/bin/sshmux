@@ -7,7 +7,7 @@ set -u
 f_usage() {
     cat <<EOF
 USAGE
-    $PROG_NAME [ -f FILE ] [ -s SESSION_NAME ] SERVER...
+    $PROG_NAME [ -f FILE ] [ -l USER ] [ -s SESSION_NAME ] SERVER...
     $PROG_NAME -h
     $PROG_NAME -m
 
@@ -20,6 +20,10 @@ OPTIONS
 
     -h
         Display help message and exit.
+
+    -l USER
+        Use username USER for SSH login. Defaults
+        to local username(whoami).
 
     -m
         Display full manual and exit.
@@ -38,7 +42,7 @@ NAME
     sshmux - SSH multiplexer
 
 SYNOPSIS
-    $PROG_NAME [ -f FILE ] [ -s SESSION_NAME ] SERVER...
+    $PROG_NAME [ -f FILE ] [ -l USER ] [ -s SESSION_NAME ] SERVER...
     $PROG_NAME -h
     $PROG_NAME -m
 
@@ -56,6 +60,10 @@ OPTIONS
 
     -h
         Display help message and exit.
+
+    -l USER
+        Use username USER for SSH login. Defaults
+        to local username(whoami).
 
     -m
         Display full manual and exit.
@@ -102,13 +110,11 @@ EOF
 
 PROG_NAME=$(basename "$0")
 readonly PROG_NAME
-SESSION_NAME=$(tmux display-message -p '#S' 2>/dev/null)
-if [ -z "$SESSION_NAME" ]; then
-    SESSION_NAME=$PROG_NAME
-fi
+SESSION_NAME=$PROG_NAME
+SSH_LOGIN_NAME="$(whoami)"
 
 INPUT_FILE=""
-while getopts "f:hms:" OPTION; do
+while getopts "f:hl:ms:" OPTION; do
     case "$OPTION" in
     f)
         INPUT_FILE=$OPTARG
@@ -116,6 +122,9 @@ while getopts "f:hms:" OPTION; do
     h)
         f_usage
         exit 0
+        ;;
+    l)
+        SSH_LOGIN_NAME=$OPTARG
         ;;
     m)
         f_manpage
@@ -169,22 +178,24 @@ else
     done
 fi
 
-if tmux -S "$TMUX_SOCKET" has -t "$SESSION_NAME"; then
-    tmux -S "$TMUX_SOCKET" new -s "$SESSION_NAME" -n "$PROG_NAME" -d "ssh ${SERVER_LIST[0]}"
+if tmux -L "$TMUX_SOCKET" has -t "$SESSION_NAME"; then
+    tmux -L "$TMUX_SOCKET" new-window -t "$SESSION_NAME" -n "$PROG_NAME" "ssh -l $SSH_LOGIN_NAME ${SERVER_LIST[0]}"
     unset "SERVER_LIST[0]"
     for server in "${SERVER_LIST[@]}"; do
-        tmux -S "$TMUX_SOCKET" split-window -d -t "$SESSION_NAME:$PROG_NAME" "ssh $server"
-        tmux -S "$TMUX_SOCKET" select-layout -t "$SESSION_NAME:$PROG_NAME" main-horizontal
+        tmux -L "$TMUX_SOCKET" split-window -d -t "$SESSION_NAME:$PROG_NAME" "ssh -l $SSH_LOGIN_NAME $server"
+        tmux -L "$TMUX_SOCKET" select-layout -t "$SESSION_NAME:$PROG_NAME" main-horizontal
     done
-    tmux -S "$TMUX_SOCKET" set-window-option -t "$SESSION_NAME:$PROG_NAME" synchronize-panes on
-    tmux -S "$TMUX_SOCKET" select-layout -t "$SESSION_NAME:$PROG_NAME" tiled
-    tmux -S "$TMUX_SOCKET" attach -t "$SESSION_NAME"
+    tmux -L "$TMUX_SOCKET" set-window-option -t "$SESSION_NAME:$PROG_NAME" synchronize-panes on
+    tmux -L "$TMUX_SOCKET" select-layout -t "$SESSION_NAME:$PROG_NAME" tiled
+    tmux -L "$TMUX_SOCKET" attach -t "$SESSION_NAME"
 else
+    tmux -L "$TMUX_SOCKET" new -s "$SESSION_NAME" -n "$PROG_NAME" -d "ssh -l $SSH_LOGIN_NAME ${SERVER_LIST[0]}"
+    unset "SERVER_LIST[0]"
     for server in "${SERVER_LIST[@]}"; do
-        tmux -S "$TMUX_SOCKET" split-window -d -t "$SESSION_NAME:$PROG_NAME" "ssh $server"
-        tmux -S "$TMUX_SOCKET" select-layout -t "$SESSION_NAME:$PROG_NAME" main-horizontal
+        tmux -L "$TMUX_SOCKET" split-window -d -t "$SESSION_NAME:$PROG_NAME" "ssh -l $SSH_LOGIN_NAME $server"
+        tmux -L "$TMUX_SOCKET" select-layout -t "$SESSION_NAME:$PROG_NAME" main-horizontal
     done
-    tmux -S "$TMUX_SOCKET" set-window-option -t "$SESSION_NAME:$PROG_NAME" synchronize-panes on
-    tmux -S "$TMUX_SOCKET" select-layout -t "$SESSION_NAME:$PROG_NAME" tiled
-    tmux -S "$TMUX_SOCKET" attach -t "$SESSION_NAME"
+    tmux -L "$TMUX_SOCKET" set-window-option -t "$SESSION_NAME:$PROG_NAME" synchronize-panes on
+    tmux -L "$TMUX_SOCKET" select-layout -t "$SESSION_NAME:$PROG_NAME" tiled
+    tmux -L "$TMUX_SOCKET" attach -t "$SESSION_NAME"
 fi
