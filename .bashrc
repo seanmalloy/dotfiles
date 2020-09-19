@@ -73,11 +73,6 @@ alias .3='cd ../../..'
 alias .4='cd ../../../..'
 alias .5='cd ../../../../../..'
 
-# Puppet Aliases
-alias p='puppet'
-alias pd='puppet describe'
-alias pr='puppet resource'
-
 # Set PATH
 export PATH=/usr/local/bin:/usr/bin:/bin:/sbin:/usr/sbin:/usr/games:/usr/local/games:/usr/local/MacGPG2/bin
 for DIR in $GOROOT/bin $GOPATH/bin $HOME/.vim/bin $BIN_DIR $TECH_DIR/usr/local/bin; do
@@ -163,32 +158,6 @@ export FZF_DEFAULT_OPTS='-m -x'
 # setup powerline-go prompt
 _update_ps1() {
     PS1="$(powerline-go -error $?)"
-}
-
-# Create new puppet module
-pmg() {
-    local PUPPET_MODULE_NAME="$1"
-    local PUPPET_MODULE_AUTHOR="seanmalloy"
-    local PUPPET_MODULE_FULL_NAME="${PUPPET_MODULE_AUTHOR}-${PUPPET_MODULE_NAME}"
-
-    if [[ -z $PUPPET_MODULE_NAME ]]; then
-        echo "ERROR: must sepcify puppet module name!!!"
-        return 1
-    fi
-
-    if [[ -e $PUPPET_MODULE_FULL_NAME ]]; then
-        echo "ERROR: file $PUPPET_MODULE_FULL_NAME already exists!!!"
-        return 1
-    fi
-
-    puppet module generate --skip-interview ${PUPPET_MODULE_FULL_NAME}
-    if [[ $? -ne 0 ]]; then
-        echo "ERROR: command 'puppet module generate ${PUPPET_MODULE_FULL_NAME}' failed!!!"
-        return 1
-    fi
-
-    cd $PUPPET_MODULE_FULL_NAME
-    git init .
 }
 
 # Dynamically start tmux sessions
