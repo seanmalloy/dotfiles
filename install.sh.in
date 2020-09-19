@@ -28,6 +28,7 @@ f_set_env()
     fi
 
     SSH_CMD=$(which ssh 2> /dev/null)
+    GH_CMD=$(which gh 2> /dev/null)
     GIT_CMD=$(which git 2> /dev/null)
 }
 
@@ -67,17 +68,18 @@ f_setup_github()
 {
     if [[ -n $GIT_CMD ]]; then
         if [[ -z $DOTFILES_SETUP_GITHUB ]]; then
-            read -p "Setup Public GitHub? " DOTFILES_SETUP_GITHUB
+            read -p "Setup gh For Public GitHub? " DOTFILES_SETUP_GITHUB
             echo "DOTFILES_SETUP_GITHUB=\"$DOTFILES_SETUP_GITHUB\"" >> $ANSWER_FILE
-            if [[ "$DOTFILES_SETUP_GITHUB" =  "y" ]]; then
-                if [[ -z $DOTFILES_GITHUB_USER ]]; then
-                    read -p "Name: "  DOTFILES_GITHUB_USER
-                    echo "DOTFILES_GITHUB_USER=\"$DOTFILES_GITHUB_USER\"" >> $ANSWER_FILE
+        fi
+        if [[ "$DOTFILES_SETUP_GITHUB" =  "y" ]]; then
+            if [[ -n $GH_CMD ]]; then
+                if [[ ! -d /home/sean/.config/gh ]]; then
+                    echo "Configuring gh For Public GitHub"
+                    $GH_CMD auth login
                 fi
-                git config --global github.user $DOTFILES_GITHUB_USER
-            else
-                echo "Skipping Public GitHub Configuration!"
             fi
+        else
+            echo "Skipping Public GitHub Configuration!"
         fi
     fi
 }
@@ -86,18 +88,22 @@ f_setup_github_enterprise()
 {
     if [[ -n $GIT_CMD ]]; then
         if [[ -z $DOTFILES_SETUP_GITHUB_ENTERPRISE ]]; then
-            read -p "Setup GitHub Enterprise? " DOTFILES_SETUP_GITHUB_ENTERPRISE
+            read -p "Setup gh For GitHub Enterprise? " DOTFILES_SETUP_GITHUB_ENTERPRISE
             echo "DOTFILES_SETUP_GITHUB_ENTERPRISE=\"$DOTFILES_SETUP_GITHUB_ENTERPRISE\"" >> $ANSWER_FILE
-            if [[ "$DOTFILES_SETUP_GITHUB_ENTERPRISE" =  "y" ]]; then
-                if [[ -z $DOTFILES_GITHUB_ENTERPRISE_HOST ]]; then
-                    read -p "GHE Host: "  DOTFILES_GITHUB_ENTERPRISE_HOST
-                    echo "DOTFILES_GITHUB_ENTERPRISE_HOST=\"$DOTFILES_GITHUB_ENTERPRISE_HOST\"" >> $ANSWER_FILE
-                fi
-                echo "Configuring GitHub Enterprise"
-                git config --global --add hub.host $DOTFILES_GITHUB_ENTERPRISE_HOST
-            else
-                echo "Skipping GitHub Enterprise Configuration!"
+        fi
+        if [[ "$DOTFILES_SETUP_GITHUB_ENTERPRISE" =  "y" ]]; then
+            if [[ -z $DOTFILES_GITHUB_ENTERPRISE_HOST ]]; then
+                read -p "GHE Host: "  DOTFILES_GITHUB_ENTERPRISE_HOST
+                echo "DOTFILES_GITHUB_ENTERPRISE_HOST=\"$DOTFILES_GITHUB_ENTERPRISE_HOST\"" >> $ANSWER_FILE
             fi
+            if [[ -n $GH_CMD ]]; then
+                if [[ ! -d /home/sean/.config/gh ]]; then
+                    echo "Configuring gh For GitHub Enterprise"
+                    $GH_CMD auth login --hostname $DOTFILES_GITHUB_ENTERPRISE_HOST
+                fi
+            fi
+        else
+            echo "Skipping GitHub Enterprise Configuration!"
         fi
     fi
 }
