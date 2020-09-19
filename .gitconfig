@@ -9,6 +9,7 @@
 	ci = commit --verbose
 	co = checkout
 	lol = log --graph --all --decorate --oneline
+	rb = rebase
 	st = status
 [push]
 	default = nothing
