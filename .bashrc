@@ -153,11 +153,6 @@ if [ -f "$BASH_INCLUDE_DIR/ag.bashcomp.sh" ]; then
     . $BASH_INCLUDE_DIR/ag.bashcomp.sh
 fi
 
-# Enable ripgrep Autocomplete
-if [ -f "$BASH_INCLUDE_DIR/rg.bash-completion" ]; then
-    . $BASH_INCLUDE_DIR/rg.bash-completion
-fi
-
 ### FZF Setup ###
 export FZF_INCLUDE_FILE="$BASH_INCLUDE_DIR/fzf.bash"
 export FZF_DEFAULT_OPTS='-m -x'
