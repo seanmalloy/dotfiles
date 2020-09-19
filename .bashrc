@@ -127,11 +127,8 @@ if [[ $OS_TYPE == "Darwin" ]]; then
     . /Library/Developer/CommandLineTools/usr/share/git-core/git-completion.bash
 fi
 
-eval "$(hub alias -s)"
-if [ -f "$BASH_INCLUDE_DIR/hub-completion.bash" ]; then
-    # Enable Hub Autocomplete
-    . $BASH_INCLUDE_DIR/hub-completion.bash
-fi
+# Enable gh autocomplete
+eval "$(gh completion -s bash)"
 
 ### SSH Setup ##
 SSH_DIR=$HOME/.ssh
