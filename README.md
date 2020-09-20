@@ -18,6 +18,11 @@ $ bash ~/install.sh
 $ gem install --user-install --bindir ~/tech/usr/local/bin/ tmuxinator
 ```
 
+#### Install bat
+```
+# dnf install bat
+```
+
 #### Install Power Line Fonts
 For Fedora.
 ```
@@ -43,6 +48,7 @@ $ brew update
 
 Install packages.
 ```
+$ brew install bat
 $ brew install the_silver_searcher
 $ brew install tmux
 $ brew install shellcheck
@@ -67,3 +73,5 @@ When using PuTTY the "remote character set" option must be set to UTF-8. This ma
 * govc
 * govendor
 * lnav
+* memo
+* rg

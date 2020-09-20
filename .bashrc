@@ -55,6 +55,7 @@ export GOROOT=$TECH_DIR/go
 export GOPATH=$PROJ_DIR/go
 
 # Generic Aliases
+alias cat='bat'
 alias ll='ls -l'
 alias la='ls -A'
 alias ltr='ls -ltr'
