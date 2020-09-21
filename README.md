@@ -42,16 +42,14 @@ Setup brew in $HOME.
 ```
 $ cd ~/tech
 $ git clone https://github.com/Homebrew/brew.git
+$ cd brew
 $ git checkout 1.6.9
 $ brew update
 ```
 
 Install packages.
 ```
-$ brew install bat
-$ brew install the_silver_searcher
-$ brew install tmux
-$ brew install shellcheck
+$ brew install bat the_silver_searcher tmux tmuxinator shellcheck gh
 $ brew install coreutils findutils gnu-tar gnu-sed gawk gnu-indent gnu-getopt grep
 $ brew tap discoteq/discoteq
 $ brew install flock
