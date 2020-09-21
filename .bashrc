@@ -208,7 +208,7 @@ build_locate_db() {
 
     touch $HOME/.updatadb.lock
     if [[ $OS_TYPE == "Darwin" ]]; then
-        flock -n $HOME/.updatedb.lock updatedb --localpaths=$HOME --output=$HOME/mlocate.db
+        flock -n $HOME/.updatedb.lock updatedb --prunepaths=$HOME/Library --localpaths=$HOME --output=$HOME/mlocate.db
     else
         # Linux
         flock -n $HOME/.updatedb.lock updatedb --require-visibility no --database-root $HOME --output $HOME/mlocate.db
