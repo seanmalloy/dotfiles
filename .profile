@@ -1,5 +1,22 @@
 # Sean Malloy's .profile
 
+# Exec into newer bash on Mac OSX
+os_type="$(uname -s)"
+if [ "$os_type" = "Darwin" ]; then
+    case $- in
+        *i*)
+        # Interactive session. Try switching to newer bash
+        NEW_BASH="$HOME/tech/brew/bin/bash"
+        if [ "$BASH" != "$NEW_BASH" ]; then
+            bash=$(command -v $NEW_BASH)
+            if [ -x "$bash" ]; then
+                export SHELL="$bash"
+                exec "$bash"
+            fi
+        fi
+    esac
+fi
+
 # if running bash
 if [ -n "$BASH_VERSION" ]; then
     if [ -f "$HOME/.bashrc" ]; then

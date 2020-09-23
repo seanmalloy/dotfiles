@@ -98,6 +98,11 @@ if [[ $OS_TYPE == "Darwin" ]]; then
     done
 fi
 
+# Source newer bash completions if available
+if [[ $OS_TYPE == "Darwin" ]]; then
+    [[ -r "$TECH_DIR/brew/etc/profile.d/bash_completion.sh" ]] && . "$TECH_DIR/brew/etc/profile.d/bash_completion.sh"
+fi
+
 # TODO: set MANPATH for OSX
 #
 # $TECH_DIR/brew/opt/*/libexec/gnuman

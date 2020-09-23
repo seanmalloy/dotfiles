@@ -50,7 +50,8 @@ $ brew update
 Install packages.
 ```
 $ brew install bat the_silver_searcher tmux tmuxinator shellcheck gh
-$ brew install coreutils findutils gnu-tar gnu-sed gawk gnu-indent gnu-getopt grep
+$ brew install coreutils findutils gnu-tar gnu-sed gawk gnu-indent gnu-getopt grep bash bash-completion@2
+c
 $ brew tap discoteq/discoteq
 $ brew install flock
 ```
