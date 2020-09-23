@@ -74,9 +74,6 @@ alias .3='cd ../../..'
 alias .4='cd ../../../..'
 alias .5='cd ../../../../../..'
 
-# k8s Aliases
-alias k='kubectl'
-
 # Set PATH
 export PATH=/usr/local/bin:/usr/bin:/bin:/sbin:/usr/sbin:/usr/games:/usr/local/games:/usr/local/MacGPG2/bin
 for DIR in $GOROOT/bin $GOPATH/bin $HOME/.vim/bin $BIN_DIR $TECH_DIR/usr/local/bin; do
@@ -100,6 +97,7 @@ fi
 
 # Source newer bash completions if available
 if [[ $OS_TYPE == "Darwin" ]]; then
+    # required for kubectl completion
     [[ -r "$TECH_DIR/brew/etc/profile.d/bash_completion.sh" ]] && . "$TECH_DIR/brew/etc/profile.d/bash_completion.sh"
 fi
 
@@ -124,6 +122,13 @@ if which dircolors > /dev/null 2>&1; then
     alias grep='grep --color=auto'
     alias fgrep='fgrep --color=auto'
     alias egrep='egrep --color=auto'
+fi
+
+### Kubernetes Setup ###
+if which kubectl > /dev/null 2>&1; then
+    source <(kubectl completion bash)
+    alias k='kubectl'
+    complete -F __start_kubectl k
 fi
 
 #### Git Setup ###
