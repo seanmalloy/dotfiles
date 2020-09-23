@@ -180,7 +180,7 @@ export FZF_DEFAULT_OPTS='-m -x'
 
 # setup powerline-go prompt
 _update_ps1() {
-    PS1="$(powerline-go -hostname-only-if-ssh -newline -error $?)"
+    PS1="$(powerline-go -hostname-only-if-ssh -newline -modules="venv,user,host,ssh,cwd,perms,git,kube,jobs,exit,root" -error $?)"
 }
 
 # Dynamically start tmux sessions
