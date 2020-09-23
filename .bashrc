@@ -131,6 +131,13 @@ if which kubectl > /dev/null 2>&1; then
     complete -F __start_kubectl k
 fi
 
+### OpenShift Setup ###
+if which oc > /dev/null 2>&1; then
+    source <(oc completion bash)
+    alias o='oc'
+    complete -F __start_oc o
+fi
+
 #### Git Setup ###
 if [[ $OS_TYPE == "Darwin" ]]; then
     . /Library/Developer/CommandLineTools/usr/share/git-core/git-completion.bash
