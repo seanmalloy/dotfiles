@@ -137,7 +137,9 @@ if [[ $OS_TYPE == "Darwin" ]]; then
 fi
 
 # Enable gh autocomplete
-eval "$(gh completion -s bash)"
+if which gh > /dev/null 2>&1; then
+    eval "$(gh completion -s bash)"
+fi
 
 ### SSH Setup ##
 SSH_DIR=$HOME/.ssh
