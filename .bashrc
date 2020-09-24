@@ -129,6 +129,14 @@ if which kubectl > /dev/null 2>&1; then
     source <(kubectl completion bash)
     alias k='kubectl'
     complete -F __start_kubectl k
+
+    # Setup kubectx
+    alias kctx='kubectx'
+    . $BASH_INCLUDE_DIR/kubectx.bash
+
+    # Setup kubens
+    alias kns='kubens'
+    . $BASH_INCLUDE_DIR/kubens.bash
 fi
 
 ### OpenShift Setup ###
