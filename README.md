@@ -4,9 +4,9 @@
 ### Linux (Fedora)
 #### Run Install
 ```
-$ mkdir -p ~/tech/use/local/bin
+$ mkdir -p ~/tech/usr/local/bin
 $ gem install --user-install --bindir ~/tech/usr/local/bin/ tmuxinator
-$ dnf install bat neovim powerline-fonts
+$ dnf install bat neovim powerline-fonts tmux
 $ wget -O ~/install.sh https://github.com/seanmalloy/dotfiles/raw/master/install.sh
 $ bash ~/install.sh
 ```
