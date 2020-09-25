@@ -53,6 +53,8 @@ $ brew install bat the_silver_searcher tmux tmuxinator shellcheck shfmt gh jq ki
 $ brew install coreutils findutils gnu-tar gnu-sed gawk gnu-indent gnu-getopt grep bash bash-completion@2
 $ brew tap discoteq/discoteq
 $ brew install flock
+$ brew tap instrumenta/instrumenta
+$ brew install kubeval
 ```
 
 Install additional binaries ~/tech/usr/local/bin.
