@@ -32,6 +32,27 @@ f_set_env()
     GIT_CMD=$(which git 2> /dev/null)
 }
 
+f_post_clean()
+{
+    # Remove Linux binary files from Mac OSX
+    if [[ $OS_TYPE == "Darwin" ]]; then
+        rm -f $HOME/tech/bin/ag
+        rm -f $HOME/tech/bin/fzf
+        rm -f $HOME/tech/bin/gh
+        rm -f $HOME/tech/bin/helm
+        rm -f $HOME/tech/bin/jira
+        rm -f $HOME/tech/bin/jq
+        rm -f $HOME/tech/bin/kind
+        rm -f $HOME/tech/bin/kubectx
+        rm -f $HOME/tech/bin/kubens
+        rm -f $HOME/tech/bin/kubeval
+        rm -f $HOME/tech/bin/powerline-go
+        rm -f $HOME/tech/bin/present
+        rm -f $HOME/tech/bin/shellcheck
+        rm -f $HOME/tech/bin/shfmt
+    fi
+}
+
 f_pre_clean()
 {
     # Clean Obsolete Files, not longer used
@@ -39,12 +60,15 @@ f_pre_clean()
     rm -f $HOME/.bash_profile
     rm -f $HOME/.perltidyrc
     rm -rf $HOME/.perlbrew/
+    rm -rf $HOME/.puppet/var/puppet-module/skeleton/
+    rm -rf $HOME/tech/bin/dep
+    rm -rf $HOME/tech/bin/memo
+    rm -rf $HOME/tech/bin/rg
 
     # Clean Up Used Directories Before Install
     rm -rf $HOME/.bash_files/
     rm -rf $HOME/.terminfo/
     rm -rf $HOME/.vim/
-    rm -rf $HOME/.puppet/var/puppet-module/skeleton/
 }
 
 f_setup_git()
@@ -73,7 +97,7 @@ f_setup_github()
         fi
         if [[ "$DOTFILES_SETUP_GITHUB" =  "y" ]]; then
             if [[ -n $GH_CMD ]]; then
-                if [[ ! -d /home/sean/.config/gh ]]; then
+                if [[ ! -d $HOME/.config/gh ]]; then
                     echo "Configuring gh For Public GitHub"
                     $GH_CMD auth login
                 fi
@@ -97,7 +121,7 @@ f_setup_github_enterprise()
                 echo "DOTFILES_GITHUB_ENTERPRISE_HOST=\"$DOTFILES_GITHUB_ENTERPRISE_HOST\"" >> $ANSWER_FILE
             fi
             if [[ -n $GH_CMD ]]; then
-                if [[ ! -d /home/sean/.config/gh ]]; then
+                if [[ ! -d $HOME/.config/gh ]]; then
                     echo "Configuring gh For GitHub Enterprise"
                     $GH_CMD auth login --hostname $DOTFILES_GITHUB_ENTERPRISE_HOST
                 fi
@@ -170,6 +194,7 @@ if [[ "${ans:0:1}"  ||  "${ans:0:1}" ]]; then
     f_setup_shfmt
     f_setup_ssh
     f_setup_tmuxinator
+    f_post_clean
 fi
 exit 0
 
