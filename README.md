@@ -1,73 +1,63 @@
-## Sean Malloy's Dotfiles
+# Sean Malloy's Dotfiles
 
-### Install Instructions
+## Install Instructions
+### Linux (Fedora)
+#### Run Install
 ```
-$ brew install wget # only for Mac OSX
+$ mkdir -p ~/tech/use/local/bin
+$ gem install --user-install --bindir ~/tech/usr/local/bin/ tmuxinator
+$ dnf install bat neovim powerline-fonts
 $ wget -O ~/install.sh https://github.com/seanmalloy/dotfiles/raw/master/install.sh
 $ bash ~/install.sh
 ```
 
-#### Install Behind Proxy
-```
-$ https_proxy="proxy.example.com:3128" wget -O ~/install.sh https://github.com/seanmalloy/dotfiles/raw/master/install.sh
-$ bash ~/install.sh
-```
-
-#### Tmuxinator Install
-```
-$ gem install --user-install --bindir ~/tech/usr/local/bin/ tmuxinator
-```
-
-#### Install bat
-```
-# dnf install bat
-```
-
-#### Install Power Line Fonts
-For Fedora.
-```
-# dnf install powerline-fonts
-```
-
-For Mac OSX.
-1. Download https://github.com/powerline/fonts
-2. Run `install.sh`
-3. In iTerm2 change font(Preferences > Profiles > Text)
-
 #### Install Neovim Plugins
 Run `:PlugInstall` command in nvim.
 
-#### Mac OSX Install
-Setup brew in $HOME.
+### Mac OSX
+#### Setup brew in $HOME
 ```
-$ cd ~/tech
+$ mkdir ~/tech && cd ~/tech
 $ git clone https://github.com/Homebrew/brew.git
 $ cd brew
 $ git checkout 1.6.9
 $ brew update
 ```
 
-Install packages.
+#### Install Packages
 ```
-$ brew install bat the_silver_searcher tmux tmuxinator shellcheck shfmt gh jq kind helm
+$ brew install bat the_silver_searcher tmux tmuxinator shellcheck shfmt gh jq kind helm wget
 $ brew install coreutils findutils gnu-tar gnu-sed gawk gnu-indent gnu-getopt grep bash bash-completion@2
 $ brew tap discoteq/discoteq
 $ brew install flock
 $ brew tap instrumenta/instrumenta
 $ brew install kubeval
 ```
-
-Install additional binaries ~/tech/usr/local/bin.
-* kubens
-* kubectx
+#### Install additional binaries ~/tech/usr/local/bin
 * fzf
+* kubectx
+* kubens
 * powerline-go
 
-Install Neovim.
+#### Install Powerline Fonts
+* Download https://github.com/powerline/fonts
+* Run `install.sh`
+* In iTerm2 change font(Preferences > Profiles > Text)
+
+#### Run Install
+```
+$ wget -O ~/install.sh https://github.com/seanmalloy/dotfiles/raw/master/install.sh
+$ bash ~/install.sh
+```
+
+#### Install Neovim
 ```
 $ rm -rf ~/tech/nvim-osx64
 $ tar xzf nvim-macos.tar.gz -C ~/tech
 ```
+
+#### Install Neovim Plugins
+Run `:PlugInstall` command in nvim.
 
 ### PuTTY Configuration
 When using PuTTY the "remote character set" option must be set to UTF-8. This makes the tmux window separator appear as a line instead of a bunch of random characters. 
