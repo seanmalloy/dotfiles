@@ -21,7 +21,7 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 ..
-.TH fzf 1 "Aug 2020" "fzf 0.22.0" "fzf - a command-line fuzzy finder"
+.TH fzf 1 "Oct 2020" "fzf 0.23.1" "fzf - a command-line fuzzy finder"
 
 .SH NAME
 fzf - a command-line fuzzy finder
@@ -381,20 +381,7 @@ Preview window will be updated even when there is no match for the current
 query if any of the placeholder expressions evaluates to a non-empty string.
 .RE
 .TP
-.BI "--preview-window=" "[POSITION][:SIZE[%]][:noborder][:wrap][:hidden][:+SCROLL[-OFFSET]]"
-Determines the layout of the preview window. If the argument contains
-\fB:hidden\fR, the preview window will be hidden by default until
-\fBtoggle-preview\fR action is triggered. Long lines are truncated by default.
-Line wrap can be enabled with \fB:wrap\fR flag.
-
-If size is given as 0, preview window will not be visible, but fzf will still
-execute the command in the background.
-
-\fB+SCROLL[-OFFSET]\fR determines the initial scroll offset of the preview
-window. \fBSCROLL\fR can be either a numeric integer or a single-field index
-expression that refers to a numeric integer. The optional \fB-OFFSET\fR part is
-for adjusting the base offset so that you can see the text above it. It should
-be given as a numeric integer.
+.BI "--preview-window=" "[POSITION][:SIZE[%]][:rounded|sharp|noborder][:[no]wrap][:[no]cycle][:[no]hidden][:+SCROLL[-OFFSET]][:default]"
 
 .RS
 .B POSITION: (default: right)
@@ -404,6 +391,28 @@ be given as a numeric integer.
     \fBright
 .RE
 
+\fRDetermines the layout of the preview window. If the argument contains
+\fB:hidden\fR, the preview window will be hidden by default until
+\fBtoggle-preview\fR action is triggered. Long lines are truncated by default.
+Line wrap can be enabled with \fB:wrap\fR flag. Cyclic scrolling is enabled
+with \fB:cycle\fR flag.
+
+If size is given as 0, preview window will not be visible, but fzf will still
+execute the command in the background.
+
+To change the style of the border of the preview window, specify one of
+\fBrounded\fR (border with rounded edges, default), \fBsharp\fR (border with
+sharp edges), or \fBnoborder\fR (no border).
+
+\fB+SCROLL[-OFFSET]\fR determines the initial scroll offset of the preview
+window. \fBSCROLL\fR can be either a numeric integer or a single-field index
+expression that refers to a numeric integer. The optional \fB-OFFSET\fR part is
+for adjusting the base offset so that you can see the text above it. It should
+be given as a numeric integer (\fB-INTEGER\fR), or as a denominator form
+(\fB-/INTEGER\fR) for specifying a fraction of the preview window height.
+
+\fBdefault\fR resets all options previously set to the default.
+
 .RS
 e.g.
      \fB# Non-default scroll window positions and sizes
@@ -411,11 +420,18 @@ e.g.
      fzf --preview="file {}" --preview-window=down:1
 
      # Initial scroll offset is set to the line number of each line of
-     # git grep output *minus* 5 lines
+     # git grep output *minus* 5 lines (-5)
      git grep --line-number '' |
-       fzf --delimiter : --preview 'nl {1}' --preview-window +{2}-5\fR
+       fzf --delimiter : --preview 'nl {1}' --preview-window +{2}-5
+
+     # Preview with bat, matching line in the middle of the window (-/2)
+     git grep --line-number '' |
+       fzf --delimiter : \\
+           --preview 'bat --style=numbers --color=always --highlight-line {2} {1}' \\
+           --preview-window +{2}-/2\fR
 
 .RE
+
 .SS Scripting
 .TP
 .BI "-q, --query=" "STR"
@@ -690,7 +706,6 @@ A key or an event can be bound to one or more of the following actions.
     \fBend-of-line\fR               \fIctrl-e  end\fR
     \fBexecute(...)\fR              (see below for the details)
     \fBexecute-silent(...)\fR       (see below for the details)
-    \fRexecute-multi(...)\fR        (deprecated in favor of \fB{+}\fR expression)
     \fBforward-char\fR              \fIctrl-f  right\fR
     \fBforward-word\fR              \fIalt-f   shift-right\fR
     \fBignore\fR
@@ -708,6 +723,8 @@ A key or an event can be bound to one or more of the following actions.
     \fBpreview-up\fR                \fIshift-up\fR
     \fBpreview-page-down\fR
     \fBpreview-page-up\fR
+    \fBpreview-half-page-down\fR
+    \fBpreview-half-page-up\fR
     \fBprevious-history\fR          (\fIctrl-p\fR on \fB--history\fR)
     \fBprint-query\fR               (print query and exit)
     \fBrefresh-preview\fR
