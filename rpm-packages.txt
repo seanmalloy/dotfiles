@@ -1,0 +1,9 @@
+bat
+bcc
+bpftrace
+docker-compose
+moby-engine
+neovim
+podman
+powerline-fonts
+tmux
