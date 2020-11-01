@@ -5,9 +5,9 @@
 #### Run Install
 ```
 $ mkdir -p ~/tech/usr/local/bin
-$ gem install --user-install --bindir ~/tech/usr/local/bin/ tmuxinator
 $ wget -O ~/rpm-packages.txt https://github.com/seanmalloy/dotfiles/raw/master/rpm-packages.txt
 $ sudo dnf install $(cat ~/pm-packages.txt)
+$ gem install --user-install --bindir ~/tech/usr/local/bin/ tmuxinator
 $ wget -O ~/install.sh https://github.com/seanmalloy/dotfiles/raw/master/install.sh
 $ bash ~/install.sh
 ```
