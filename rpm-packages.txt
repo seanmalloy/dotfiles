@@ -6,4 +6,5 @@ moby-engine
 neovim
 podman
 powerline-fonts
+ruby
 tmux
