@@ -1,7 +1,7 @@
 # Sean Malloy's Dotfiles
 
 ## Install Instructions
-### Linux (Fedora)
+### Linux (Fedora 33)
 #### Run Install
 ```
 $ mkdir -p ~/tech/usr/local/bin
@@ -14,6 +14,14 @@ $ bash ~/install.sh
 
 #### Install Neovim Plugins
 Run `:PlugInstall` command in nvim.
+
+#### Setup Docker
+```
+sudo systemctl enable docker.service
+sudo systemctl start docker.service
+sudo usermod -aG docker $user
+sudo grubby --update-kernel=ALL --args="systemd.unified_cgroup_hierarchy=0"
+```
 
 ### Mac OSX
 #### Setup brew in $HOME

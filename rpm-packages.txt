@@ -2,6 +2,7 @@ bat
 bcc
 bpftrace
 docker-compose
+make
 moby-engine
 neovim
 podman
