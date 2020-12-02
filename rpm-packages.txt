@@ -2,6 +2,7 @@ bat
 bcc
 bpftrace
 docker-compose
+google-cloud-sdk
 make
 moby-engine
 neovim
