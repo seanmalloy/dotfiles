@@ -1,4 +1,8 @@
 avrdude
+avr-gcc
+avr-gcc-c++
+avr-libc
+avr-libc-doc
 bat
 bcc
 bpftrace
