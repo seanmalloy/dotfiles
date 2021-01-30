@@ -8,6 +8,7 @@ bcc
 bpftrace
 docker-compose
 google-cloud-sdk
+kicad
 make
 moby-engine
 neovim
