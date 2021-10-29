@@ -9,6 +9,7 @@ bpftrace
 docker-compose
 google-cloud-sdk
 kicad
+libnsl
 make
 moby-engine
 neovim
