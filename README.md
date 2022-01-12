@@ -35,7 +35,7 @@ $ brew update
 
 #### Install Packages
 ```
-$ brew install bat the_silver_searcher tmux tmuxinator shellcheck shfmt gh jq kind helm wget
+$ brew install bat the_silver_searcher tmux tmuxinator shellcheck shfmt gh jq kind helm wget powerline-go neovim
 $ brew install coreutils findutils gnu-tar gnu-sed gawk gnu-indent gnu-getopt grep bash bash-completion@2
 $ brew tap discoteq/discoteq
 $ brew install flock
@@ -46,7 +46,6 @@ $ brew install kubeval
 * fzf
 * kubectx
 * kubens
-* powerline-go
 
 #### Install Powerline Fonts
 * Download https://github.com/powerline/fonts
@@ -57,12 +56,6 @@ $ brew install kubeval
 ```
 $ wget -O ~/install.sh https://github.com/seanmalloy/dotfiles/raw/master/install.sh
 $ bash ~/install.sh
-```
-
-#### Install Neovim
-```
-$ rm -rf ~/tech/nvim-osx64
-$ tar xzf nvim-macos.tar.gz -C ~/tech
 ```
 
 #### Install Neovim Plugins
