@@ -45,6 +45,10 @@ $ brew install kubeval
 #### Install additional binaries ~/tech/usr/local/bin
 * kubens
 
+```
+xattr -r -d com.apple.quarantine ~/tech/usr/local/bin/
+```
+
 #### Install Powerline Fonts
 * Download https://github.com/powerline/fonts
 * Run `install.sh`
