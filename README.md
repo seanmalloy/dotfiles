@@ -35,7 +35,7 @@ $ brew update
 
 #### Install Packages
 ```
-$ brew install bat the_silver_searcher tmux tmuxinator shellcheck shfmt gh jq kind helm wget powerline-go neovim fzf kubectx
+$ brew install bat the_silver_searcher tmux tmuxinator shellcheck shfmt gh jq kind helm wget powerline-go neovim fzf kubectx exa
 $ brew install coreutils findutils gnu-tar gnu-sed gawk gnu-indent gnu-getopt grep bash bash-completion@2
 $ brew tap discoteq/discoteq
 $ brew install flock
