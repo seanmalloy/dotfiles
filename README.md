@@ -41,6 +41,7 @@ $ brew tap discoteq/discoteq
 $ brew install flock
 $ brew tap instrumenta/instrumenta
 $ brew install kubeval
+$ brew install podman skopeo
 ```
 #### Install additional binaries ~/tech/usr/local/bin
 * kubens
