@@ -36,17 +36,13 @@ f_post_clean()
 {
     # Remove Linux binary files from Mac OSX
     if [[ $OS_TYPE == "Darwin" ]]; then
-        rm -f $HOME/tech/bin/ag
         rm -f $HOME/tech/bin/fzf
         rm -f $HOME/tech/bin/gh
         rm -f $HOME/tech/bin/helm
-        rm -f $HOME/tech/bin/jira
-        rm -f $HOME/tech/bin/jq
         rm -f $HOME/tech/bin/kind
         rm -f $HOME/tech/bin/kubectx
         rm -f $HOME/tech/bin/kubens
         rm -f $HOME/tech/bin/kubeval
-        rm -f $HOME/tech/bin/powerline-go
         rm -f $HOME/tech/bin/present
         rm -f $HOME/tech/bin/shellcheck
         rm -f $HOME/tech/bin/shfmt
@@ -55,14 +51,18 @@ f_post_clean()
 
 f_pre_clean()
 {
-    # Clean Obsolete Files, not longer used
+    # Clean Obsolete Files, no longer used
     rm -f $HOME/.ackrc
     rm -f $HOME/.bash_profile
     rm -f $HOME/.perltidyrc
     rm -rf $HOME/.perlbrew/
     rm -rf $HOME/.puppet/var/puppet-module/skeleton/
-    rm -rf $HOME/tech/bin/dep
-    rm -rf $HOME/tech/bin/memo
+    rm -f $HOME/tech/bin/ag
+    rm -f $HOME/tech/bin/dep
+    rm -f $HOME/tech/bin/jira
+    rm -f $HOME/tech/bin/jq
+    rm -f $HOME/tech/bin/memo
+    rm -f $HOME/tech/bin/powerline-go
     rm -rf $HOME/tech/bin/rg
 
     # Clean Up Used Directories Before Install

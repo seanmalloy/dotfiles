@@ -8,6 +8,7 @@ bcc
 bpftrace
 docker-compose
 google-cloud-sdk
+jq
 kicad
 libnsl
 make
@@ -15,5 +16,7 @@ moby-engine
 neovim
 podman
 powerline-fonts
+powerline-go
 ruby
 tmux
+the_silver_searcher

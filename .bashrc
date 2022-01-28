@@ -178,11 +178,6 @@ alias tmux='tmux -L $TMUX_SOCKET'
 export TMUXINATOR_INCLUDE_FILE="$BASH_INCLUDE_DIR/tmuxinator.bash"
 . $TMUXINATOR_INCLUDE_FILE
 
-# Enable ag auto complete
-if [ -f "$BASH_INCLUDE_DIR/ag.bashcomp.sh" ]; then
-    . $BASH_INCLUDE_DIR/ag.bashcomp.sh
-fi
-
 ### FZF Setup ###
 export FZF_INCLUDE_FILE="$BASH_INCLUDE_DIR/fzf.bash"
 export FZF_DEFAULT_OPTS='-m -x'
