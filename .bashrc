@@ -54,6 +54,10 @@ export HOSTNAME=$(hostname -s)     # Short hostname of this computer
 export GOROOT=$TECH_DIR/go
 export GOPATH=$PROJ_DIR/go
 
+# Rust Variables
+export RUSTUP_HOME=$TECH_DIR/rust/.rustup
+export CARGO_HOME=$TECH_DIR/rust/.cargo
+
 # Generic Aliases
 alias cat='bat'
 alias ll='ls -l'
@@ -76,7 +80,7 @@ alias .5='cd ../../../../../..'
 
 # Set PATH
 export PATH=/usr/local/bin:/usr/bin:/bin:/sbin:/usr/sbin:/usr/games:/usr/local/games:/usr/local/MacGPG2/bin
-for DIR in $GOROOT/bin $GOPATH/bin $HOME/.vim/bin $BIN_DIR $TECH_DIR/usr/local/bin; do
+for DIR in $GOROOT/bin $GOPATH/bin $HOME/.vim/bin $BIN_DIR $TECH_DIR/usr/local/bin $CARGO_HOME/bin; do
     if [[ -d $DIR ]]; then
         if [[ ! $PATH =~ $DIR ]]; then
             PATH=$DIR:$PATH

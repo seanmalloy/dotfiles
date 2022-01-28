@@ -68,6 +68,12 @@ Run `:PlugInstall` command in nvim.
 When using PuTTY the "remote character set" option must be set to UTF-8. This makes the tmux window separator appear as a line instead of a bunch of random characters. 
 ![My image](http://seanmalloy.github.io/dotfiles/putty_config.png)
 
+###
+Install Rust.
+```
+curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | RUSTUP_HOME=~/tech/rust/.rustup CARGO_HOME=~/tech/rust/.cargo sh
+```
+
 ### Other Useful Tools Not Included
 * ack
 * cpustat
