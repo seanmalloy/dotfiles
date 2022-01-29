@@ -142,20 +142,6 @@ f_setup_proxy()
     fi
 }
 
-f_setup_rubygems()
-{
-    if [[ -n $(which gem 2> /dev/null) ]]; then
-        if [[ -z $DOTFILES_RUBY_GEM_SOURCE ]]; then
-            read -p "Ruby Gem Source: " DOTFILES_RUBY_GEM_SOURCE
-            echo "DOTFILES_RUBY_GEM_SOURCE=\"$DOTFILES_RUBY_GEM_SOURCE\"" >> $ANSWER_FILE
-        fi
-        if [[ $DOTFILES_RUBY_GEM_SOURCE != "n" ]]; then
-            gem sources -a $DOTFILES_RUBY_GEM_SOURCE
-            gem sources -r https://rubygems.org/
-        fi
-    fi
-}
-
 f_setup_shfmt()
 {
     ln -fs shfmt_v3.1.2_linux_amd64 $HOME/tech/bin/shfmt
@@ -201,7 +187,6 @@ if [[ "${ans:0:1}"  ||  "${ans:0:1}" ]]; then
     f_setup_github
     f_setup_github_enterprise
     f_setup_proxy
-    f_setup_rubygems
     f_setup_shfmt
     f_setup_ssh
     f_setup_tmuxinator
