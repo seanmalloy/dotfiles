@@ -80,7 +80,7 @@ alias .4='cd ../../../..'
 alias .5='cd ../../../../../..'
 
 # Set PATH
-export PATH=/usr/local/bin:/usr/bin:/bin:/sbin:/usr/sbin:/usr/games:/usr/local/games:/usr/local/MacGPG2/bin
+export PATH=/usr/local/bin:/usr/bin:/bin:/sbin:/usr/sbin:/usr/games:/usr/local/games
 for DIR in $GOROOT/bin $GOPATH/bin $HOME/.vim/bin $BIN_DIR $TECH_DIR/usr/local/bin $CARGO_HOME/bin; do
     if [[ -d $DIR ]]; then
         if [[ ! $PATH =~ $DIR ]]; then
@@ -91,7 +91,7 @@ done
 
 # Mac OSX Specific PATH
 if [[ $OS_TYPE == "Darwin" ]]; then
-    for DIR in $TECH_DIR/brew/bin $TECH_DIR/nvim-osx64/bin $TECH_DIR/brew/opt/gnu-tar/libexec/gnubin $TECH_DIR/brew/opt/coreutils/libexec/gnubin $TECH_DIR/brew/opt/findutils/libexec/gnubin $TECH_DIR/brew/opt/gnu-sed/libexec/gnubin $TECH_DIR/brew/opt/grep/libexec/gnubin; do
+    for DIR in $TECH_DIR/brew/bin $TECH_DIR/brew/opt/gnu-tar/libexec/gnubin $TECH_DIR/brew/opt/coreutils/libexec/gnubin $TECH_DIR/brew/opt/findutils/libexec/gnubin $TECH_DIR/brew/opt/gnu-sed/libexec/gnubin $TECH_DIR/brew/opt/grep/libexec/gnubin; do
         if [[ -d $DIR ]]; then
             if [[ ! $PATH =~ $DIR ]]; then
                 PATH=$DIR:$PATH
