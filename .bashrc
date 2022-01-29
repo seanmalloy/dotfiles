@@ -49,6 +49,7 @@ export PROJ_DIR=$HOME/projects     # directory for code projects
 export VISUAL=nvim                 # neovim is my editor
 export EDITOR=nvim                 # neovim is my editor
 export HOSTNAME=$(hostname -s)     # Short hostname of this computer
+export PROXY_ENABLED=no            # tracks status of the proxy settings used by shell function p()
 
 # Go Lang Variables
 export GOROOT=$TECH_DIR/go
@@ -187,7 +188,23 @@ export FZF_DEFAULT_OPTS='-m -x'
 
 # setup powerline-go prompt
 _update_ps1() {
-    PS1="$(powerline-go -hostname-only-if-ssh -newline -modules="venv,user,host,ssh,cwd,perms,git,kube,jobs,exit,root" -error $?)"
+    PS1="$(powerline-go -shell-var PROXY_ENABLED -hostname-only-if-ssh -newline -modules="venv,user,host,ssh,cwd,perms,git,kube,jobs,exit,root,shell-var" -error $?)"
+}
+
+# Toggle Proxy Settings
+p() {
+    if [[ $PROXY_ENABLED = "no" ]]; then
+        eval "local $(grep LOCAL_PROXY_SERVER $HOME/.dotfiles_answers)"
+        http_proxy=$LOCAL_PROXY_SERVER
+        HTTP_PROXY=$http_proxy
+        https_proxy=$http_proxy
+        HTTPS_PROXY=$https_proxy
+        export http_proxy https_proxy HTTP_PROXY HTTPS_PROXY
+        PROXY_ENABLED=yes
+    else
+        unset http_proxy HTTP_PROXY https_proxy HTTPS_PROXY
+        PROXY_ENABLED=no
+    fi
 }
 
 # Dynamically start tmux sessions

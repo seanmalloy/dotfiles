@@ -132,6 +132,16 @@ f_setup_github_enterprise()
     fi
 }
 
+# Variable LOCAL_PROXY_SERVER is used by the p() shell function
+# to toggle the proxy settings.
+f_setup_proxy()
+{
+    if [[ -z "$LOCAL_PROXY_SERVER" ]]; then
+        read -p "Proxy Server: "  LOCAL_PROXY_SERVER
+        echo "LOCAL_PROXY_SERVER=\"$LOCAL_PROXY_SERVER\"" >> $ANSWER_FILE
+    fi
+}
+
 f_setup_rubygems()
 {
     if [[ -n $(which gem 2> /dev/null) ]]; then
@@ -190,6 +200,7 @@ if [[ "${ans:0:1}"  ||  "${ans:0:1}" ]]; then
     f_setup_git
     f_setup_github
     f_setup_github_enterprise
+    f_setup_proxy
     f_setup_rubygems
     f_setup_shfmt
     f_setup_ssh
