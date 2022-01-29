@@ -6,7 +6,7 @@
 ```
 $ mkdir -p ~/tech/usr/local/bin
 $ wget -O ~/rpm-packages.txt https://github.com/seanmalloy/dotfiles/raw/master/rpm-packages.txt
-$ sudo dnf install $(cat ~/pm-packages.txt)
+$ sudo dnf install $(cat ~/rpm-packages.txt)
 $ gem install --user-install --bindir ~/tech/usr/local/bin/ tmuxinator
 $ wget -O ~/install.sh https://github.com/seanmalloy/dotfiles/raw/master/install.sh
 $ bash ~/install.sh
@@ -35,13 +35,9 @@ $ brew update
 
 #### Install Packages
 ```
-$ brew install bat the_silver_searcher tmux tmuxinator shellcheck shfmt gh jq yq kind helm wget powerline-go neovim fzf kubectx exa
-$ brew install coreutils findutils gnu-tar gnu-sed gawk gnu-indent gnu-getopt grep bash bash-completion@2
+$ brew install $(cat ~/brew-packages.txt)
 $ brew tap discoteq/discoteq
-$ brew install flock
 $ brew tap instrumenta/instrumenta
-$ brew install kubeval
-$ brew install podman skopeo
 ```
 #### Install additional binaries ~/tech/usr/local/bin
 * kubens
