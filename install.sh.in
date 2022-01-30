@@ -36,7 +36,6 @@ f_post_clean()
 {
     # Remove Linux binary files from Mac OSX
     if [[ $OS_TYPE == "Darwin" ]]; then
-        rm -f $HOME/tech/bin/fzf
         rm -f $HOME/tech/bin/gh
         rm -f $HOME/tech/bin/helm
         rm -f $HOME/tech/bin/kind
@@ -59,6 +58,7 @@ f_pre_clean()
     rm -rf $HOME/.puppet/var/puppet-module/skeleton/
     rm -f $HOME/tech/bin/ag
     rm -f $HOME/tech/bin/dep
+    rm -f $HOME/tech/bin/fzf
     rm -f $HOME/tech/bin/jira
     rm -f $HOME/tech/bin/jq
     rm -f $HOME/tech/bin/memo
