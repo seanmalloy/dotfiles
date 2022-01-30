@@ -180,8 +180,8 @@ export TMUXINATOR_INCLUDE_FILE="$BASH_INCLUDE_DIR/tmuxinator.bash"
 . $TMUXINATOR_INCLUDE_FILE
 
 ### FZF Setup ###
-if [[ -f /usr/share/fzf/shell/key-bindings.bash ]] && source /usr/share/fzf/shell/key-bindings.bash
-if [[ -f $HOME/.fzf.bash ]] && source $HOME/.fzf.bash
+[ -f /usr/share/fzf/shell/key-bindings.bash ] && source /usr/share/fzf/shell/key-bindings.bash
+[ -f $HOME/.fzf.bash ] && source $HOME/.fzf.bash
 export FZF_DEFAULT_OPTS='-m -x'
 
 ### Shell Functions ###
