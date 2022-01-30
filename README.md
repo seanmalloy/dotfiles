@@ -38,6 +38,7 @@ $ brew update
 $ brew install $(cat ~/brew-packages.txt)
 $ brew tap discoteq/discoteq
 $ brew tap instrumenta/instrumenta
+$ $HOME/brew/opt/fzf/install # for shell completions
 ```
 #### Install additional binaries ~/tech/usr/local/bin
 * kubens
