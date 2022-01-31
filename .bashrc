@@ -44,6 +44,7 @@ set -o noclobber
 
 export TECH_DIR=$HOME/tech         # top level dir for locally installed software
 export BIN_DIR=$TECH_DIR/bin       # directory for scripts, binaries, etc.
+export BREW_DIR=$TECH_DIR/brew     # top level directory for brew on masOS
 export MAN_DIR=$TECH_DIR/share/man # directory for man pages
 export PROJ_DIR=$HOME/projects     # directory for code projects
 export VISUAL=nvim                 # neovim is my editor
@@ -91,7 +92,7 @@ done
 
 # Mac OSX Specific PATH
 if [[ $OS_TYPE == "Darwin" ]]; then
-    for DIR in $TECH_DIR/brew/bin $TECH_DIR/brew/opt/gnu-tar/libexec/gnubin $TECH_DIR/brew/opt/coreutils/libexec/gnubin $TECH_DIR/brew/opt/findutils/libexec/gnubin $TECH_DIR/brew/opt/gnu-sed/libexec/gnubin $TECH_DIR/brew/opt/grep/libexec/gnubin; do
+    for DIR in $BREW_DIR/bin $BREW_DIR/opt/gnu-tar/libexec/gnubin $BREW_DIR/opt/coreutils/libexec/gnubin $BREW_DIR/opt/findutils/libexec/gnubin $BREW_DIR/opt/gnu-sed/libexec/gnubin $BREW_DIR/opt/grep/libexec/gnubin; do
         if [[ -d $DIR ]]; then
             if [[ ! $PATH =~ $DIR ]]; then
                 PATH=$DIR:$PATH
@@ -103,7 +104,14 @@ fi
 # Source newer bash completions if available
 if [[ $OS_TYPE == "Darwin" ]]; then
     # required for kubectl completion
-    [[ -r "$TECH_DIR/brew/etc/profile.d/bash_completion.sh" ]] && source "$TECH_DIR/brew/etc/profile.d/bash_completion.sh"
+    [[ -r "$BREW_DIR/etc/profile.d/bash_completion.sh" ]] && source "$BREW_DIR/etc/profile.d/bash_completion.sh"
+fi
+
+# Source bash completion files insatlled for all brew packages
+if [[ $OS_TYPE == "Darwin" ]]; then
+    for FILE in $(ls $BREW_DIR/etc/bash_completions.d); do
+        source $FILE
+    done
 fi
 
 # TODO: set MANPATH for OSX
@@ -137,11 +145,17 @@ if which kubectl > /dev/null 2>&1; then
 
     # Setup kubectx
     alias kctx='kubectx'
-    source $BASH_INCLUDE_DIR/kubectx.bash
+    if [[ $OS_TYPE = "Linux" ]]; then
+        # Bash completion instlled via brew on macOS
+        source $BASH_INCLUDE_DIR/kubectx.bash
+    fi
 
     # Setup kubens
     alias kns='kubens'
-    source $BASH_INCLUDE_DIR/kubens.bash
+    if [[ $OS_TYPE = "Linux" ]]; then
+        # Bash completion instlled via brew on macOS
+        source $BASH_INCLUDE_DIR/kubens.bash
+    fi
 fi
 
 ### OpenShift Setup ###
