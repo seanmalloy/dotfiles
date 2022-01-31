@@ -110,7 +110,7 @@ fi
 # Source bash completion files insatlled for all brew packages
 if [[ $OS_TYPE == "Darwin" ]]; then
     for FILE in $(ls $BREW_DIR/etc/bash_completion.d); do
-        source $FILE
+        source $BREW_DIR/etc/bash_completion.d/$FILE
     done
 fi
 
