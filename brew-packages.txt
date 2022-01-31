@@ -21,6 +21,7 @@ kubeval
 neovim
 podman
 powerline-go
+ripgrep
 shellcheck
 shfmt
 skopeo

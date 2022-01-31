@@ -19,6 +19,7 @@ neovim
 podman
 powerline-fonts
 powerline-go
+ripgrep
 ruby
 tmux
 the_silver_searcher
