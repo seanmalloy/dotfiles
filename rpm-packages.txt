@@ -7,6 +7,7 @@ bat
 bcc
 bpftrace
 docker-compose
+fd-find
 fzf
 google-cloud-sdk
 jq
@@ -21,3 +22,4 @@ powerline-go
 ruby
 tmux
 the_silver_searcher
+zoxide

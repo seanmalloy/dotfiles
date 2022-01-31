@@ -196,7 +196,12 @@ source $TMUXINATOR_INCLUDE_FILE
 ### FZF Setup ###
 [ -f /usr/share/fzf/shell/key-bindings.bash ] && source /usr/share/fzf/shell/key-bindings.bash
 [ -f $HOME/.fzf.bash ] && source $HOME/.fzf.bash
+export FZF_DEFAULT_COMMAND='fd --type file --follow --hidden --exclude .git'
+export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
 export FZF_DEFAULT_OPTS='-m -x'
+
+### Zoxide Setup ###
+eval "$(zoxide init bash)"
 
 ### Shell Functions ###
 
