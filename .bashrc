@@ -5,7 +5,7 @@
 
 # source global bash configuration
 if [[ -f /etc/bashrc ]]; then
-    . /etc/bashrc
+    source /etc/bashrc
 fi
 
 # set OS type and version
@@ -103,7 +103,7 @@ fi
 # Source newer bash completions if available
 if [[ $OS_TYPE == "Darwin" ]]; then
     # required for kubectl completion
-    [[ -r "$TECH_DIR/brew/etc/profile.d/bash_completion.sh" ]] && . "$TECH_DIR/brew/etc/profile.d/bash_completion.sh"
+    [[ -r "$TECH_DIR/brew/etc/profile.d/bash_completion.sh" ]] && source "$TECH_DIR/brew/etc/profile.d/bash_completion.sh"
 fi
 
 # TODO: set MANPATH for OSX
@@ -137,11 +137,11 @@ if which kubectl > /dev/null 2>&1; then
 
     # Setup kubectx
     alias kctx='kubectx'
-    . $BASH_INCLUDE_DIR/kubectx.bash
+    source $BASH_INCLUDE_DIR/kubectx.bash
 
     # Setup kubens
     alias kns='kubens'
-    . $BASH_INCLUDE_DIR/kubens.bash
+    source $BASH_INCLUDE_DIR/kubens.bash
 fi
 
 ### OpenShift Setup ###
@@ -153,7 +153,7 @@ fi
 
 #### Git Setup ###
 if [[ $OS_TYPE == "Darwin" ]]; then
-    . /Library/Developer/CommandLineTools/usr/share/git-core/git-completion.bash
+    source /Library/Developer/CommandLineTools/usr/share/git-core/git-completion.bash
 fi
 
 # Enable gh autocomplete
@@ -172,12 +172,12 @@ fi
 
 ### TMUX Setup ###
 export TMUX_INCLUDE_FILE="$BASH_INCLUDE_DIR/tmux.bash"
-. $TMUX_INCLUDE_FILE
+source $TMUX_INCLUDE_FILE
 alias tmux='tmux -L $TMUX_SOCKET'
 
 ### Tmuxinator Setup ###
 export TMUXINATOR_INCLUDE_FILE="$BASH_INCLUDE_DIR/tmuxinator.bash"
-. $TMUXINATOR_INCLUDE_FILE
+source $TMUXINATOR_INCLUDE_FILE
 
 ### FZF Setup ###
 [ -f /usr/share/fzf/shell/key-bindings.bash ] && source /usr/share/fzf/shell/key-bindings.bash
@@ -276,5 +276,5 @@ export BASH_SITE_FILE="$HOME/.site_env"
 if [[ ! -e $BASH_SITE_FILE ]]; then
     touch $BASH_SITE_FILE
 fi
-. $BASH_SITE_FILE
+source $BASH_SITE_FILE
 

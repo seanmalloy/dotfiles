@@ -20,7 +20,7 @@ fi
 # if running bash
 if [ -n "$BASH_VERSION" ]; then
     if [ -f "$HOME/.bashrc" ]; then
-	. "$HOME/.bashrc"
+	source "$HOME/.bashrc"
     fi
 fi
 
@@ -34,12 +34,12 @@ if [ $OS_TYPE == "Linux" ]; then
             if [ -z "$EXISTING_SSH_AGENT_PID" ]; then
                 # Existing ssh-agent not running, start one
                 ssh-agent -s >| $SSH_AGENT_FILE
-                . $SSH_AGENT_FILE
+                source $SSH_AGENT_FILE
                 ssh-add
             else
                 # Existing ssh-agent running, connect to it
                 if [ -f "$SSH_AGENT_FILE" ]; then
-                    . $SSH_AGENT_FILE
+                    source $SSH_AGENT_FILE
                     ssh-add -X
                     while [ "$?" -ne 0 ]; do
                         ssh-add -X
