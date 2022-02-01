@@ -56,6 +56,8 @@ f_pre_clean()
     rm -f $HOME/.perltidyrc
     rm -rf $HOME/.perlbrew/
     rm -rf $HOME/.puppet/var/puppet-module/skeleton/
+    rm -rf $HOME/.vim/
+    rm -f $HOME/.vimrc
     rm -f $HOME/tech/bin/ag
     rm -f $HOME/tech/bin/dep
     rm -f $HOME/tech/bin/fzf
@@ -68,7 +70,6 @@ f_pre_clean()
     # Clean Up Used Directories Before Install
     rm -rf $HOME/.bash_files/
     rm -rf $HOME/.terminfo/
-    rm -rf $HOME/.vim/
 }
 
 f_setup_git()
