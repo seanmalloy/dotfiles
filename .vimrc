@@ -1,7 +1,5 @@
 " Load plugins using pathogen
 filetype on
-execute pathogen#infect()
-execute pathogen#helptags()
 
 " Use Vim setting instead of Vi settings. Must be first.
 set nocompatible
@@ -20,7 +18,6 @@ set autoindent                   " preserves current indent on new lines
 set backspace=indent,eol,start   " make backspaces delete sensibly
 set shiftround                   " indent/outdent to nearest tabstop
 set matchpairs+=<:>              " all % to bounce between angles too
-"set textwidth=78                " wrap at this column
 
 "folding settings
 set foldmethod=indent   "fold based on indent
@@ -43,8 +40,6 @@ au FileType cpp    let b:delimitMate_expand_cr = 1
 au FileType perl   let b:delimitMate_expand_cr = 1
 au FileType puppet let b:delimitMate_expand_cr = 1
 au FileType sh     let b:delimitMate_expand_cr = 1
-
-let delimitMate_matchpairs = '(:),{:},[:]'
 
 " in command mode expand %% to the path of the current buffer
 cnoremap <expr> %% getcmdtype() == ':' ? expand('%:h').'/' : '%%'
