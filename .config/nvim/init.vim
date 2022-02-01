@@ -1,10 +1,6 @@
 " start load plugins using junegunn/vim-plug
-call plug#begin('~/.local/share/nvim/plugged')
-
-Plug 'junegunn/fzf'
-Plug 'junegunn/fzf.vim'
-Plug 'scrooloose/nerdtree'
-
+call plug#begin()
+Plug 'neovim/nvim-lspconfig', { 'tag': 'v0.1.2' }
 call plug#end()
 " end load plugins
 
@@ -29,16 +25,3 @@ colorscheme darkblue
 " in command mode expand %% to the path of the current buffer
 cnoremap <expr> %% getcmdtype() == ':' ? expand('%:h').'/' : '%%'
 
-"
-" NerdTree Settings
-"
-
-" start on vim load
-autocmd StdinReadPre * let s:std_in=1
-autocmd VimEnter * if argc() == 0 && !exists("s:std_in") | NERDTree | endif
-
-" exit if NerdTree is the only window left
-autocmd BufEnter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
-
-" ctrl+n open NerdTree
-map <C-n> :NERDTreeToggle<CR>
