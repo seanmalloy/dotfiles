@@ -58,8 +58,12 @@ $ wget -O ~/install.sh https://github.com/seanmalloy/dotfiles/raw/master/install
 $ bash ~/install.sh
 ```
 
-#### Install Neovim Plugins
+#### Install Neovim Plugins and LSP Servers For Neovim
 Run `:PlugInstall` command in nvim.
+```
+go install golang.org/x/tools/gopls@latest
+rustup component add rls rust-analysis rust-src
+```
 
 ### PuTTY Configuration
 When using PuTTY the "remote character set" option must be set to UTF-8. This makes the tmux window separator appear as a line instead of a bunch of random characters. 
