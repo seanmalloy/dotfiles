@@ -201,7 +201,9 @@ export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
 export FZF_DEFAULT_OPTS='-m -x'
 
 ### Zoxide Setup ###
-eval "$(zoxide init bash)"
+if which zoxide > /dev/null 2>&1; then
+    eval "$(zoxide init bash)"
+fi
 
 ### Shell Functions ###
 
