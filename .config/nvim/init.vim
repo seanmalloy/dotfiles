@@ -17,6 +17,11 @@ set shiftround       " indent/outdent to nearest tabstop
 set matchpairs+=<:>  " % to bounce between angles too
 set inccommand=split " real time preview of substitutions
 
+" enable spell checker
+set spelllang=en
+nnoremap <silent> <F3> :set spell!<CR>
+inoremap <silent> <F3> <C-O>:set spell!<CR>
+
 " folding settings
 set foldmethod=indent " fold based on indent
 set foldnestmax=10    " deepest fold is 10 levels
