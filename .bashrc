@@ -114,6 +114,18 @@ if [[ $OS_TYPE == "Darwin" ]]; then
     done
 fi
 
+# Setup pyenv
+export PYENV_ROOT="$HOME/.pyenv"
+if [ -d $PYENV_ROOT/bin ]; then
+    PATH=$PYENV_ROOT/bin:$PATH
+fi
+if [ -d $PYENV_ROOT/shims ]; then
+    PATH=$PYENV_ROOT/shims:$PATH
+fi
+if which pyenv > /dev/null 2>&1; then
+    eval "$(pyenv init -)"
+fi
+
 # TODO: set MANPATH for OSX
 #
 # $TECH_DIR/brew/opt/*/libexec/gnuman

@@ -23,6 +23,11 @@ sudo usermod -aG docker $user
 sudo grubby --update-kernel=ALL --args="systemd.unified_cgroup_hierarchy=0"
 ```
 
+#### Pyenv
+```
+git clone https://github.com/pyenv/pyenv.git ~/.pyenv
+```
+
 ### Mac OSX
 #### Setup brew in $HOME
 ```
