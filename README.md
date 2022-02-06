@@ -12,8 +12,13 @@ $ wget -O ~/install.sh https://github.com/seanmalloy/dotfiles/raw/master/install
 $ bash ~/install.sh
 ```
 
-#### Install Neovim Plugins
+#### Install Neovim Plugins and LSP Servers For Neovim
 Run `:PlugInstall` command in nvim.
+```
+go install golang.org/x/tools/gopls@latest
+pip install 'python-lsp-server[all]'
+rustup component add rls rust-analysis rust-src
+```
 
 #### Setup Docker
 ```
@@ -67,6 +72,7 @@ $ bash ~/install.sh
 Run `:PlugInstall` command in nvim.
 ```
 go install golang.org/x/tools/gopls@latest
+pip install 'python-lsp-server[all]'
 rustup component add rls rust-analysis rust-src
 ```
 
