@@ -4,7 +4,6 @@ bat
 coreutils
 fd
 findutils
-flock
 fzf
 gawk
 gh

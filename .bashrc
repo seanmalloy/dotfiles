@@ -253,9 +253,9 @@ proj() {
     fi
 
     if [[ -z $1 ]]; then
-        local DIR=$(locate --database $HOME/mlocate.db '.git' | grep "^$PROJ_DIR" | grep '.git$' | sed s'/\/\.git//' | fzf +m)
+        local DIR=$(fd --type directory --prune --hidden --color never --glob .git $BASE_DIR | grep '.git$' | sed s'/\/\.git//' | fzf +m)
     else
-        local DIR=$(locate --database $HOME/mlocate.db '.git' | grep "^$BASE_DIR" | grep '.git$' | sed s'/\/\.git//' | fzf +m -q $1 -1)
+        local DIR=$(fd --type directory --prune --hidden --color never --glob .git $BASE_DIR | sed s'/\/\.git//' | fzf +m -q $1 -1)
     fi
     local SESSION=$(echo $DIR | awk -F / '{print $NF}')
 
@@ -272,28 +272,6 @@ proj() {
 # fuzzy find RPM packages
 fzpkg() {
     repoquery -a --qf "%{name}.%{arch}" | fzf
-}
-
-# Build a locate database for my home dir
-build_locate_db() {
-    # requires https://github.com/discoteq/flock on Mac OSX
-    if ! which flock > /dev/null 2>&1; then
-        echo "build_locate_db: flock command not found"
-        return 1
-    fi
-
-    touch $HOME/.updatadb.lock
-    if [[ $OS_TYPE == "Darwin" ]]; then
-        flock -n $HOME/.updatedb.lock updatedb --prunepaths=$HOME/Library --localpaths=$HOME --output=$HOME/mlocate.db
-    else
-        # Linux
-        flock -n $HOME/.updatedb.lock updatedb --require-visibility no --database-root $HOME --output $HOME/mlocate.db
-    fi
-    local UPDATE_DB_RET_CODE=$?
-    if [[ -e $HOME/mlocate.db ]]; then
-        chmod 600 $HOME/mlocate.db
-    fi
-    return $UPDATE_DB_RET_CODE
 }
 
 ### Set Bash Prompt ###

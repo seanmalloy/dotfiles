@@ -52,7 +52,3 @@ if [ $OS_TYPE == "Linux" ]; then
     fi
 fi
 
-# Udate my local locate DB if not running in tmux
-if [[ -z "$TMUX" ]]; then
-    build_locate_db &
-fi
