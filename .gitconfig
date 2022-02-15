@@ -15,3 +15,5 @@
 	rebase = false
 [push]
 	default = nothing
+[user]
+	signingkey = 0xA218732AB06000AF
