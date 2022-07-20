@@ -11,6 +11,7 @@ docker-compose
 fd-find
 fzf
 google-cloud-sdk
+inkscape
 jq
 kicad
 libnsl
