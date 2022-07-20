@@ -17,6 +17,8 @@ libnsl
 make
 moby-engine
 neovim
+openscad
+openscad-MCAD
 podman
 powerline-fonts
 powerline-go
