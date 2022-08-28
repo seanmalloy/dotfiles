@@ -24,7 +24,7 @@ rustup component add rls rust-analysis rust-src
 ```
 sudo systemctl enable docker.service
 sudo systemctl start docker.service
-sudo usermod -aG docker $user
+sudo usermod -aG docker $USER
 sudo grubby --update-kernel=ALL --args="systemd.unified_cgroup_hierarchy=0"
 ```
 
