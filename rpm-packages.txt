@@ -5,6 +5,7 @@ avr-libc
 avr-libc-doc
 bat
 bcc
+blender
 bpftrace
 bzip2-devel
 docker-compose
