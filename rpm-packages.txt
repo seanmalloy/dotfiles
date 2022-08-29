@@ -8,9 +8,13 @@ bcc
 blender
 bpftrace
 bzip2-devel
+cryptsetup
+dirmngr
 docker-compose
 fd-find
 fzf
+gnupg2
+gnupg2-smime
 google-cloud-sdk
 inkscape
 jq
@@ -19,8 +23,12 @@ libnsl
 make
 moby-engine
 neovim
+opensc
 openscad
 openscad-MCAD
+pcsc-lite
+pcsc-tools
+pgp-tools
 podman
 powerline-fonts
 powerline-go
@@ -28,6 +36,7 @@ readline-devel
 ripgrep
 ruby
 sqlite-devel
-tmux
 the_silver_searcher
+tmux
+yubikey-personalization-gui
 zoxide
