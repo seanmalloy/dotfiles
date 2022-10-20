@@ -13,6 +13,7 @@ dirmngr
 docker-compose
 fd-find
 fzf
+git-lfs
 gnupg2
 gnupg2-smime
 google-cloud-sdk
