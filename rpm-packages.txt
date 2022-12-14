@@ -17,12 +17,14 @@ git-lfs
 gnupg2
 gnupg2-smime
 google-cloud-sdk
+gstreamer1-plugin-openh264
 inkscape
 jq
 kicad
 libnsl
 make
 moby-engine
+mozilla-openh264
 neovim
 opensc
 openscad
