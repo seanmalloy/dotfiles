@@ -1,0 +1,2 @@
+neovim
+python3-neovim
