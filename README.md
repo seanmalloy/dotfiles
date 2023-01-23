@@ -1,12 +1,12 @@
 # Sean Malloy's Dotfiles
 
 ## Install Instructions
-### Linux (Fedora 33)
+### Linux (Fedora 37)
 #### Run Install
 ```
 $ mkdir -p ~/tech/usr/local/bin
-$ wget -O ~/rpm-packages.txt https://github.com/seanmalloy/dotfiles/raw/master/rpm-packages.txt
-$ sudo dnf install $(cat ~/rpm-packages.txt)
+$ wget -O ~/rpm-packages-fedora.txt https://github.com/seanmalloy/dotfiles/raw/master/rpm-packages-fedora.txt
+$ sudo dnf install $(cat ~/rpm-packages-fedora.txt)
 $ gem install --user-install --bindir ~/tech/usr/local/bin/ tmuxinator
 $ wget -O ~/install.sh https://github.com/seanmalloy/dotfiles/raw/master/install.sh
 $ bash ~/install.sh
@@ -33,6 +33,37 @@ sudo grubby --update-kernel=ALL --args="systemd.unified_cgroup_hierarchy=0"
 git clone https://github.com/pyenv/pyenv.git ~/.pyenv
 ```
 
+### Linux (RHEL 8)
+#### Run Install
+```
+$ mkdir -p ~/tech/usr/local/bin
+$ wget -O ~/rpm-packages-rhel8.txt https://github.com/seanmalloy/dotfiles/raw/master/rpm-packages-rhel8.txt
+$ sudo dnf install $(cat ~/rpm-packages-rhel8.txt)
+$ gem install -v 2.0.3 --user-install --bindir ~/tech/usr/local/bin/ tmuxinator
+$ wget -O ~/install.sh https://github.com/seanmalloy/dotfiles/raw/master/install.sh
+$ bash ~/install.sh
+```
+
+#### Install Neovim Plugins and LSP Servers For Neovim
+Run `:PlugInstall` command in nvim.
+```
+go install golang.org/x/tools/gopls@latest
+pip install 'python-lsp-server[all]'
+rustup component add rls rust-analysis rust-src
+```
+
+#### Setup Docker
+```
+sudo systemctl enable docker.service
+sudo systemctl start docker.service
+sudo usermod -aG docker $USER
+sudo grubby --update-kernel=ALL --args="systemd.unified_cgroup_hierarchy=0"
+```
+
+#### Pyenv
+```
+git clone https://github.com/pyenv/pyenv.git ~/.pyenv
+```
 ### Mac OSX
 #### Setup brew in $HOME
 ```

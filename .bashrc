@@ -61,7 +61,10 @@ export RUSTUP_HOME=$TECH_DIR/rust/.rustup
 export CARGO_HOME=$TECH_DIR/rust/.cargo
 
 # Generic Aliases
-alias cat='bat'
+if [[ ! $OS_VERSION =~ ^RedHat ]]; then
+    # TODO: install bat on RHEL
+    alias cat='bat'
+fi
 alias ll='ls -l'
 alias la='ls -A'
 alias ltr='ls -ltr'
