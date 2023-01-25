@@ -27,6 +27,7 @@ ruby
 rubygems
 sqlite-devel
 the_silver_searcher
+tk-devel
 tmux
 xz-devel
 zlib-devel
