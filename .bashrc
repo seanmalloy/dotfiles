@@ -220,6 +220,11 @@ if which zoxide > /dev/null 2>&1; then
     eval "$(zoxide init bash)"
 fi
 
+### RHEL Specific Setup ###
+if [[ $OS_VERSION =~ ^RedHat ]]; then
+    [ -f $BASH_INCLUDE_DIR/fd.bash ] && source $BASH_INCLUDE_DIR/fd.bash
+fi
+
 ### Shell Functions ###
 
 # setup powerline-go prompt
