@@ -19,7 +19,6 @@ pcsc-lite
 pcsc-tools
 podman
 powerline-fonts
-powerline-go
 python3-neovim
 readline-devel
 ripgrep
