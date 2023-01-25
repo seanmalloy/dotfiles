@@ -3,6 +3,7 @@ cryptsetup
 dirmngr
 fd-find
 fzf
+gcc
 git-lfs
 gnupg2
 gnupg2-smime
