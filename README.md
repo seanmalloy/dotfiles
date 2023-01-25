@@ -54,6 +54,7 @@ rustup component add rls rust-analysis rust-src
 
 #### Install Additional Software
 * https://github.com/justjanne/powerline-go
+* https://github.com/sharkdp/fd
 
 #### Pyenv
 ```
