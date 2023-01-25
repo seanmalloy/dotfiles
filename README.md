@@ -52,13 +52,8 @@ pip install 'python-lsp-server[all]'
 rustup component add rls rust-analysis rust-src
 ```
 
-#### Setup Docker
-```
-sudo systemctl enable docker.service
-sudo systemctl start docker.service
-sudo usermod -aG docker $USER
-sudo grubby --update-kernel=ALL --args="systemd.unified_cgroup_hierarchy=0"
-```
+#### Install Additional Software
+* https://github.com/justjanne/powerline-go
 
 #### Pyenv
 ```
