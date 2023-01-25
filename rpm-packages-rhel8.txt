@@ -11,6 +11,7 @@ jq
 libffi-devel
 libnsl
 make
+ncurses-devel
 neovim
 opensc
 openssl-devel
