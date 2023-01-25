@@ -25,4 +25,5 @@ rubygems
 sqlite-devel
 the_silver_searcher
 tmux
+zlib-devel
 zoxide
