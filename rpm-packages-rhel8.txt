@@ -8,10 +8,12 @@ git-lfs
 gnupg2
 gnupg2-smime
 jq
+libffi-devel
 libnsl
 make
 neovim
 opensc
+openssl-devel
 pcsc-lite
 pcsc-tools
 podman
