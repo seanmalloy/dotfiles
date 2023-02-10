@@ -1,4 +1,2 @@
-# Local UDEV Rules File
-
 # AVR Programer
 KERNEL=="ttyUSB[0-9]*", SUBSYSTEM=="tty", ATTRS{product}=="FT232R USB UART", ATTRS{serial}=="A3000HFA", SYMLINK+="local/avr_programmer", GROUP="sean"

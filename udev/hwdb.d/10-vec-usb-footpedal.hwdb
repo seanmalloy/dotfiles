@@ -1,0 +1,5 @@
+evdev:input:b*v05F3p00FF*
+ KEYBOARD_KEY_90001=esc
+ KEYBOARD_KEY_90002=leftctrl
+ KEYBOARD_KEY_90003=leftshift
+

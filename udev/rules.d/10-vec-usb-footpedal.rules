@@ -1,0 +1,1 @@
+ACTION=="add|change", KERNEL=="event[0-9]*", ATTRS{idVendor}=="05f3", ATTRS{idProduct}=="00ff", ENV{ID_INPUT_KEYBOARD}="1"
