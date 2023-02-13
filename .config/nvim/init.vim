@@ -1,6 +1,6 @@
 " start load plugins using junegunn/vim-plug
 call plug#begin()
-Plug 'neovim/nvim-lspconfig', { 'tag': 'v0.1.2' }
+Plug 'neovim/nvim-lspconfig', { 'tag': 'v0.1.4' }
 Plug 'hrsh7th/cmp-nvim-lsp'
 Plug 'hrsh7th/nvim-cmp'
 Plug 'hrsh7th/cmp-vsnip'
