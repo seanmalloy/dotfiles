@@ -161,6 +161,7 @@ f_setup_ssh()
     fi
     sed -i "s/JUMPHOST/$DOTFILES_SSH_JUMP_HOST/g" $HOME/.ssh/config
     chmod 700 $HOME/.ssh 2> /dev/null
+    chmod 600 $HOME/.ssh/config 2> /dev/null
 }
 
 f_setup_tmuxinator()
