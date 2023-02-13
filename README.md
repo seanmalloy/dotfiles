@@ -41,6 +41,7 @@ $ mkdir -p ~/tech/usr/local/bin
 $ wget -O ~/rpm-packages-rhel8.txt https://github.com/seanmalloy/dotfiles/raw/master/rpm-packages-rhel8.txt
 $ sudo dnf install $(cat ~/rpm-packages-rhel8.txt)
 $ gem install -v 2.0.3 --user-install --bindir ~/tech/usr/local/bin/ tmuxinator
+$ sudo dnf module install nodejs:18/common
 $ wget -O ~/install.sh https://github.com/seanmalloy/dotfiles/raw/master/install.sh
 $ bash ~/install.sh
 ```
