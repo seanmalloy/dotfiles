@@ -18,6 +18,7 @@ tar --delete -f $BUILD_FILE install.sh.in
 tar --delete -f $BUILD_FILE tmp || true
 tar --delete -f $BUILD_FILE tmux_install.sh
 tar --delete -f $BUILD_FILE ag_install.sh
+tar --delete -f $BUILD_FILE udev
 
 gzip $BUILD_FILE
 if [[ "$?" -ne 0 ]]; then

@@ -8,12 +8,13 @@ $ mkdir -p ~/tech/usr/local/bin
 $ wget -O ~/rpm-packages-fedora.txt https://github.com/seanmalloy/dotfiles/raw/master/rpm-packages-fedora.txt
 $ sudo dnf install $(cat ~/rpm-packages-fedora.txt)
 $ gem install --user-install --bindir ~/tech/usr/local/bin/ tmuxinator
+$ sudo dnf module install nodejs:18/common
 $ wget -O ~/install.sh https://github.com/seanmalloy/dotfiles/raw/master/install.sh
 $ bash ~/install.sh
 ```
 
 #### Install Neovim Plugins and LSP Servers For Neovim
-Run `:PlugInstall` command in nvim.
+Run commands `:PlugInstall` and `:Copilot setup` commands in nvim.
 ```
 go install golang.org/x/tools/gopls@latest
 pip install 'python-lsp-server[all]'
