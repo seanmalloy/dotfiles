@@ -41,6 +41,9 @@ ripgrep
 ruby
 sqlite-devel
 the_silver_searcher
+tk-devel
 tmux
+xz-devel
 yubikey-personalization-gui
+zlib-devel
 zoxide
