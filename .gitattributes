@@ -7,4 +7,4 @@ tech/bin/kubeval filter=lfs diff=lfs merge=lfs -text
 tech/bin/present filter=lfs diff=lfs merge=lfs -text
 tech/bin/rust-analyzer filter=lfs diff=lfs merge=lfs -text
 tech/bin/shellcheck filter=lfs diff=lfs merge=lfs -text
-tech/bin/shfmt_v3.1.2_linux_amd64 filter=lfs diff=lfs merge=lfs -text
+tech/bin/shfmt filter=lfs diff=lfs merge=lfs -text
