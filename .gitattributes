@@ -1,5 +1,4 @@
 install.sh filter=lfs diff=lfs merge=lfs -text
-tech/bin/gh filter=lfs diff=lfs merge=lfs -text
 tech/bin/helm filter=lfs diff=lfs merge=lfs -text
 tech/bin/kind filter=lfs diff=lfs merge=lfs -text
 tech/bin/kubectx filter=lfs diff=lfs merge=lfs -text

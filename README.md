@@ -9,6 +9,7 @@ $ wget -O ~/rpm-packages-fedora.txt https://github.com/seanmalloy/dotfiles/raw/m
 $ sudo dnf install $(cat ~/rpm-packages-fedora.txt)
 $ gem install --user-install --bindir ~/tech/usr/local/bin/ tmuxinator
 $ sudo dnf module install nodejs:18/common
+$ sudo dnf config-manager --add-repo https://cli.github.com/packages/rpm/gh-cli.repo
 $ wget -O ~/install.sh https://github.com/seanmalloy/dotfiles/raw/master/install.sh
 $ bash ~/install.sh
 ```
@@ -42,6 +43,7 @@ $ wget -O ~/rpm-packages-rhel8.txt https://github.com/seanmalloy/dotfiles/raw/ma
 $ sudo dnf install $(cat ~/rpm-packages-rhel8.txt)
 $ gem install -v 2.0.3 --user-install --bindir ~/tech/usr/local/bin/ tmuxinator
 $ sudo dnf module install nodejs:18/common
+$ sudo dnf config-manager --add-repo https://cli.github.com/packages/rpm/gh-cli.repo
 $ wget -O ~/install.sh https://github.com/seanmalloy/dotfiles/raw/master/install.sh
 $ bash ~/install.sh
 ```

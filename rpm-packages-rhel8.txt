@@ -4,6 +4,7 @@ dirmngr
 fd-find
 fzf
 gcc
+gh
 git-lfs
 gnupg2
 gnupg2-smime
