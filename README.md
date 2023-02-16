@@ -59,6 +59,7 @@ rustup component add rls rust-analysis rust-src
 * https://github.com/sharkdp/bat
 * https://github.com/sharkdp/fd
 * https://github.com/junegunn/fzf
+* https://github.com/ajeetdsouza/zoxide
 
 #### Pyenv
 ```
