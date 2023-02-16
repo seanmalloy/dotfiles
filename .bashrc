@@ -61,10 +61,6 @@ export RUSTUP_HOME=$TECH_DIR/rust/.rustup
 export CARGO_HOME=$TECH_DIR/rust/.cargo
 
 # Generic Aliases
-if [[ ! $OS_VERSION =~ ^RedHat ]]; then
-    # TODO: install bat on RHEL
-    alias cat='bat'
-fi
 alias ll='ls -l'
 alias la='ls -A'
 alias ltr='ls -ltr'
@@ -138,7 +134,7 @@ fi
 # $TECH_DIR/brew/opt/gnu-sed/libexec/gnuman
 # $TECH_DIR/brew/opt/grep/libexec/gnuman
 if [[ -n $MANPATH ]]; then
-    export MANPATH=$MAN_DIR:$MANPATH
+    export MANPATH=$MANPATH:$MAN_DIR
 else
     export MANPATH=$MAN_DIR: # trailing : is required
 fi
@@ -212,11 +208,23 @@ source $TMUXINATOR_INCLUDE_FILE
 [ -f /usr/share/fzf/shell/key-bindings.bash ] && source /usr/share/fzf/shell/key-bindings.bash
 [ -f $HOME/.fzf.bash ] && source $HOME/.fzf.bash
 if [[ $OS_VERSION =~ ^RedHat ]]; then
-    [ -f $BASH_INCLUDE_DIR/fzf-key-bindings.bash ] && source $BASH_INCLUDE_DIR/fzf-key-bindings.bash
+    if which fzf > /dev/null 2>&1; then
+        [ -f $BASH_INCLUDE_DIR/fzf-key-bindings.bash ] && source $BASH_INCLUDE_DIR/fzf-key-bindings.bash
+    fi
 fi
 export FZF_DEFAULT_COMMAND='fd --type file --follow --hidden --exclude .git'
 export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
 export FZF_DEFAULT_OPTS='-m -x'
+
+### Bat Setup ###
+if which bat > /dev/null 2>&1; then
+    alias cat='bat'
+fi
+if [[ $OS_VERSION =~ ^RedHat ]]; then
+    if which bat > /dev/null 2>&1; then
+        [ -f $BASH_INCLUDE_DIR/bat.bash ] && source $BASH_INCLUDE_DIR/bat.bash
+    fi
+fi
 
 ### Zoxide Setup ###
 if which zoxide > /dev/null 2>&1; then
