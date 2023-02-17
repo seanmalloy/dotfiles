@@ -81,7 +81,7 @@ alias .5='cd ../../../../../..'
 
 # Set PATH
 export PATH=/usr/local/bin:/usr/bin:/bin:/sbin:/usr/sbin:/usr/games:/usr/local/games
-for DIR in $GOROOT/bin $GOPATH/bin $HOME/.vim/bin $BIN_DIR $TECH_DIR/usr/local/bin $CARGO_HOME/bin; do
+for DIR in $GOROOT/bin $GOPATH/bin $HOME/.vim/bin $BIN_DIR $TECH_DIR/usr/local/bin $CARGO_HOME/bin $HOME/.local/bin; do
     if [[ -d $DIR ]]; then
         if [[ ! $PATH =~ $DIR ]]; then
             PATH=$DIR:$PATH
