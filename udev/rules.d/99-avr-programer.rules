@@ -1,2 +1,20 @@
 # AVR Programer
-KERNEL=="ttyUSB[0-9]*", SUBSYSTEM=="tty", ATTRS{product}=="FT232R USB UART", ATTRS{serial}=="A3000HFA", SYMLINK+="local/avr_programmer", GROUP="sean"
+#
+# http://tuxgraphics.org/electronics/200705/article07052.shtml
+
+# dmesg -w
+# ...
+#[170045.316165] usb 3-1: new high-speed USB device number 46 using xhci_hcd
+#[170115.810886] usb 3-1: new full-speed USB device number 47 using xhci_hcd
+#[170115.943660] usb 3-1: New USB device found, idVendor=0403, idProduct=6001, bcdDevice= 6.00
+#[170115.943672] usb 3-1: New USB device strings: Mfr=1, Product=2, SerialNumber=3
+#[170115.943673] usb 3-1: Product: FT232R USB UART
+#[170115.943674] usb 3-1: Manufacturer: FTDI
+#[170115.943675] usb 3-1: SerialNumber: A3000HFA
+#[170115.968780] usbcore: registered new interface driver ftdi_sio
+#[170115.968789] usbserial: USB Serial support registered for FTDI USB Serial Device
+#[170115.968830] ftdi_sio 3-1:1.0: FTDI USB Serial Device converter detected
+#[170115.968846] usb 3-1: Detected FT232R
+#[170115.969216] usb 3-1: FTDI USB Serial Device converter now attached to ttyUSB0
+
+SUBSYSTEM=="tty", ATTRS{product}=="FT232R USB UART", ATTRS{idVendor}=="0403", ATTRS{idProduct}=="6001", ATTRS{serial}=="A3000HFA", MODE="666", SYMLINK+="local/avr_stk500v2_programmer"
