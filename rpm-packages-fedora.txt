@@ -20,6 +20,7 @@ gnupg2
 gnupg2-smime
 google-cloud-sdk
 gstreamer1-plugin-openh264
+hplip-gui
 inkscape
 jq
 kicad
