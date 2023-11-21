@@ -41,6 +41,7 @@ powerline-go
 readline-devel
 ripgrep
 ruby
+signify
 sqlite-devel
 the_silver_searcher
 tk-devel
