@@ -184,6 +184,9 @@ fi
 # Enable gh autocomplete
 if which gh > /dev/null 2>&1; then
     eval "$(gh completion -s bash)"
+    if gh copilot --version > /dev/null 2>&1; then
+        eval "$(gh copilot alias -- bash)"
+    fi
 fi
 
 ### SSH Setup ##
