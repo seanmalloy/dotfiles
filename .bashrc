@@ -60,6 +60,9 @@ export GOPATH=$PROJ_DIR/go
 export RUSTUP_HOME=$TECH_DIR/rust/.rustup
 export CARGO_HOME=$TECH_DIR/rust/.cargo
 
+# Kind Variables - https://kind.sigs.k8s.io/
+export KIND_EXPERIMENTAL_PROVIDER=podman
+
 # Generic Aliases
 alias ll='ls -l'
 alias la='ls -A'
