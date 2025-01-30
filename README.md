@@ -22,12 +22,10 @@ pip install 'python-lsp-server[all]'
 rustup component add rls rust-analysis rust-src
 ```
 
-#### Setup Docker
+#### Install Tailscale
 ```
-sudo systemctl enable docker.service
-sudo systemctl start docker.service
-sudo usermod -aG docker $USER
-sudo grubby --update-kernel=ALL --args="systemd.unified_cgroup_hierarchy=0"
+sudo dnf config-manager addrepo --from-repofile=https://pkgs.tailscale.com/stable/fedora/tailscale.repo
+sudo dnf install tailscale
 ```
 
 #### Pyenv
